@@ -28,7 +28,7 @@ class SearchResults extends Component {
                   <img src={`https://image.tmdb.org/t/p/original/${result.poster_path}`} className="card-img-top" alt="..." />
                   <div className="card-body">
                     <div className="card-title h6">{result.original_title}</div>
-                    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p className="card-text">{result.overview}</p>
                   </div>
                 </div>
               </div>
