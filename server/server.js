@@ -12,7 +12,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 //-- Dependencies ------------------------------------------------------------
-const axios = require('axios')
 const express = require('express');
 const logger = require('morgan');
 
@@ -40,25 +39,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // //-- Controller Routes -------------------------------------------------------
-// app.use(require('./controllers'));
+app.use(require('./controllers'));
 
 // //-- React catch-all ---------------------------------------------------------
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../client/build/index.html'));
-// });
-
-app.get('/netflix', (req, res) => {
-  // axios.get('https://api.themoviedb.org/3/movie/78?api_key=38050460e68774c8a8cf7af02fac33cc')
-  axios.get('https://api.themoviedb.org/3/search/tv?query=South%20Park&api_key=38050460e68774c8a8cf7af02fac33cc')
-    .then(response => res.json(response.data))
-    .catch(err => {
-      console.log(err)
-      res.send('Error')
-    })
-})
-
 app.get('*', (req, res) => {
-  res.send("Home Page")
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 //-- Main --------------------------------------------------------------------

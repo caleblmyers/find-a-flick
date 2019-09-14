@@ -1,6 +1,15 @@
 import axios from 'axios';
 
 export default {
+  TMDB: {
+    search: function (type, term) {
+      return axios.post(`/api/tmdb/${type}`, { term })
+    },
+    trending: function () {
+      return axios.get('/api/tmdb/trending')
+    }
+  },
+
   Users: {
     login: function (email, password) {
       return axios.post('/api/users/login', { email, password });

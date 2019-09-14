@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 
-import logo from './logo.svg';
+import API from '../../lib/API'
+import Featured from '../../components/Featured'
 
 class HomePage extends Component {
+  state = {
+    featured: []
+  }
+
+  componentDidMount() {
+    API.TMDB.trending()
+      .then(res => {
+        console.log(res.data)
+        this.setState({ featured: res.data.results })
+      })
+      .catch(err => console.log(err))
+  }
+
   render() {
     return (
       <div className='Home'>
-        <div className='row'>
-          <div className='col'>
-            <img src={logo} className='App-logo' alt='logo' />
-            <p>
-              Edit <code>src/pages/Home.js</code> and save to reload.
-            </p>
-            <a
-              className='App-link'
-              href='https://reactjs.org'
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </div>
-        </div>
+        <Featured featured={this.state.featured} />
       </div>
     );
   }
