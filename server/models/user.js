@@ -1,39 +1,21 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
 
-const UserSchema = new Schema({
-  email: {
-    type: String,
-    trim: true,
-    required: 'Email address is required'
-  },
-  password: {
-    type: String,
-    trim: true,
-    required: 'A password is required',
-    validate: [
-      function (input) {
-        return input.length >= 4
-      },
-      'Password should be four characters or longer'
-    ]
-  },
-})
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    password: DataTypes.STRING
+  }, {});
 
-class newUser {
-  constructor({ id, email, password }) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
-  }
+  User.associate = function (models) {
+    // associations can be defined here
+  };
 
-  comparePassword(challenge) {
+  User.prototype.comparePassword = function (challenge) {
     return this.password === challenge;
   }
-}
 
-UserSchema.loadClass(newUser);
-let User = mongoose.model('User', UserSchema);
-
-
-module.exports = User;
+  return User;
+};

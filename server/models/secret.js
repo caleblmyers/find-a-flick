@@ -1,14 +1,12 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+  const Secret = sequelize.define('Secret', {
+    message: DataTypes.STRING
+  }, {});
 
-const SecretSchema = new Schema({
-    message: {
-        type: String,
-        trim: true,
-        default: 'The clock tolls twice at midnight on the next full moon'
-    }
-})
+  Secret.associate = function (models) {
+    // associations can be defined here
+  };
 
-let Secret = mongoose.model('Secret', SecretSchema)
-
-module.exports = Secret
+  return Secret;
+};
