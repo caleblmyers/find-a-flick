@@ -1,0 +1,10 @@
+#div-featured {
+  max-height: 50vh;
+  width: 60vw;
+}
+
+#img-featured {
+  display: block;
+  width: 100%;
+  height: auto;
+}

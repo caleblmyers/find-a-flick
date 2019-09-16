@@ -1,0 +1,2 @@
+export const PROCESS_SEARCH = 'PROCESS_SEARCH'
+export const GET_SEARCH = 'GET_SEARCH'

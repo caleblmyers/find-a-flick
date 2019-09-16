@@ -1,58 +1,53 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-
-import API from '../../lib/API'
+import { connect } from 'react-redux'
+import { getSearch } from '../../actions/searchActions'
 
 class SearchBar extends Component {
-  state = {
-    search: ""
-  }
+  // state = {
+  //   search: ""
+  // }
 
-  handleInputChange = event => {
-    let value = event.target.value
-    const name = event.target.name
+  // handleInputChange = event => {
+  //   let value = event.target.value
+  //   const name = event.target.name
 
-    if (name === "password") value = value.substring(0, 15)
-    this.setState({ [name]: value })
-  }
+  //   this.setState({ [name]: value })
+  // }
 
-  handleRequest = event => {
-    event.preventDefault()
+  handleSubmit = e => {
+    e.preventDefault()
   }
 
   render() {
     return (
-      <form className="form">
-        <div className="form-group">
+      <div className="SearchBar">
+        <form>
           <span className="h6 mx-1">Search for a movie, show, or person</span>
           <input
-            value={this.state.search}
-            name="search"
-            onChange={this.handleInputChange}
+            value={this.props.search}
+            onChange={this.props.getSearch}
             type="text"
             placeholder="Search here..."
-            id="search"
             className="mx-2"
           />
-          <button
-            onClick={this.handleRequest}
-            className="mx-2 btn btn-info"
-          >
-            {this.state.search ? (
-              <Link to={{
-                pathname: "/results",
-                state: this.state.search
-              }}>
+          <button className="mx-2 btn btn-info" onSubmit={this.handleSubmit} type="submit">
+            {this.props.keyword ? (
+              <Link to={"/results"}>
                 <span>Search</span>
               </Link>
             ) : (
                 <span>Search</span>
               )}
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     )
   }
 }
 
-export default SearchBar
+const mapStateToProps = state => ({
+  keyword: state.search.keyword
+})
+
+export default connect(mapStateToProps, { getSearch })(SearchBar)

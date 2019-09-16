@@ -1,0 +1,8 @@
+.SideNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190px;
+  min-height: 100vh;
+  background-color: black;
+}

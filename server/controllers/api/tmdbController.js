@@ -1,7 +1,7 @@
 const axios = require('axios')
 const tmdbController = require('express').Router();
-const { JWTVerifier } = require('../../lib/passport');
-const db = require('../../models');
+// const { JWTVerifier } = require('../../lib/passport');
+// const db = require('../../models');
 
 tmdbController.post('/search', (req, res) => {
   axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.term}&api_key=38050460e68774c8a8cf7af02fac33cc`)
