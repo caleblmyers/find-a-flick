@@ -4,19 +4,9 @@ import { connect } from 'react-redux'
 import { getSearch } from '../../actions/searchActions'
 
 class SearchBar extends Component {
-  // state = {
-  //   search: ""
-  // }
-
-  // handleInputChange = event => {
-  //   let value = event.target.value
-  //   const name = event.target.name
-
-  //   this.setState({ [name]: value })
-  // }
-
   handleSubmit = e => {
     e.preventDefault()
+    this.props.search = ''
   }
 
   render() {
@@ -31,15 +21,17 @@ class SearchBar extends Component {
             placeholder="Search here..."
             className="mx-2"
           />
-          <button className="mx-2 btn btn-info" onSubmit={this.handleSubmit} type="submit">
-            {this.props.keyword ? (
-              <Link to={"/results"}>
+          {this.props.keyword ? (
+            <Link to={"/results"}>
+              <button className="mx-2 btn btn-info" onSubmit={this.handleSubmit} type="submit">
                 <span>Search</span>
-              </Link>
-            ) : (
+              </button>
+            </Link>
+          ) : (
+              <button className="mx-2 btn btn-info" onSubmit={this.handleSubmit} type="submit">
                 <span>Search</span>
-              )}
-          </button>
+              </button>
+            )}
         </form>
       </div>
     )

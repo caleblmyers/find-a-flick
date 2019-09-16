@@ -2,9 +2,7 @@ import { PROCESS_SEARCH, GET_SEARCH } from './types'
 import API from '../lib/API'
 
 export const processSearch = () => (dispatch, getState) => {
-  let state = getState()
-  let { keyword } = state.search
-  console.log(keyword)
+  let { keyword } = getState().search
   API.TMDB.search('search', keyword)
     .then(res => {
       dispatch({

@@ -21,6 +21,15 @@ class App extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      auth: {
+        user: undefined,
+        authToken: TokenStore.getToken(),
+        onLogin: this.handleLogin,
+        onLogout: this.handleLogout
+      }
+    }
+
     this.handleLogin = (user, authToken) => {
       TokenStore.setToken(authToken)
       this.setState(prevState => ({ auth: { ...prevState.auth, user, authToken } }))
@@ -29,16 +38,6 @@ class App extends Component {
     this.handleLogout = () => {
       TokenStore.clearToken()
       this.setState(prevState => ({ auth: { ...prevState.auth, user: undefined, authToken: undefined } }))
-    }
-
-
-    this.state = {
-      auth: {
-        user: undefined,
-        authToken: TokenStore.getToken(),
-        onLogin: this.handleLogin,
-        onLogout: this.handleLogout
-      }
     }
   }
 
