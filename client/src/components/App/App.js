@@ -57,7 +57,7 @@ class App extends Component {
         <Provider store={store}>
           <div className='App'>
             <Navigation />
-            <SideNav />
+            {/* <SideNav /> */}
             <div id="app-body">
               <Switch>
                 <Route exact path='/' component={Home} />

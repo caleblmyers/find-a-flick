@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { processSearch } from '../../actions/searchActions'
 
+import './style.css'
 import ResultsGrid from '../../components/ResultsGrid'
 
 class SearchResults extends Component {
@@ -10,19 +11,29 @@ class SearchResults extends Component {
     this.props.processSearch()
   }
 
+  truncateText(text, maxLength) {
+    let truncated = text
+    if (text.length > maxLength) {
+      truncated = truncated.substr(0, maxLength) + '...';
+    }
+    return truncated;
+  }
+
   render() {
+    const maxLength = 100
+
     let resultItems = this.props.results.results ?
       this.props.results.results.map(result => (
-        <div className="col-12 col-md-6 col-xl-3" key={result.id}>
+        <div className="col-12 col-md-6 col-xl-3 p-3" key={result.id}>
           <div className="card mb-3">
             <div className="row no-gutters">
               <div className="col-4">
-                <img src={`https://image.tmdb.org/t/p/original/${result.poster_path}`} className="card-img" alt="..." />
+                <img className="img-fluid" src={`https://image.tmdb.org/t/p/original/${result.poster_path}`} alt="..." />
               </div>
               <div className="col-8">
                 <div className="card-body">
                   <h5 className="card-title">{result.original_title}</h5>
-                  <p className="card-text">{result.overview}</p>
+                  <p className="card-text">{this.truncateText(result.overview, maxLength)}</p>
                 </div>
               </div>
             </div>

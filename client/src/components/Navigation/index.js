@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import './style.css'
 import AuthContext from '../../contexts/AuthContext';
 import AuthDropdown from '../../components/AuthDropdown/AuthDropdown';
 import SearchBar from '../SearchBar';
@@ -25,15 +26,15 @@ class Navigation extends Component {
     const togglerClass = `navbar-toggler ${collapsed && 'collapsed'}`;
 
     return (
-      <div className='Navigation sticky-top shadow-sm'>
-        <nav className='navbar navbar-expand-lg navbar-light bg-light mb-3'>
-          <Link className='navbar-brand' to='#'>Find-a-Flick</Link>
+      <div className='Navigation sticky-top'>
+        <nav className='navbar navbar-dark navbar-expand-lg mb-3'>
+          <Link className='navbar-brand' to='/'>Find-a-Flick</Link>
           <button className={togglerClass} onClick={this.toggleCollapse} data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
             <span className='navbar-toggler-icon'></span>
           </button>
 
           <div className={targetClass} id='navbarSupportedContent'>
-            <ul className="navbar-nav mx-auto">
+            <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <SearchBar />
               </li>
