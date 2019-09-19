@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { processSearch } from '../../actions/searchActions'
 
 import './style.css'
@@ -34,6 +35,16 @@ class SearchResults extends Component {
                 <div className="card-body">
                   <h5 className="card-title">{result.original_title}</h5>
                   <p className="card-text">{this.truncateText(result.overview, maxLength)}</p>
+                  <Link to={{
+                    pathname: '/details',
+                    state: {
+                      id: result.id
+                    }
+                  }}>
+                    <button className="btn btn-info">
+                      Details
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -54,7 +65,7 @@ class SearchResults extends Component {
 
 SearchResults.propTypes = {
   processSearch: PropTypes.func.isRequired,
-  results: PropTypes.object.isRequired
+  results: PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({

@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export default {
   TMDB: {
-    search: function (type, term) {
-      return axios.post(`/api/tmdb/${type}`, { term })
+    search: function (type, data) {
+      return axios.post(`/api/tmdb/${type}`, { data })
     },
     trending: function () {
       return axios.get('/api/tmdb/trending')

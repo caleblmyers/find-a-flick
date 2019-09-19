@@ -1,8 +1,9 @@
-import { PROCESS_SEARCH, GET_SEARCH } from '../actions/types'
+import { PROCESS_SEARCH, GET_SEARCH, GET_DETAILS } from '../actions/types'
 
 const initialState = {
   results: [],
-  keyword: ''
+  keyword: '',
+  details: {}
 }
 
 export default function (state = initialState, action) {
@@ -17,6 +18,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         keyword: action.payload
+      }
+
+    case GET_DETAILS:
+      return {
+        ...state,
+        details: action.payload
       }
 
     default:

@@ -6,7 +6,7 @@ const tmdbKey = process.env.TMDB_KEY
 const omdbKey = process.env.OMDB_KEY
 
 tmdbController.post('/search', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.term}&api_key=${tmdbKey}`)
+  axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.data}&api_key=${tmdbKey}`)
     .then(response => res.json(response.data))
     .catch(err => res.json(err))
 })
@@ -18,7 +18,7 @@ tmdbController.get('/trending', (req, res) => {
 })
 
 tmdbController.post('/movie', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/movie/78?&api_key=${tmdbKey}`)
+  axios.get(`https://api.themoviedb.org/3/movie/${req.body.data}?&api_key=${tmdbKey}`)
     .then(response => res.json(response.data))
     .catch(err => res.json(err))
 })

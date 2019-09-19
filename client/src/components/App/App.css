@@ -2,11 +2,15 @@
   text-align: center;
 }
 
+#app-body {
+  margin-left: 180px
+}
+
 @media only screen and (max-width: 992px) {
-  /* .SideNav {
+  .SideNav {
     display: none;
   }
   #app-body {
     margin-left: inherit
-  } */
+  }
 }
