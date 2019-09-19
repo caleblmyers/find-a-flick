@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 
 import './App.css'
 // import API from '../../lib/API'
-import store from '../../lib/store'
+import store from '../../store'
 import TokenStore from '../../lib/TokenStore'
 import AuthContext from '../../contexts/AuthContext'
 import Navigation from '../Navigation'

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { processSearch } from '../../actions/searchActions'
+import { processSearch } from '../../store/actions/searchActions'
 
 import './style.css'
 import ResultsGrid from '../../components/ResultsGrid'

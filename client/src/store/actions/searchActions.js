@@ -1,5 +1,5 @@
 import { PROCESS_SEARCH, GET_SEARCH, GET_DETAILS } from './types'
-import API from '../lib/API'
+import API from '../../lib/API'
 
 export const processSearch = () => (dispatch, getState) => {
   let { keyword } = getState().search

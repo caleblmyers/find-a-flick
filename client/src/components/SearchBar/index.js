@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getSearch } from '../../actions/searchActions'
+import { getSearch } from '../../store/actions/searchActions'
 
 class SearchBar extends Component {
   handleSubmit = e => {
