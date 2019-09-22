@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import './style.css'
+import SearchBar from '../SearchBar'
 
 class SideNav extends Component {
   render() {
@@ -8,7 +9,7 @@ class SideNav extends Component {
       <div className="SideNav text-white">
         <div className="row no-gutters">
           <div className="col">
-            <div>Navigation</div>
+            <SearchBar />
         </div>
         </div>
       </div>

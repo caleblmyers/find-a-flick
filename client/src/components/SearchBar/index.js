@@ -12,27 +12,29 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="SearchBar">
-        <form>
-          <span className="h6 mx-1">Search for a movie, show, or person</span>
+        <div className="input-group my-2">
+          <span className="h6">Search for a movie, show, or person</span>
           <input
             value={this.props.search}
             onChange={this.props.getSearch}
             type="text"
             placeholder="Search here..."
-            className="mx-2"
+            className="form-control mx-3"
           />
+          </div>
+          <div className="input-group justify-content-center my-2">
           {this.props.keyword ? (
             <Link to={"/results"}>
-              <button className="mx-2 btn btn-info" onSubmit={this.handleSubmit} type="submit">
+              <button className="btn btn-info" onSubmit={this.handleSubmit} type="submit">
                 <span>Search</span>
               </button>
             </Link>
           ) : (
-              <button className="mx-2 btn btn-info" onSubmit={this.handleSubmit} type="submit">
+              <button className="btn btn-info" onSubmit={this.handleSubmit} type="submit">
                 <span>Search</span>
               </button>
             )}
-        </form>
+        </div>
       </div>
     )
   }

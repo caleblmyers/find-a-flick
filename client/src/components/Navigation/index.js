@@ -34,11 +34,11 @@ class Navigation extends Component {
           </button>
 
           <div className={targetClass} id='navbarSupportedContent'>
-            <ul className="navbar-nav ml-auto">
+            {/* <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <SearchBar />
               </li>
-            </ul>
+            </ul> */}
             <ul className='navbar-nav ml-auto'>
               <li className='nav-item'>
                 <Link className='nav-link' to='/' onClick={this.toggleCollapse}>Home</Link>
