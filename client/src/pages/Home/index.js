@@ -11,6 +11,7 @@ class HomePage extends Component {
     movieIndex: 0,
     shows: [],
     showIndex: 0,
+    popular: {},
     isLoaded: false
   }
 
@@ -19,11 +20,16 @@ class HomePage extends Component {
       .then(movies => {
         API.TMDB.trending('tv')
           .then(shows => {
-            this.setState({
-              movies: movies.data.results,
-              shows: shows.data.results,
-              isLoaded: true
-            })
+            API.TMDB.popular()
+              .then(popular => {
+                console.log(popular.data)
+                this.setState({
+                  movies: movies.data.results,
+                  shows: shows.data.results,
+                  popular: popular.data,
+                  isLoaded: true
+                })
+              })
           })
           .catch(err => console.log(err))
       })
@@ -40,15 +46,16 @@ class HomePage extends Component {
     else this.setState({ showIndex: i })
   }
 
-  goToSlide = e => {
-    this.setState({ movieIndex: e.target.id.slice(5) })
+  goToSlide = (type, e) => {
+    if (type === 'movie') this.setState({ movieIndex: e.target.id.slice(5) })
+    else this.setState({ showIndex: e.target.id.slice(4) })
   }
 
   render() {
     return (
       <div className='Home'>
         <div className="Featured">
-          <div className="display-4">Featured</div>
+          <div className="display-4">Movies</div>
           <div className="row no-gutters">
             <div className="col-6">
               <div className="h5">Movies</div>
@@ -74,6 +81,10 @@ class HomePage extends Component {
                   </div>
                 </div>}
             </div>
+
+          </div>
+          <div className="display-4">TV</div>
+          <div className="row no-gutters">
             <div className="col-6">
               <div className="h5">TV Shows</div>
               {this.state.isLoaded &&
@@ -93,7 +104,7 @@ class HomePage extends Component {
                   </div>
                   <div className="mx-auto" id="dot-container">
                     {this.state.shows.map((feature, index) => (
-                      <span onClick={event => this.goToSlide('show', event)} className={`dot ${index === this.state.showIndex ? 'activeDot' : 'inactiveDot'}`} key={index} id={`movie${index}`}></span>
+                      <span onClick={event => this.goToSlide('show', event)} className={`dot ${index === this.state.showIndex ? 'activeDot' : 'inactiveDot'}`} key={index} id={`show${index}`}></span>
                     ))}
                   </div>
                 </div>}

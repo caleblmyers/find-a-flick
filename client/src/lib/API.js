@@ -2,6 +2,12 @@ import axios from 'axios';
 
 export default {
   TMDB: {
+    genres: function () {
+      return axios.get('/api/tmdb/genres')
+    },
+    popular: function () {
+      return axios.get('/api/tmdb/popular')
+    },
     search: function (type, data) {
       return axios.post(`/api/tmdb/${type}`, { data })
     },

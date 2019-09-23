@@ -15,7 +15,7 @@ class Details extends Component {
 
     return (
       <div className="Details p-4">
-        {!this.props.details ? (
+        {!details ? (
           <div>Loading...</div>
         ) : (
             <div className="row no-gutters">

@@ -14,8 +14,9 @@ import Home from '../../pages/Home'
 import Login from '../../pages/Login/Login'
 import Register from '../../pages/Register/Register'
 import Secret from '../../pages/Secret/Secret'
-import Details from '../../pages/Details'
+import Genres from '../../pages/Genres'
 import SearchResults from '../../pages/SearchResults'
+import Details from '../../pages/Details'
 import NotFound from '../../pages/NotFound/NotFound'
 
 class App extends Component {
@@ -62,6 +63,7 @@ class App extends Component {
             <div id="app-body">
               <Switch>
                 <Route exact path='/' component={Home} />
+                <Route path='/genres' component={Genres} />
                 <Route path='/results' component={SearchResults} />
                 <Route path='/details' component={Details} />
                 <Route path='/login' component={Login} />
