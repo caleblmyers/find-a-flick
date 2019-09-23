@@ -54,11 +54,17 @@ class HomePage extends Component {
   render() {
     return (
       <div className='Home'>
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <div className="display-3">Pop Media</div>
+            <div class="lead pt-2">Discover something new!</div>
+          </div>
+        </div>
         <div className="Featured">
-          <div className="display-4">Movies</div>
+          <div className="h2 text-center">Movies</div>
           <div className="row no-gutters">
-            <div className="col-6">
-              <div className="h5">Movies</div>
+            <div className="col-12 col-md-6 p-3">
+              <div className="h5">Featured</div>
               {this.state.isLoaded &&
                 <div>
                   <div className="mx-auto" id="div-featured">
@@ -81,12 +87,18 @@ class HomePage extends Component {
                   </div>
                 </div>}
             </div>
-
+            <div className="col-6 col-md-3 p-3">
+              Top Rated
+            </div>
+            <div className="col-6 col-md-3 p-3">
+              In Theaters
+            </div>
           </div>
-          <div className="display-4">TV</div>
+
+          <div className="h2 text-center">TV Shows</div>
           <div className="row no-gutters">
-            <div className="col-6">
-              <div className="h5">TV Shows</div>
+            <div className="col-12 col-md-6 p-3">
+              <div className="h5">Featured</div>
               {this.state.isLoaded &&
                 <div>
                   <div className="mx-auto" id="div-featured">
@@ -108,6 +120,12 @@ class HomePage extends Component {
                     ))}
                   </div>
                 </div>}
+            </div>
+            <div className="col-6 col-md-3 p-3">
+              Top Rated
+            </div>
+            <div className="col-6 col-md-3 p-3">
+              On Tonight
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 #div-featured {
-  width: 40vw;
-  max-width: 720px;
+  /* width: 40vw; */
+  /* max-width: 720px; */
   position: relative;
 }
 
@@ -8,6 +8,7 @@
   display: block;
   width: 100%;
   height: auto;
+  border-radius: 12px;
 }
 
 #prev, #next {
