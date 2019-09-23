@@ -4,21 +4,21 @@ import "./style.css"
 import API from "../../lib/API"
 
 class Featured extends Component {
-  state = {
-    featured: [],
-    isLoaded: false
-  }
+  // state = {
+  //   featured: [],
+  //   isLoaded: false
+  // }
 
-  componentDidMount() {
-    API.TMDB.trending()
-      .then(res => {
-        this.setState({
-          featured: res.data.results,
-          isLoaded: true
-        })
-      })
-      .catch(err => console.log(err))
-  }
+  // componentDidMount() {
+  //   API.TMDB.trending()
+  //     .then(res => {
+  //       this.setState({
+  //         featured: res.data.results,
+  //         isLoaded: true
+  //       })
+  //     })
+  //     .catch(err => console.log(err))
+  // }
 
   render() {
     return (

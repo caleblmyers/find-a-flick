@@ -5,8 +5,8 @@ export default {
     search: function (type, data) {
       return axios.post(`/api/tmdb/${type}`, { data })
     },
-    trending: function () {
-      return axios.get('/api/tmdb/trending')
+    trending: function (type) {
+      return axios.get(`/api/tmdb/trending/${type}`)
     }
   },
 

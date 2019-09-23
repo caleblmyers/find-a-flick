@@ -1,5 +1,15 @@
 .Navigation {
   background-color: rgb(18, 8, 109);
   color: white;
-  min-height: 60px;
+  min-height: 70px;
+}
+
+#search-bar-container {
+  display: none;
+}
+
+@media only screen and (max-width: 992px) {
+  #search-bar-container {
+    display: block;
+  }
 }

@@ -1,8 +1,8 @@
 .SideNav {
   position: fixed;
-  top: 60px;
+  top: 70px;
   left: 0;
   width: 180px;
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   background-color: rgb(18, 8, 109);
 }

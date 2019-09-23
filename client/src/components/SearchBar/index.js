@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { getSearch } from '../../store/actions/searchActions'
 
 class SearchBar extends Component {
@@ -13,7 +14,7 @@ class SearchBar extends Component {
     return (
       <div className="SearchBar">
         <div className="input-group my-2">
-          <span className="h6">Search for a movie, show, or person</span>
+          <span className="h6 m-auto">Search for a movie, show, or person</span>
           <input
             value={this.props.search}
             onChange={this.props.getSearch}
@@ -21,8 +22,8 @@ class SearchBar extends Component {
             placeholder="Search here..."
             className="form-control mx-3"
           />
-          </div>
-          <div className="input-group justify-content-center my-2">
+          {/* </div> */}
+          {/* <div className="input-group justify-content-center my-2"> */}
           {this.props.keyword ? (
             <Link to={"/results"}>
               <button className="btn btn-info" onSubmit={this.handleSubmit} type="submit">
@@ -38,6 +39,10 @@ class SearchBar extends Component {
       </div>
     )
   }
+}
+
+SearchBar.propTypes = {
+  keyword: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({
