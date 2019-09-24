@@ -45,7 +45,7 @@ tmdbController.get('/popular/:type', (req, res) => {
 })
 
 tmdbController.post('/search', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.data}&api_key=${tmdbKey}`)
+  axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.data}&include_adult=false&api_key=${tmdbKey}`)
     .then(response => res.json(response.data))
     .catch(err => res.json(err))
 })

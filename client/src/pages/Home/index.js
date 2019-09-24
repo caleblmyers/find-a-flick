@@ -23,37 +23,37 @@ class HomePage extends Component {
     isLoaded: false
   }
 
-  componentDidMount() {
-    API.TMDB.trending('movie')
-      .then(movies => {
-        API.TMDB.topRated('movie')
-          .then(topMovie => {
-            API.TMDB.nowPlaying()
-              .then(nowPlaying => {
-                API.TMDB.trending('tv')
-                  .then(shows => {
-                    API.TMDB.topRated('tv')
-                      .then(topShows => {
-                        API.TMDB.popular('tv')
-                          .then(popularShows => {
-                            this.setState({
-                              movies: movies.data.results,
-                              topMovies: topMovie.data.results,
-                              nowPlaying: nowPlaying.data.results,
-                              shows: shows.data.results,
-                              topShows: topShows.data.results,
-                              popularShows: popularShows.data.results,
-                              isLoaded: true
-                            })
-                          })
-                      })
-                  })
-              })
-          })
-          .catch(err => console.log(err))
-      })
-      .catch(err => console.log(err))
-  }
+  // componentDidMount() {
+  //   API.TMDB.trending('movie')
+  //     .then(movies => {
+  //       API.TMDB.topRated('movie')
+  //         .then(topMovie => {
+  //           API.TMDB.nowPlaying()
+  //             .then(nowPlaying => {
+  //               API.TMDB.trending('tv')
+  //                 .then(shows => {
+  //                   API.TMDB.topRated('tv')
+  //                     .then(topShows => {
+  //                       API.TMDB.popular('tv')
+  //                         .then(popularShows => {
+  //                           this.setState({
+  //                             movies: movies.data.results,
+  //                             topMovies: topMovie.data.results,
+  //                             nowPlaying: nowPlaying.data.results,
+  //                             shows: shows.data.results,
+  //                             topShows: topShows.data.results,
+  //                             popularShows: popularShows.data.results,
+  //                             isLoaded: true
+  //                           })
+  //                         })
+  //                     })
+  //                 })
+  //             })
+  //         })
+  //         .catch(err => console.log(err))
+  //     })
+  //     .catch(err => console.log(err))
+  // }
 
   changeSlide = (type, e) => {
     let i = this.state[`${type}Index`]
@@ -84,7 +84,7 @@ class HomePage extends Component {
             <SearchBar />
           </div>
         </div>
-        {this.state.isLoaded &&
+        {/* {this.state.isLoaded &&
           <div className="Featured">
             <div className="h2 text-center">Movies</div>
             <div className="row no-gutters">
@@ -263,7 +263,7 @@ class HomePage extends Component {
               </div>
             </div>
           </div>
-        }
+        } */}
       </div >
     );
   }

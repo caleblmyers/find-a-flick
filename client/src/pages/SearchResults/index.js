@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { processSearch } from '../../store/actions/searchActions'
 
 import './style.css'
-import ResultsGrid from '../../components/ResultsGrid'
 
 class SearchResults extends Component {
   componentDidMount() {
@@ -55,17 +54,18 @@ class SearchResults extends Component {
     return (
       <div className='SearchResults' >
         <div className="display-4">Search Results</div>
-        <ResultsGrid>
-          {resultItems}
-        </ResultsGrid>
+        <div className="ResultsGrid">
+          <div className="row no-gutters justify-content-center">
+            {resultItems}
+          </div>
+        </div>
       </div>
     );
   }
 }
 
 SearchResults.propTypes = {
-  processSearch: PropTypes.func.isRequired,
-  results: PropTypes.array.isRequired
+  processSearch: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
