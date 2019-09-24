@@ -11,6 +11,9 @@ export default {
     search: function (type, data) {
       return axios.post(`/api/tmdb/${type}`, { data })
     },
+    topRated: function (type) {
+      return axios.get(`/api/tmdb/${type}/top_rated`)
+    },
     trending: function (type) {
       return axios.get(`/api/tmdb/trending/${type}`)
     }

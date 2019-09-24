@@ -40,6 +40,12 @@ tmdbController.post('/search', (req, res) => {
     .catch(err => res.json(err))
 })
 
+tmdbController.get('/:type/top_rated', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/${req.params.type}/top_rated?api_key=${tmdbKey}&region=US`)
+    .then(response => res.json(response.data))
+    .catch(err => res.json(err))
+})
+
 tmdbController.get('/trending/:type', (req, res) => {
   axios.get(`https://api.themoviedb.org/3/trending/${req.params.type}/week?api_key=${tmdbKey}`)
     .then(response => res.json(response.data))
