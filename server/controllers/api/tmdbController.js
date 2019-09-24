@@ -20,16 +20,26 @@ tmdbController.get('/genres', (req, res) => {
     .catch(err => res.json(err))
 })
 
-tmdbController.get('/popular', (req, res) => {
-  let popular = {}
-  axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}`)
-    .then(movie => {
-      axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${tmdbKey}`)
-        .then(tv => {
-          popular.movies = movie.data
-          popular.shows = tv.data
-          res.json(popular)
-        })
+tmdbController.get('/coming_soon', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}`)
+    .then(comingSoon => {
+      res.json(comingSoon.data)
+    })
+    .catch(err => res.json(err))
+})
+
+tmdbController.get('/now_playing', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}`)
+    .then(nowPlaying => {
+      res.json(nowPlaying.data)
+    })
+    .catch(err => res.json(err))
+})
+
+tmdbController.get('/popular/:type', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/${req.params.type}/popular?api_key=${tmdbKey}`)
+    .then(popular => {
+      res.json(popular.data)
     })
     .catch(err => res.json(err))
 })

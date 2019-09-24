@@ -1,4 +1,4 @@
-#div-featured {
+.div-featured {
   /* width: 40vw; */
   /* max-width: 720px; */
   position: relative;
@@ -77,4 +77,13 @@
 @keyframes fade {
   from {opacity: .4}
   to {opacity: 1}
+}
+
+.now-playing, .now-playing:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.table {
+  max-width: 100%;
 }

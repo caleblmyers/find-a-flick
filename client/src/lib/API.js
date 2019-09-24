@@ -2,11 +2,17 @@ import axios from 'axios';
 
 export default {
   TMDB: {
+    comingSoon: function () {
+      return axios.get('/api/tmdb/coming_soon')
+    },
     genres: function () {
       return axios.get('/api/tmdb/genres')
     },
-    popular: function () {
-      return axios.get('/api/tmdb/popular')
+    nowPlaying: function () {
+      return axios.get('/api/tmdb/now_playing')
+    },
+    popular: function (type) {
+      return axios.get(`/api/tmdb/popular/${type}`)
     },
     search: function (type, data) {
       return axios.post(`/api/tmdb/${type}`, { data })
