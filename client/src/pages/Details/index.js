@@ -14,7 +14,8 @@ class Details extends Component {
 
   state = {
     isLoaded: false,
-    message: ""
+    message: "",
+    messageType: ""
   }
 
   componentDidMount() {
@@ -22,16 +23,19 @@ class Details extends Component {
     setTimeout(() => this.setState({ isLoaded: true }), 1500)
   }
 
-  addFavorite = (type, id, title) => {
-    API.Favorites.add(type, id, title, this.context.authToken)
+  addFavorite = (type, id, title, userId, token) => {
+    API.Favorites.add(type, id, title, userId, token)
       .then(res => {
         let message = ""
+        let messageType = ""
         if (res.data.errors) {
           message = res.data.errors[0].type === "unique violation" ? "This item is already on your favorites!" : "Unknown error"
+          messageType = "danger"
         } else {
           message = `${res.data.title} added to favorites!`
+          messageType = "success"
         }
-        this.setState({ message })
+        this.setState({ message, messageType })
         console.log(res)
 
       })
@@ -50,7 +54,7 @@ class Details extends Component {
               {this.state.message &&
                 <div className='row no-gutters'>
                   <div className='col'>
-                    <div className='alert alert-success mb-3' role='alert'>
+                    <div className={`alert alert-${this.state.messageType} mb-3`} role='alert'>
                       {this.state.message}
                     </div>
                   </div>
@@ -107,7 +111,15 @@ class Details extends Component {
                         Rating: {details.vote_average} <small>({details.vote_count})</small>
                       </div>
                       <div>
-                        <button className="btn btn-outline-dark" onClick={() => this.addFavorite(this.props.location.state.type, this.props.location.state.id, (details.title || details.name))} >Favorite</button>
+                        <button
+                          className="btn btn-outline-dark"
+                          onClick={() => this.addFavorite(
+                            this.props.location.state.type,
+                            this.props.location.state.id,
+                            (details.title || details.name),
+                            this.context.user.id,
+                            this.context.authToken
+                          )}>Favorite</button>
                       </div>
                     </div>
                   </div>

@@ -4,11 +4,13 @@ const db = require('../../models');
 const { JWTVerifier } = require('../../lib/passport');
 
 favoritesController.post('/', JWTVerifier, (req, res) => {
+  const { mediaType, tmdbId, title, userId } = req.body
+  console.log(req.body)
   db.Favorite.create({
-    userId: 1,
-    mediaType: req.body.type,
-    tmdbId: req.body.id,
-    title: req.body.title,
+    userId,
+    mediaType,
+    tmdbId,
+    title,
     createdAt: new Date(),
     updatedAt: new Date()
   })

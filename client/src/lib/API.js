@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export default {
   Favorites: {
-    add: function (type, id, title, token) {
-      return axios.post('/api/favorites', { type, id, title }, {
+    add: function (mediaType, tmdbId, title, userId, token) {
+      return axios.post('/api/favorites', { mediaType, tmdbId, title, userId }, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

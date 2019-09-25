@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     tmdbId: {
       type: DataTypes.INTEGER,
-      unique: true
     },
     title: {
       type: DataTypes.STRING
@@ -35,7 +34,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       default: DataTypes.NOW
     }
-  }, { timestamps: false });
+  }, { 
+    timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'tmdbId']
+      }
+    ]
+  });
 
   Favorite.associate = function (models) {
     Favorite.belongsTo(models.User, { foreignKey: "userId" })
