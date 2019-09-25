@@ -83,7 +83,7 @@ class Details extends Component {
                           ), "YYYY-MM-DD").format("MMMM Do, YYYY")}
                         </div>
                       </div>
-                      <div className="col">
+                      {details.genres && <div className="col">
                         <div>
                           Genres:
                         </div>
@@ -92,7 +92,7 @@ class Details extends Component {
                             <span key={genre.id}>{genre.name} </span>
                           ))}
                         </div>
-                      </div>
+                      </div>}
                       {this.props.location.state.type === "movie" &&
                         <div className="col">
                           <div>

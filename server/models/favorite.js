@@ -25,16 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     createdAt: {
-      allowNull: false,
       type: DataTypes.DATE,
       default: DataTypes.NOW
     },
     updatedAt: {
-      allowNull: false,
       type: DataTypes.DATE,
       default: DataTypes.NOW
     }
-  }, { 
+  }, {
     timestamps: false,
     indexes: [
       {
