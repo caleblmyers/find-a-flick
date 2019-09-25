@@ -9,7 +9,7 @@ import './style.css'
 
 class SearchResults extends Component {
   componentDidMount() {
-    this.props.processSearch()
+    this.props.processSearch(this.props.location.state.keyword)
   }
 
   render() {
@@ -24,7 +24,7 @@ class SearchResults extends Component {
               <div className="col-12 col-md-7">
                 <div className="card-body">
                   <h5 className="card-title">{result.original_title}</h5>
-                  <h6 className="card-subtitle media-type text-muted">{result.media_type}</h6>
+                  <h6 className="card-subtitle text-muted capitalize">{result.media_type}</h6>
                   <h6 className="card-subtitle text-muted">Release Date: {moment(result.release_date, "YYYY-MM-DD").format("MM/DD/YYYY")}</h6>
                   <p>Rating: {result.vote_average} <small>({result.vote_count})</small></p>
                   <Link to={{
@@ -46,7 +46,7 @@ class SearchResults extends Component {
 
     return (
       <div className='SearchResults' >
-        <div className="display-4">Search Results for {`"${this.props.keyword}"`}</div>
+        <div className="display-4">Search Results for <span className="capitalize">{`"${this.props.location.state.keyword}"`}</span></div>
         <div className="row no-gutters justify-content-center">
           {resultItems}
         </div>

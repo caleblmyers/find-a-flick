@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 
 import API from '../../lib/API';
 import AuthContext from '../../contexts/AuthContext';
-import RegisterForm from '../../components/RegisterForm/RegisterForm';
+import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 
 class Register extends Component {
   static contextType = AuthContext;
@@ -13,16 +13,20 @@ class Register extends Component {
     error: ""
   }
 
-  handleSubmit = (email, password) => {
-    API.Users.register(email, password)
-      .then(response => {
+  handleSubmit = (email, password, confirm) => {
+    if (password === confirm) {
+      API.Users.register(email, password)
+        .then(response => {
           this.setState({ redirectToReferrer: true })
-      })
-      .catch(err => {
-        if (err.response.status === 401) {
-          this.setState({ error: "Sorry, that email/password combination is not valid. Please try again." });
-        }
-      });
+        })
+        .catch(err => {
+          if (err.response.status === 401) {
+            this.setState({ error: "Sorry, that email/password combination is not valid. Please try again." });
+          }
+        });
+    } else {
+      this.setState({ error: "Please enter the same password in both fields." })
+    }
   }
 
   render() {
@@ -50,7 +54,7 @@ class Register extends Component {
           </div>}
         <div className='row'>
           <div className='col'>
-            <RegisterForm onSubmit={this.handleSubmit} />
+            <RegistrationForm onSubmit={this.handleSubmit} />
           </div>
         </div>
       </div>

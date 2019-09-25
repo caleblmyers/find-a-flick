@@ -25,7 +25,12 @@ class SearchBar extends Component {
           {/* </div> */}
           {/* <div className="input-group justify-content-center my-2"> */}
           {this.props.keyword ? (
-            <Link to={"/results"}>
+            <Link to={{
+              pathname: "/results",
+              state: {
+                keyword: this.props.keyword
+              }
+            }}>
               <button className="btn btn-info" onSubmit={this.handleSubmit} type="submit">
                 <span>Search</span>
               </button>

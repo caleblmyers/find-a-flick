@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './style.css'
 import AuthContext from '../../contexts/AuthContext';
-import AuthDropdown from '../../components/AuthDropdown/AuthDropdown';
+import AuthDropdown from '../../components/AuthDropdown';
 // import SearchBar from '../SearchBar';
 
 class Navigation extends Component {

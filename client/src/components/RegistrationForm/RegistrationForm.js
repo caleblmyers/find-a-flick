@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import Octicon, { Mail, Key } from '@githubprimer/octicons-react';
 
 class RegistrationForm extends Component {
