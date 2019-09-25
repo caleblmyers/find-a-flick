@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 
 import './style.css'
 import API from "../../lib/API"
@@ -10,51 +9,45 @@ import Table from '../../components/Table';
 class HomePage extends Component {
   state = {
     movies: [],
-    movieIndex: 0,
     topMovies: [],
-    topMovieIndex: 0,
     nowPlaying: [],
-    editorPicks: ['test', 'test', 'test'],
     shows: [],
-    showIndex: 0,
     topShows: [],
-    topShowIndex: 0,
     popularShows: [],
-    popular: {},
     isLoaded: false
   }
 
-  componentDidMount() {
-    // API.TMDB.trending('movie')
-    //   .then(movies => {
-    //     API.TMDB.topRated('movie')
-    //       .then(topMovie => {
-    API.TMDB.nowPlaying()
-      .then(nowPlaying => {
-        API.TMDB.trending('tv')
-          .then(shows => {
-            API.TMDB.topRated('tv')
-              .then(topShows => {
-                API.TMDB.popular('tv')
-                  .then(popularShows => {
-                    this.setState({
-                      // movies: movies.data.results,
-                      // topMovies: topMovie.data.results,
-                      nowPlaying: nowPlaying.data.results,
-                      shows: shows.data.results,
-                      topShows: topShows.data.results,
-                      popularShows: popularShows.data.results,
-                      isLoaded: true
-                    })
-                  })
-                //         })
-                //     })
-              })
-          })
-          .catch(err => console.log(err))
-      })
-      .catch(err => console.log(err))
-  }
+  // componentDidMount() {
+  //   API.TMDB.trending('movie')
+  //     .then(movies => {
+  //       API.TMDB.topRated('movie')
+  //         .then(topMovie => {
+  //           API.TMDB.nowPlaying()
+  //             .then(nowPlaying => {
+  //               API.TMDB.trending('tv')
+  //                 .then(shows => {
+  //                   API.TMDB.topRated('tv')
+  //                     .then(topShows => {
+  //                       API.TMDB.popular('tv')
+  //                         .then(popularShows => {
+  //                           this.setState({
+  //                             movies: movies.data.results,
+  //                             topMovies: topMovie.data.results,
+  //                             nowPlaying: nowPlaying.data.results,
+  //                             shows: shows.data.results,
+  //                             topShows: topShows.data.results,
+  //                             popularShows: popularShows.data.results,
+  //                             isLoaded: true
+  //                           })
+  //                         })
+  //                     })
+  //                 })
+  //             })
+  //         })
+  //         .catch(err => console.log(err))
+  //     })
+  //     .catch(err => console.log(err))
+  // }
 
   render() {
     return (
@@ -67,19 +60,19 @@ class HomePage extends Component {
           </div>
         </div>
 
-        {this.state.isLoaded &&
+        {/* {this.state.isLoaded &&
           <div className="Featured">
             <div className="h2 text-center">Movies</div>
             <div className="row no-gutters">
-              {/* <div className="col-12 col-md-8">
+              <div className="col-12 col-md-8">
                 <div className="row no-gutters">
                   <div className="col-12 col-xl-6 p-3">
                     <div className="h5">Featured</div>
-                    <Carousel data={this.state.movies} index={this.state.movieIndex} type={"movie"} />
+                    <Carousel data={this.state.movies} type={"movie"} />
                   </div>
                   <div className="col-12 col-xl-6 p-3">
                     <div className="h5">Top Rated</div>
-                    <Carousel data={this.state.topMovies} index={this.state.topMovieIndex} type={"topMovie"} />
+                    <Carousel data={this.state.topMovies} type={"topMovie"} />
                   </div>
                 </div>
                 <div className="row no-gutters">
@@ -87,7 +80,7 @@ class HomePage extends Component {
                     <div className="h4">Editor Picks</div>
                   </div>
                 </div>
-              </div> */}
+              </div>
               <div className="col-12 col-md-4 p-3">
                 <div className="h6">In Theaters</div>
                 <Table dataSet={this.state.nowPlaying} />
@@ -100,11 +93,11 @@ class HomePage extends Component {
                 <div className="row no-gutters">
                   <div className="col-12 col-xl-6 p-3">
                     <div className="h5">Featured</div>
-                    <Carousel data={this.state.shows} index={this.state.showIndex} type={"show"} />
+                    <Carousel data={this.state.shows} type={"show"} />
                   </div>
                   <div className="col-12 col-xl-6 p-3">
                     <div className="h5">Top Rated</div>
-                    <Carousel data={this.state.topShows} index={this.state.topShowIndex} type={"topShow"} />
+                    <Carousel data={this.state.topShows} type={"topShow"} />
                   </div>
                 </div>
                 <div className="row no-gutters">
@@ -118,7 +111,7 @@ class HomePage extends Component {
                 <Table dataSet={this.state.popularShows} />
               </div>
             </div>
-          </div>}
+          </div>} */}
       </div>
     )
   }

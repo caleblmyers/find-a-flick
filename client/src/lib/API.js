@@ -8,8 +8,8 @@ export default {
     genres: function () {
       return axios.get('/api/tmdb/genres')
     },
-    movie: function (id) {
-      return axios.get(`/api/tmdb/movie/${id}`)
+    details: function (type, id) {
+      return axios.get(`/api/tmdb/details/${type}/${id}`)
     },
     nowPlaying: function () {
       return axios.get('/api/tmdb/now_playing')

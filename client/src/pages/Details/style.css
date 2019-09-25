@@ -1,1 +1,12 @@
 /* Collections, credits, genres, outisde links */
+
+#details-body {
+  background-color: rgba(170, 170, 170, 0.685);
+  border-radius: 10px;
+}
+
+#details-header {
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+}

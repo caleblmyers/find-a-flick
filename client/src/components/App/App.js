@@ -8,7 +8,7 @@ import store from '../../store'
 import TokenStore from '../../lib/TokenStore'
 import AuthContext from '../../contexts/AuthContext'
 import Navigation from '../Navigation'
-import SideNav from '../SideNav'
+// import SideNav from '../SideNav'
 import PrivateRoute from '../PrivateRoute'
 import Home from '../../pages/Home'
 import Login from '../../pages/Login'
@@ -59,7 +59,7 @@ class App extends Component {
         <Provider store={store}>
           <div className='App'>
             <Navigation />
-            <SideNav />
+            {/* <SideNav /> */}
             <div id="app-body">
               <Switch>
                 <Route exact path='/' component={Home} />

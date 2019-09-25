@@ -62,8 +62,8 @@ tmdbController.get('/trending/:type', (req, res) => {
     .catch(err => res.json(err))
 })
 
-tmdbController.get('/movie/:id', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/movie/${req.params.id}?api_key=${tmdbKey}&append_to_response=credits,recommendations`)
+tmdbController.get('/details/:type/:id', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/${req.params.type}/${req.params.id}?api_key=${tmdbKey}&append_to_response=credits,recommendations`)
     .then(movie => res.json(movie.data))
     .catch(err => res.json(err))
 })

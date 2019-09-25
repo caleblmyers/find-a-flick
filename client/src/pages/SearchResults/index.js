@@ -23,13 +23,19 @@ class SearchResults extends Component {
               </div>
               <div className="col-12 col-md-7">
                 <div className="card-body">
-                  <h5 className="card-title">{result.original_title}</h5>
+                  <h5 className="card-title">{result.title || result.name}</h5>
                   <h6 className="card-subtitle text-muted capitalize">{result.media_type}</h6>
-                  <h6 className="card-subtitle text-muted">Release Date: {moment(result.release_date, "YYYY-MM-DD").format("MM/DD/YYYY")}</h6>
+                  <h6 className="card-subtitle text-muted">
+                    Release Date:
+                    {moment((
+                      result.release_date || result.first_air_date
+                    ), "YYYY-MM-DD").format("MM/DD/YYYY")}
+                  </h6>
                   <p>Rating: {result.vote_average} <small>({result.vote_count})</small></p>
                   <Link to={{
                     pathname: '/details',
                     state: {
+                      type: result.media_type,
                       id: result.id
                     }
                   }}>

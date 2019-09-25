@@ -19,8 +19,8 @@ export const getSearch = e => dispatch => {
   })
 }
 
-export const getDetails = id => dispatch => {
-  API.TMDB.movie(id)
+export const getDetails = (type, id) => dispatch => {
+  API.TMDB.details(type, id)
     .then(res => {
       console.log(res.data)
       dispatch({
