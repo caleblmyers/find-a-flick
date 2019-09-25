@@ -1,6 +1,16 @@
 import axios from 'axios';
 
 export default {
+  Favorites: {
+    add: function (type, id, token) {
+      return axios.post('/api/favorites', { type, id }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    }
+  },
+
   TMDB: {
     comingSoon: function () {
       return axios.get('/api/tmdb/coming_soon')

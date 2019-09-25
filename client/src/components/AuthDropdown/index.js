@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Gravatar from 'react-gravatar';
 
 import AuthContext from '../../contexts/AuthContext';
@@ -34,6 +34,9 @@ class AuthDropdown extends Component {
           <Gravatar className="rounded-circle" email={user.email} size={30} /> {user.email}
         </button>
         <div className={dropdownMenuClass} aria-labelledby="navbarDropdown">
+          <Link className="dropdown-item" to={"favorites"}>
+            <div>Favorites</div>
+          </Link>
           <div className="dropdown-item" onClick={this.handleLogout}>Logout</div>
         </div>
       </li>

@@ -6,8 +6,12 @@ import PropTypes from 'prop-types'
 import { getDetails } from '../../store/actions/searchActions'
 
 import './style.css'
+import AuthContext from '../../contexts/AuthContext'
+import API from '../../lib/API'
 
 class Details extends Component {
+  static contextType = AuthContext
+
   state = {
     isLoaded: false
   }
@@ -15,6 +19,12 @@ class Details extends Component {
   componentDidMount() {
     this.props.getDetails(this.props.location.state.type, this.props.location.state.id)
     setTimeout(() => this.setState({ isLoaded: true }), 1500)
+  }
+
+  addFavorite = (type, id) => {
+    API.Favorites.add(type, id, this.context.authToken)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
   }
 
   render() {
@@ -42,11 +52,11 @@ class Details extends Component {
                   <div className="row no-gutters">
                     <div className="col">
                       <div>
-                        Released: 
+                        Released:
                         {moment((
                           details.release_date || details.first_air_date
                         ), "YYYY-MM-DD").format("MMMM Do, YYYY")}
-                    </div>
+                      </div>
                     </div>
                     <div className="col">
                       <div>
@@ -75,6 +85,9 @@ class Details extends Component {
                   <div className="col-4">
                     <div>
                       Rating: {details.vote_average} <small>({details.vote_count})</small>
+                    </div>
+                    <div>
+                      <button className="btn btn-outline-dark" onClick={this.addFavorite} >Favorite</button>
                     </div>
                   </div>
                 </div>

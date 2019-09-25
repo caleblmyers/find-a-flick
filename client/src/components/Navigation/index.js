@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import './style.css'
 import AuthContext from '../../contexts/AuthContext';
 import AuthDropdown from '../../components/AuthDropdown';
-// import SearchBar from '../SearchBar';
 
 class Navigation extends Component {
   static contextType = AuthContext;
@@ -14,9 +13,7 @@ class Navigation extends Component {
   }
 
   toggleCollapse = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
+    this.setState({ collapsed: !this.state.collapsed })
   }
 
   render() {
@@ -34,11 +31,6 @@ class Navigation extends Component {
           </button>
 
           <div className={targetClass} id='navbarSupportedContent'>
-            {/* <ul className="navbar-nav mx-auto">
-              <li className="nav-item">
-                <SearchBar />
-              </li>
-            </ul> */}
             <ul className='navbar-nav ml-auto'>
               <li className='nav-item'>
                 <Link className='nav-link' to='/' onClick={this.toggleCollapse}>Home</Link>

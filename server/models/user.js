@@ -2,15 +2,28 @@
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    id: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     email: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
+      allowNull: false
     },
-    password: DataTypes.STRING
-  }, {});
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+  }, {
+    underscored: true,
+    timestamps: false
+  });
 
   User.associate = function (models) {
-    // associations can be defined here
+    User.hasMany(models.Favorite)
   };
 
   User.prototype.comparePassword = function (challenge) {

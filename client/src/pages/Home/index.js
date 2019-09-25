@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 
 import './style.css'
+import AuthContext from '../../contexts/AuthContext'
 import API from "../../lib/API"
 import SearchBar from '../../components/SearchBar';
 import Carousel from '../../components/Carousel';
 import Table from '../../components/Table';
 
 class HomePage extends Component {
+  static contextType = AuthContext
+
   state = {
     movies: [],
     topMovies: [],

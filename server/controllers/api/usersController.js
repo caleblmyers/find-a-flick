@@ -13,6 +13,7 @@ usersController.post('/', (req, res) => {
 });
 
 usersController.get('/me', JWTVerifier, (req, res) => {
+  console.log(req.user)
   res.json(req.user);
 });
 

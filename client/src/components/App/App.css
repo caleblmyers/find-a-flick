@@ -1,6 +1,9 @@
 .App {
   text-align: center;
 }
+.dropdown-item:active {
+  background: none;
+}
 /* 
 #app-body {
   margin-left: 180px
