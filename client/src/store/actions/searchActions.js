@@ -3,7 +3,7 @@ import API from '../../lib/API'
 
 export const processSearch = () => (dispatch, getState) => {
   let { keyword } = getState().search
-  API.TMDB.search('search', keyword)
+  API.TMDB.search(keyword)
     .then(res => {
       dispatch({
         type: PROCESS_SEARCH,
@@ -21,7 +21,7 @@ export const getSearch = e => dispatch => {
 }
 
 export const getDetails = id => dispatch => {
-  API.TMDB.search('movie', id)
+  API.TMDB.movie(id)
     .then(res => {
       console.log(res.data)
       dispatch({

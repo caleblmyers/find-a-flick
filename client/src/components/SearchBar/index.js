@@ -6,8 +6,8 @@ import { getSearch } from '../../store/actions/searchActions'
 
 class SearchBar extends Component {
   handleSubmit = e => {
-    e.preventDefault()
-    this.props.search = ''
+    // e.preventDefault()
+    // this.props.search = ''
   }
 
   render() {

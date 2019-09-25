@@ -8,14 +8,17 @@ export default {
     genres: function () {
       return axios.get('/api/tmdb/genres')
     },
+    movie: function (id) {
+      return axios.get(`/api/tmdb/movie/${id}`)
+    },
     nowPlaying: function () {
       return axios.get('/api/tmdb/now_playing')
     },
     popular: function (type) {
       return axios.get(`/api/tmdb/popular/${type}`)
     },
-    search: function (type, data) {
-      return axios.post(`/api/tmdb/${type}`, { data })
+    search: function (data) {
+      return axios.post('/api/tmdb/search', { data })
     },
     topRated: function (type) {
       return axios.get(`/api/tmdb/${type}/top_rated`)

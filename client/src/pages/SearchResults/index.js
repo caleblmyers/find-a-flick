@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import { processSearch } from '../../store/actions/searchActions'
 
@@ -11,29 +12,21 @@ class SearchResults extends Component {
     this.props.processSearch()
   }
 
-  truncateText(text, maxLength) {
-    let truncated = text
-    if (text.length > maxLength) {
-      truncated = truncated.substr(0, maxLength) + '...';
-    }
-    return truncated;
-  }
-
   render() {
-    const maxLength = 100
-
     let resultItems = this.props.results.results ?
       this.props.results.results.map(result => (
         <div className="col-12 col-md-6 col-xl-3 p-3" key={result.id}>
           <div className="card mb-3">
             <div className="row no-gutters">
-              <div className="col-4">
+              <div className="col-12 col-md-5">
                 <img className="img-fluid" src={`https://image.tmdb.org/t/p/original/${result.poster_path}`} alt="..." />
               </div>
-              <div className="col-8">
+              <div className="col-12 col-md-7">
                 <div className="card-body">
                   <h5 className="card-title">{result.original_title}</h5>
-                  <p className="card-text">{this.truncateText(result.overview, maxLength)}</p>
+                  <h6 className="card-subtitle media-type text-muted">{result.media_type}</h6>
+                  <h6 className="card-subtitle text-muted">Release Date: {moment(result.release_date, "YYYY-MM-DD").format("MM/DD/YYYY")}</h6>
+                  <p>Rating: {result.vote_average} <small>({result.vote_count})</small></p>
                   <Link to={{
                     pathname: '/details',
                     state: {
@@ -53,11 +46,9 @@ class SearchResults extends Component {
 
     return (
       <div className='SearchResults' >
-        <div className="display-4">Search Results</div>
-        <div className="ResultsGrid">
-          <div className="row no-gutters justify-content-center">
-            {resultItems}
-          </div>
+        <div className="display-4">Search Results for {`"${this.props.keyword}"`}</div>
+        <div className="row no-gutters justify-content-center">
+          {resultItems}
         </div>
       </div>
     );
@@ -69,7 +60,8 @@ SearchResults.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  results: state.search.results
+  results: state.search.results,
+  keyword: state.search.keyword
 })
 
 export default connect(mapStateToProps, { processSearch })(SearchResults)
