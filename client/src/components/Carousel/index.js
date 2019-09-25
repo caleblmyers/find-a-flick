@@ -27,6 +27,7 @@ class Carousel extends Component {
           <Link to={{
             pathname: '/details',
             state: {
+              type: this.state.data[this.state.index].media_type,
               id: this.state.data[this.state.index].id
             }
           }}>

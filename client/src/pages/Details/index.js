@@ -85,11 +85,11 @@ class Details extends Component {
                       <div className="col">
                         <div>
                           Genres:
-                      <div>
-                            {details.genres.map(genre => (
-                              <span key={genre.id}>{genre.name} </span>
-                            ))}
-                          </div>
+                        </div>
+                        <div>
+                          {details.genres.map(genre => (
+                            <span key={genre.id}>{genre.name} </span>
+                          ))}
                         </div>
                       </div>
                       {this.props.location.state.type === "movie" &&
