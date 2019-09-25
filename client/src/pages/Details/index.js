@@ -13,7 +13,8 @@ class Details extends Component {
   static contextType = AuthContext
 
   state = {
-    isLoaded: false
+    isLoaded: false,
+    message: ""
   }
 
   componentDidMount() {
@@ -21,9 +22,19 @@ class Details extends Component {
     setTimeout(() => this.setState({ isLoaded: true }), 1500)
   }
 
-  addFavorite = (type, id) => {
-    API.Favorites.add(type, id, this.context.authToken)
-      .then(res => console.log(res))
+  addFavorite = (type, id, title) => {
+    API.Favorites.add(type, id, title, this.context.authToken)
+      .then(res => {
+        let message = ""
+        if (res.data.errors) {
+          message = res.data.errors[0].type === "unique violation" ? "This item is already on your favorites!" : "Unknown error"
+        } else {
+          message = `${res.data.title} added to favorites!`
+        }
+        this.setState({ message })
+        console.log(res)
+
+      })
       .catch(err => console.log(err))
   }
 
@@ -35,65 +46,75 @@ class Details extends Component {
         {!this.state.isLoaded ? (
           <div>Loading...</div>
         ) : (
-            <div className="row no-gutters p-3" id="details-body">
-              <div className="col-9 px-3">
-                <div className="p-3" id="details-header">
-                  <div className="row no-gutters">
-                    <div className="col">
-                      <div className="h2">{details.title || details.name}</div>
+            <div>
+              {this.state.message &&
+                <div className='row no-gutters'>
+                  <div className='col'>
+                    <div className='alert alert-success mb-3' role='alert'>
+                      {this.state.message}
                     </div>
                   </div>
-                  {details.tagline &&
+                </div>}
+              <div className="row no-gutters p-3" id="details-body">
+                <div className="col-9 px-3">
+                  <div className="p-3" id="details-header">
                     <div className="row no-gutters">
                       <div className="col">
-                        <small>{details.tagline}</small>
-                      </div>
-                    </div>}
-                  <div className="row no-gutters">
-                    <div className="col">
-                      <div>
-                        Released:
-                        {moment((
-                          details.release_date || details.first_air_date
-                        ), "YYYY-MM-DD").format("MMMM Do, YYYY")}
+                        <div className="h2">{details.title || details.name}</div>
                       </div>
                     </div>
-                    <div className="col">
-                      <div>
-                        Genres:
-                      <div>
-                          {details.genres.map(genre => (
-                            <span key={genre.id}>{genre.name} </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    {this.props.location.state.type === "movie" &&
-                      <div className="col">
-                        <div>
-                          Runtime: {`${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`}
+                    {details.tagline &&
+                      <div className="row no-gutters">
+                        <div className="col">
+                          <small>{details.tagline}</small>
                         </div>
                       </div>}
+                    <div className="row no-gutters">
+                      <div className="col">
+                        <div>
+                          Released:
+                        {moment((
+                            details.release_date || details.first_air_date
+                          ), "YYYY-MM-DD").format("MMMM Do, YYYY")}
+                        </div>
+                      </div>
+                      <div className="col">
+                        <div>
+                          Genres:
+                      <div>
+                            {details.genres.map(genre => (
+                              <span key={genre.id}>{genre.name} </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      {this.props.location.state.type === "movie" &&
+                        <div className="col">
+                          <div>
+                            Runtime: {`${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`}
+                          </div>
+                        </div>}
+                    </div>
                   </div>
-                </div>
 
-                <div className="row no-gutters my-4">
-                  <div className="col-8">
-                    <div className="h5">Overview</div>
-                    <p>{details.overview}</p>
-                  </div>
-                  <div className="col-4">
-                    <div>
-                      Rating: {details.vote_average} <small>({details.vote_count})</small>
+                  <div className="row no-gutters my-4">
+                    <div className="col-8">
+                      <div className="h5">Overview</div>
+                      <p>{details.overview}</p>
                     </div>
-                    <div>
-                      <button className="btn btn-outline-dark" onClick={this.addFavorite} >Favorite</button>
+                    <div className="col-4">
+                      <div>
+                        Rating: {details.vote_average} <small>({details.vote_count})</small>
+                      </div>
+                      <div>
+                        <button className="btn btn-outline-dark" onClick={() => this.addFavorite(this.props.location.state.type, this.props.location.state.id, (details.title || details.name))} >Favorite</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-3">
-                <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path}`} alt="Poster" />
+                <div className="col-3">
+                  <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path}`} alt="Poster" />
+                </div>
               </div>
             </div>
           )

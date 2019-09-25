@@ -19,10 +19,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     tmdbId: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      unique: true
     },
     title: {
       type: DataTypes.STRING
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      default: DataTypes.NOW
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE,
+      default: DataTypes.NOW
     }
   }, { timestamps: false });
 

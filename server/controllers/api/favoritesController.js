@@ -6,12 +6,14 @@ const { JWTVerifier } = require('../../lib/passport');
 favoritesController.post('/', JWTVerifier, (req, res) => {
   db.Favorite.create({
     userId: 1,
-    mediaType: 'movie',
-    tmdbId: 671,
-    title: 'test fav'
+    mediaType: req.body.type,
+    tmdbId: req.body.id,
+    title: req.body.title,
+    createdAt: new Date(),
+    updatedAt: new Date()
   })
     .then(favorite => res.json(favorite))
-    .catch(err => console.log(err))
+    .catch(err => res.json(err))
 })
 
 module.exports = favoritesController;

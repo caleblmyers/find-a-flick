@@ -12,8 +12,18 @@ usersController.post('/', (req, res) => {
     .catch(err => res.json(err));
 });
 
+usersController.get('/:id/favorites', JWTVerifier, (req, res) => {
+  db.Favorite.findAll({
+    where: {
+      userId: req.params.id
+    },
+    order: [['title', 'DESC']]
+  })
+    .then(favorites => res.json(favorites))
+    .catch(err => res.json(err));
+});
+
 usersController.get('/me', JWTVerifier, (req, res) => {
-  console.log(req.user)
   res.json(req.user);
 });
 

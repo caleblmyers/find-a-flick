@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export default {
   Favorites: {
-    add: function (type, id, token) {
-      return axios.post('/api/favorites', { type, id }, {
+    add: function (type, id, title, token) {
+      return axios.post('/api/favorites', { type, id, title }, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -42,10 +42,17 @@ export default {
     login: function (email, password) {
       return axios.post('/api/users/login', { email, password });
     },
-    getMe: function (authToken) {
+    getFavorites: function (id, token) {
+      return axios.get(`/api/users/${id}/favorites`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    },
+    getMe: function (token) {
       return axios.get('/api/users/me', {
         headers: {
-          'Authorization': `Bearer ${authToken}`
+          'Authorization': `Bearer ${token}`
         }
       });
     },
