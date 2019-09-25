@@ -10,9 +10,7 @@ favoritesController.post('/', JWTVerifier, (req, res) => {
     userId,
     mediaType,
     tmdbId,
-    title,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    title
   })
     .then(favorite => res.json(favorite))
     .catch(err => res.json(err))

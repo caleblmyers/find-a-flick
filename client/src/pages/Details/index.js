@@ -44,6 +44,7 @@ class Details extends Component {
 
   render() {
     const { details } = this.props
+    const { user } = this.context
 
     return (
       <div className="Details p-4">
@@ -110,7 +111,7 @@ class Details extends Component {
                       <div>
                         Rating: {details.vote_average} <small>({details.vote_count})</small>
                       </div>
-                      <div>
+                      {user && <div>
                         <button
                           className="btn btn-outline-dark"
                           onClick={() => this.addFavorite(
@@ -120,7 +121,7 @@ class Details extends Component {
                             this.context.user.id,
                             this.context.authToken
                           )}>Favorite</button>
-                      </div>
+                      </div>}
                     </div>
                   </div>
                 </div>
