@@ -20,6 +20,10 @@ class Carousel extends Component {
   }
 
   render() {
+    let mediaType
+    if (this.props.type === "movie" || this.props.type === "topMovie") mediaType = "movie"
+    else mediaType = "tv"
+
     return (
       <div className="Carousel">
         <div className="mx-auto div-featured">
@@ -27,7 +31,7 @@ class Carousel extends Component {
           <Link to={{
             pathname: '/details',
             state: {
-              type: this.state.data[this.state.index].media_type,
+              type: mediaType,
               id: this.state.data[this.state.index].id
             }
           }}>

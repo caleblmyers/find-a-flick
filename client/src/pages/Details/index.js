@@ -18,8 +18,6 @@ class Details extends Component {
     isLoaded: false,
     message: "",
     messageType: "",
-    // castSlide: 1,
-    // maxSlide: 0,
     cast: []
   }
 
@@ -27,7 +25,6 @@ class Details extends Component {
     this.props.getDetails(this.props.location.state.type, this.props.location.state.id)
     setTimeout(() => this.setState({
       isLoaded: true,
-      // maxSlide: Math.floor(this.props.details.credits.cast.length / 5),
       cast: this.props.details.credits.cast
     }), 2000)
   }
@@ -50,14 +47,11 @@ class Details extends Component {
       .catch(err => console.log(err))
   }
 
-  // changeCast = (slide, e) => {
-  //   if (e.target.id === "next") this.setState({ castSlide: slide + 1 })
-  //   else this.setState({ castSlide: slide - 1 })
-  // }
-
   render() {
     const { details } = this.props
-    const { user } = this.context
+    const { user, authToken } = this.context
+    const { message, messageType } = this.state
+    const { type, id } = this.props.location.state
 
     return (
       <div className="Details p-4">
@@ -65,11 +59,11 @@ class Details extends Component {
           <div>Loading...</div>
         ) : (
             <div className="container">
-              {this.state.message &&
+              {message &&
                 <div className='row'>
                   <div className='col'>
-                    <div className={`alert alert-${this.state.messageType} mb-3`} role='alert'>
-                      {this.state.message}
+                    <div className={`alert alert-${messageType} mb-3`} role='alert'>
+                      {message}
                     </div>
                   </div>
                 </div>}
@@ -126,11 +120,11 @@ class Details extends Component {
                         <button
                           className="btn btn-outline-dark"
                           onClick={() => this.addFavorite(
-                            this.props.location.state.type,
-                            this.props.location.state.id,
+                            type,
+                            id,
                             (details.title || details.name),
-                            this.context.user.id,
-                            this.context.authToken
+                            user.id,
+                            authToken
                           )}>Favorite</button>
                       </div>}
                     </div>
@@ -145,19 +139,20 @@ class Details extends Component {
                 <div className="col-12 col-lg-9 p-3 text-left">
                   <div className="h4"><strong>Cast</strong></div>
                   <CastSlider cast={details.credits.cast} />
-                  <div className="row pt-2">
-                    <div className="mr-auto col-8">
+                  <div className="row mt-2">
+                    <div className="col-12 col-md-6">
                       <div className="h4"><strong>Recommended</strong></div>
                     </div>
-                    <div className="ml-auto col-3">
-                      <div className="h4"><strong>Collection</strong></div>
+                    <div className="col-12 col-md-6">
+                      <div className="h4"><strong>Similar</strong></div>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="mr-auto col-8 bg-light-grey border-round py-2">
-                      <Carousel data={details.recommendations.results} type="movie" />
+                  <div className="row bg-light-grey border-round">
+                    <div className="mr-auto col-12 col-md-6 p-3">
+                      <Carousel data={details.recommendations.results} type={type} />
                     </div>
-                    <div className="ml-auto col-3 bg-light-grey border-round py-2">
+                    <div className="mr-auto col-12 col-md-6 p-3">
+                      <Carousel data={details.similar.results} type={type} />
                     </div>
                   </div>
                 </div>
@@ -175,22 +170,28 @@ class Details extends Component {
                   </div>
                   <div className="h4 mt-2"><strong>Facts</strong></div>
                   <div className="row no-gutters bg-light-grey border-round py-2">
-                    <div className="col-12">
-                      <div className="pl-2 py-1">
-                        <div className="text-sm"><strong>Revenue</strong></div>
-                        <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                    {type === "movie" ? (
+                      <div className="col-12">
+                        <div className="pl-2 py-1">
+                          <div className="text-sm"><strong>Revenue</strong></div>
+                          <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                        </div>
+                        <div className="pl-2 py-1">
+                          <div className="text-sm"><strong>Budget</strong></div>
+                          <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                        </div>
+                        <div className="pl-2 py-1">
+                          <div className="text-sm"><strong>Production Companies</strong></div>
+                          {details.production_companies.map(company => (
+                            <div className="text-xs" key={company.id}>{company.name}</div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="pl-2 py-1">
-                        <div className="text-sm"><strong>Budget</strong></div>
-                        <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
-                      </div>
-                      <div className="pl-2 py-1">
-                        <div className="text-sm"><strong>Production Companies</strong></div>
-                        {details.production_companies.map(company => (
-                          <div className="text-xs" key={company.id}>{company.name}</div>
-                        ))}
-                      </div>
-                    </div>
+                    ) : (
+                        <div className="col-12">
+                          Tv Facts
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>

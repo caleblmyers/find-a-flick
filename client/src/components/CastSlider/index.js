@@ -26,10 +26,10 @@ class CastSlider extends Component {
         <button onClick={event => this.changeSlide(slide, event)} className={`btn ${displayPrev}`} id="prev">&#10094;</button>
         <button onClick={event => this.changeSlide(slide, event)} className={`btn ${displayNext}`} id="next">&#10095;</button>
         {cast.slice(((slide - 1) * 5), (slide * 5)).map(person => (
-          <div className="col-4 col-md-2 px-0" key={person.cast_id}>
+          <div className="col-4 col-md-2 px-0 py-2 mx-1 align-self-center" key={person.id}>
             <div className="card">
               <img src={`https://image.tmdb.org/t/p/original/${person.profile_path}`} className="card-img-top" alt={person.name} />
-              <div className="cast-body pl-1 pt-1">
+              <div className="pl-1 py-3">
                 <div className="text-sm"><strong>{person.name}</strong></div>
                 <div className="text-xs">{person.character}</div>
               </div>
