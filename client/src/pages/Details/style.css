@@ -1,7 +1,6 @@
 /* Collections, credits, genres, outisde links */
 
 #details-body {
-  background-color: rgba(170, 170, 170, 0.685);
   border-radius: 10px;
 }
 
@@ -9,4 +8,23 @@
   background-color: black;
   color: white;
   border-radius: 10px;
+}
+.bg-light-grey {
+  background-color: rgba(170, 170, 170, 0.685);
+}
+#cast-container {
+  border-radius: 10px;
+  height: 260px;
+}
+.border-round {
+  border-radius: 10px;
+}
+.text-sm {
+  font-size: 0.85rem;
+}
+.text-xs {
+  font-size: 0.75rem;
+}
+.cast-body {
+  height: 4rem;
 }

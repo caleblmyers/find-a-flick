@@ -31,7 +31,7 @@ class Navigation extends Component {
           </button>
 
           <div className={targetClass} id='navbarSupportedContent'>
-            <ul className='navbar-nav ml-auto'>
+            <ul className='navbar-nav mr-auto'>
               <li className='nav-item'>
                 <Link className='nav-link' to='/' onClick={this.toggleCollapse}>Home</Link>
               </li>
@@ -42,11 +42,14 @@ class Navigation extends Component {
                 <li className='nav-item'>
                   <Link className='nav-link' to='/secret' onClick={this.toggleCollapse}>Secret</Link>
                 </li>}
+            </ul>
+            <ul className="navbar-nav ml-auto">
               {user
                 ? <AuthDropdown onClick={this.toggleCollapse} />
                 : <>
                   <li className='nav-item'><Link className='nav-link' to='/login' onClick={this.toggleCollapse}>Login</Link></li>
                   <li className='nav-item'><Link className='nav-link' to='/register' onClick={this.toggleCollapse}>Register</Link></li>
+
                 </>}
             </ul>
           </div>
