@@ -95,11 +95,17 @@ class Details extends Component {
   }
 
   changeMedia = (type, id) => {
+    this.setState({ isLoaded: false })
     this.props.getDetails(type, id)
     API.Comments.pageComments(type, id)
       .then(res => {
         const comments = res.data
-        this.setState({ comments })
+        setTimeout(() => this.setState({
+          comments,
+          message: "",
+          messageType: "",
+          isLoaded: true
+        }), 1000)
       })
       .catch(err => console.log(err))
   }
@@ -138,41 +144,58 @@ class Details extends Component {
                           <small>{details.tagline}</small>
                         </div>
                       </div>}
-                    <div className="row no-gutters">
-                      <div className="col">
-                        <div>
-                          Released:
+                    {type === "person" ? (
+                      <div className="row no-gutters">
+                        <div className="col">
+                          Birthday:
                           {moment((
-                            details.release_date || details.first_air_date
+                            details.birthday
                           ), "YYYY-MM-DD").format(" MMMM Do, YYYY")}
                         </div>
-                      </div>
-                      {details.genres && <div className="col">
-                        <div>
-                          Genres:
-                          {details.genres.map(genre => (
-                            <span key={genre.id}> {genre.name}</span>
-                          ))}
-                        </div>
-                      </div>}
-                      {details.runtime &&
                         <div className="col">
-                          <div>
-                            Runtime: {`${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`}
+                          Birthplace: {details.place_of_birth}
+                        </div>
+                        <div className="col">
+                          Known for: {details.known_for_department}
+                        </div>
+                      </div>
+                    ) : (
+                        <div className="row no-gutters">
+                          <div className="col">
+                            <div>
+                              Released:
+                              {moment((
+                                details.release_date || details.first_air_date
+                              ), "YYYY-MM-DD").format(" MMMM Do, YYYY")}
+                            </div>
                           </div>
-                        </div>}
-                    </div>
+                          {details.genres && <div className="col">
+                            <div>
+                              Genres:
+                              {details.genres.map(genre => (
+                                <span key={genre.id}> {genre.name}</span>
+                              ))}
+                            </div>
+                          </div>}
+                          {details.runtime &&
+                            <div className="col">
+                              <div>
+                                Runtime: {`${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`}
+                              </div>
+                            </div>}
+                        </div>
+                      )}
                   </div>
 
                   <div className="row no-gutters my-4">
                     <div className="col-8">
                       <div className="h5">Overview</div>
-                      <p>{details.overview}</p>
+                      <p>{details.overview || details.biography}</p>
                     </div>
                     <div className="col-4">
-                      <div>
+                      {details.vote_average && <div>
                         Rating: {details.vote_average} <small>({details.vote_count})</small>
-                      </div>
+                      </div>}
                       {user && <div>
                         <button
                           className="btn btn-outline-dark"
@@ -188,14 +211,18 @@ class Details extends Component {
                   </div>
                 </div>
                 <div className="col-3">
-                  <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path}`} alt="Poster" />
+                  <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`} alt="Poster" />
                 </div>
               </div>
 
               <div className="row">
                 <div className="col-12 col-lg-9 p-3 text-left">
-                  <div className="h4"><strong>Cast</strong></div>
-                  <CastSlider cast={details.credits.cast} />
+                  {type === "person" ? (
+                    <div className="h4"><strong>Credits</strong></div>
+                  ) : (
+                      <div className="h4"><strong>Cast</strong></div>
+                    )}
+                  <CastSlider cast={details.credits.cast || details.combined_credits.cast} handler={this.changeMedia} />
                   <div className="row mt-2">
                     <div className="col-12 col-md-6">
                       <div className="h4"><strong>Recommended</strong></div>
@@ -206,24 +233,24 @@ class Details extends Component {
                   </div>
                   <div className="row bg-light-grey border-round">
                     <div className="mr-auto col-12 col-md-6 p-3">
-                      <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
+                      {type !== "person" && <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />}
                     </div>
                     <div className="mr-auto col-12 col-md-6 p-3">
-                      <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
+                      {type !== "person" && <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />}
                     </div>
                   </div>
                 </div>
                 <div className="col-3 p-3 text-left">
                   <div className="h4"><strong>Crew</strong></div>
                   <div className="row no-gutters bg-light-grey border-round py-2">
-                    <div className="col-12">
+                    {type !== "person" && <div className="col-12">
                       {details.credits.crew.slice(0, 8).map(person => (
                         <div className="pl-2 py-1" key={person.credit_id}>
                           <div className="text-sm"><strong>{person.name}</strong></div>
                           <div className="text-xs">{person.job}</div>
                         </div>
                       ))}
-                    </div>
+                    </div>}
                   </div>
                   <div className="h4 mt-2"><strong>Facts</strong></div>
                   <div className="row no-gutters bg-light-grey border-round py-2">
@@ -314,7 +341,7 @@ class Details extends Component {
                   Reviews
                 </div>
               </div>
-            </div>
+            </div >
           )
         }
       </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class CastSlider extends Component {
   state = {
@@ -25,15 +26,23 @@ class CastSlider extends Component {
       <div className="CastSlider position-relative row justify-content-center bg-light-grey py-2" id="cast-container">
         <button onClick={event => this.changeSlide(slide, event)} className={`btn ${displayPrev}`} id="prev">&#10094;</button>
         <button onClick={event => this.changeSlide(slide, event)} className={`btn ${displayNext}`} id="next">&#10095;</button>
-        {cast.slice(((slide - 1) * 5), (slide * 5)).map(person => (
-          <div className="col-4 col-md-2 px-0 py-2 mx-1 align-self-center" key={person.id}>
-            <div className="card">
-              <img src={`https://image.tmdb.org/t/p/original/${person.profile_path}`} className="card-img-top" alt={person.name} />
-              <div className="pl-1 py-3">
-                <div className="text-sm"><strong>{person.name}</strong></div>
-                <div className="text-xs">{person.character}</div>
+        {cast.slice(((slide - 1) * 5), (slide * 5)).map(credit => (
+          <div className="col-4 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.id}>
+            <Link onClick={() => this.props.handler(credit.media_type || "person", credit.id)} className="no-link" to={{
+              pathname: '/details',
+              state: {
+                type: credit.media_type || "person",
+                id: credit.id
+              }
+            }}>
+              <div className="card">
+                <img src={`https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`} className="card-img-top" alt={credit.name} />
+                <div className="pl-1 py-3">
+                  <div className="text-sm"><strong>{credit.name || credit.title}</strong></div>
+                  <div className="text-xs">{credit.character}</div>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         ))}
       </div>

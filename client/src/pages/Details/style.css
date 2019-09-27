@@ -15,6 +15,10 @@
   border-radius: 10px;
   min-height: 295px;
 }
+.no-link, .no-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
 .border-round {
   border-radius: 10px;
 }

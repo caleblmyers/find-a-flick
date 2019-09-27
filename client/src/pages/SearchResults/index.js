@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import PropTypes from 'prop-types'
 import { processSearch } from '../../store/actions/searchActions'
 
@@ -11,12 +9,12 @@ import ResultsGrid from '../../components/ResultsGrid'
 
 class SearchResults extends Component {
   state = {
-    keyword: this.props.location.state.keyword,
+    keyword: '',
     results: []
   }
 
   componentDidMount() {
-    this.props.processSearch(this.state.keyword)
+    this.props.location.state && this.props.processSearch(this.props.location.state.keyword)
     this.setState({ results: this.props.results.results })
   }
 
@@ -36,8 +34,15 @@ class SearchResults extends Component {
             <SearchBar handler={() => this.submitHandler(this.props.keyword)} />
           </div>
         </div>
-        <div className="display-4">Search Results for <span className="capitalize">{`"${this.props.location.state.keyword}"`}</span></div>
-        {this.props.results.results && <ResultsGrid results={this.props.results.results} />}
+        {this.props.results.results ? (
+          <div>
+            <div className="display-4">Search Results for <span className="capitalize">{`"${this.props.location.state.keyword}"`}</span></div>
+            <ResultsGrid results={this.props.results.results} />
+          </div>
+        ) : (
+            <div className="h2">Nothing here yet! Type something above to make a search.</div>
+          )
+        }
       </div>
     );
   }
