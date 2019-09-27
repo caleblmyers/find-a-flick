@@ -18,15 +18,28 @@ class Details extends Component {
     isLoaded: false,
     message: "",
     messageType: "",
-    cast: []
+    cast: [],
+    comment: "",
+    comments: []
   }
 
   componentDidMount() {
-    this.props.getDetails(this.props.location.state.type, this.props.location.state.id)
+    const { type, id } = this.props.location.state
+
+    this.props.getDetails(type, id)
+
+    API.Comments.pageComments(type, id)
+      .then(res => {
+        const comments = res.data
+        console.log(comments)
+        this.setState({ comments })
+      })
+      .catch(err => console.log(err))
+
     setTimeout(() => this.setState({
       isLoaded: true,
       cast: this.props.details.credits.cast
-    }), 2000)
+    }), 2500)
   }
 
   addFavorite = (type, id, title, userId, token) => {
@@ -47,10 +60,46 @@ class Details extends Component {
       .catch(err => console.log(err))
   }
 
+  handleInputChange = event => {
+    const { name, value } = event.target;
+
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const { comment } = this.state
+    const { user, authToken } = this.context
+    const { type, id } = this.props.location.state
+
+    let newComment = {
+      userId: user.id,
+      userName: user.username,
+      mediaType: type,
+      tmdbId: id,
+      body: comment,
+      replyTo: 0
+    }
+
+    API.Comments.add(newComment, authToken)
+      .then(res => {
+        API.Comments.pageComments(type, id)
+          .then(res => {
+            const comments = res.data
+            console.log(comments)
+            this.setState({ comments })
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
+  }
+
+
   render() {
     const { details } = this.props
     const { user, authToken } = this.context
-    const { message, messageType } = this.state
+    const { message, messageType, comment, comments } = this.state
     const { type, id } = this.props.location.state
 
     return (
@@ -196,14 +245,55 @@ class Details extends Component {
                 </div>
               </div>
 
-              <div className="row">
-                <div className="col-8">
-                  Comments
+              {user && <div className="row">
+                <div className="col-9">
+                  <div className="row no-gutters">
+                    <div className="col-12">
+                      <div className="h4 text-left">Add a Comment</div>
+                      <div className="row bg-light-grey border-round my-3">
+                        {user && <div className="col-12 p-3">
+                          <form onSubmit={this.handleSubmit}>
+                            <div className='form-group mb-3'>
+                              <textarea
+                                className='form-control'
+                                id='comment'
+                                name='comment'
+                                placeholder='Post a comment'
+                                value={comment}
+                                onChange={this.handleInputChange}
+                                rows={4}
+                              />
+                            </div>
+                            <div className="form-group mb-3">
+                              <button className='btn btn-success float-right' type='submit'>Post</button>
+                            </div>
+                          </form>
+                        </div>}
+                      </div>
+
+                      <div className="h4 text-left">Comments</div>
+                      <div className="row bg-light-grey border-round py-2">
+                        {comments.map(comment => (
+                          <div className="col-12 py-2" key={comment.id}>
+                            <div class="card bg-dark text-white text-left">
+                              <div class="card-header">{comment.userName}</div>
+                              <div class="card-body">
+                                <blockquote class="blockquote mb-0">
+                                  <p>{comment.body}</p>
+                                  <footer class="blockquote-footer">Created at: {comment.createdAt}</footer>
+                                </blockquote>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-4">
-                  Ratings
+                <div className="col-3">
+                  Reviews
                 </div>
-              </div>
+              </div>}
             </div>
           )
         }

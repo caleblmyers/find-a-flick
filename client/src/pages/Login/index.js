@@ -13,8 +13,8 @@ class Login extends Component {
     error: ""
   }
 
-  handleSubmit = (email, password) => {
-    API.Users.login(email, password)
+  handleSubmit = (username, password) => {
+    API.Users.login(username, password)
       .then(response => response.data)
       .then(({ user, token }) => {
         this.context.onLogin(user, token);
@@ -25,7 +25,7 @@ class Login extends Component {
 
         switch (err.response.status) {
           case 401:
-            message = 'Sorry, that email/password combination is not valid. Please try again.';
+            message = 'Sorry, that username/password combination is not valid. Please try again.';
             break;
           case 500:
             message = 'Server error. Please try again later.';

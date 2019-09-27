@@ -1,30 +1,28 @@
 import React, { Component } from 'react';
 
-import Octicon, { Mail, Key } from '@githubprimer/octicons-react';
+import Octicon, { Person, Key } from '@githubprimer/octicons-react';
 
 class LoginForm extends Component {
   state = {
-    email: '',
+    username: '',
     password: ''
   };
 
   handleInputChange = event => {
     const { name, value } = event.target;
 
-    this.setState({
-      [name]: value
-    });
+    this.setState({ [name]: value });
   }
 
   handleSubmit = event => {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
 
-    this.props.onSubmit(email, password);
+    this.props.onSubmit(username, password);
     event.preventDefault();
   }
 
   render() {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
 
     return (
       <div className='LoginForm'>
@@ -33,15 +31,15 @@ class LoginForm extends Component {
             <form className='LoginForm' onSubmit={this.handleSubmit}>
               <div className='input-group mb-3'>
                 <div className="input-group-prepend">
-                  <span className="input-group-text"><Octicon icon={Mail} /></span>
+                  <span className="input-group-text"><Octicon icon={Person} /></span>
                 </div>
                 <input
                   className='form-control'
-                  id='email'
-                  type='email'
-                  name='email'
-                  placeholder='email@provider.com'
-                  value={email}
+                  id='username'
+                  type='username'
+                  name='username'
+                  placeholder='MovieBuff25'
+                  value={username}
                   onChange={this.handleInputChange}
                 />
               </div>

@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
+    username: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -34,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = function (models) {
     User.hasMany(models.Favorite)
+    User.hasMany(models.Comment)
   };
 
   User.prototype.comparePassword = function (challenge) {

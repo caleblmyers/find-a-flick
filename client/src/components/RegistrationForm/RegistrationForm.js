@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Octicon, { Mail, Key } from '@githubprimer/octicons-react';
+import Octicon, { Person, Mail, Key } from '@githubprimer/octicons-react';
 
 class RegistrationForm extends Component {
   state = {
+    username: '',
     email: '',
     password: '',
     passwordConfirm: ''
@@ -17,20 +18,35 @@ class RegistrationForm extends Component {
   }
 
   handleSubmit = event => {
-    const { email, password, passwordConfirm } = this.state;
+    const { username, email, password, passwordConfirm } = this.state;
 
-    this.props.onSubmit(email, password, passwordConfirm);
+    this.props.onSubmit(username, email, password, passwordConfirm);
     event.preventDefault();
   }
 
   render() {
-    const { email, password, passwordConfirm } = this.state;
+    const { username, email, password, passwordConfirm } = this.state;
 
     return (
       <div className='LoginForm'>
         <div className='card'>
           <div className='card-body'>
             <form onSubmit={this.handleSubmit}>
+              <div className='input-group mb-3'>
+                <div className="input-group-prepend">
+                  <span className="input-group-text"><Octicon icon={Person} /></span>
+                </div>
+                <input
+                  className='form-control'
+                  id='username'
+                  type='username'
+                  name='username'
+                  placeholder='MovieBuff25'
+                  value={username}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+
               <div className='input-group mb-3'>
                 <div className="input-group-prepend">
                   <span className="input-group-text"><Octicon icon={Mail} /></span>

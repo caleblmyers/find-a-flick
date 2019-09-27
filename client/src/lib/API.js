@@ -1,6 +1,18 @@
 import axios from 'axios';
 
 export default {
+  Comments: {
+    add: function (comment, token) {
+      return axios.post('/api/comments', { comment }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    },
+    pageComments: function (type, id) {
+      return axios.get(`api/comments/${type}/${id}`)
+    }
+  },
   Favorites: {
     add: function (mediaType, tmdbId, title, userId, token) {
       return axios.post('/api/favorites', { mediaType, tmdbId, title, userId }, {
@@ -40,8 +52,8 @@ export default {
   },
 
   Users: {
-    login: function (email, password) {
-      return axios.post('/api/users/login', { email, password });
+    login: function (username, password) {
+      return axios.post('/api/users/login', { username, password });
     },
     getFavorites: function (id, token) {
       return axios.get(`/api/users/${id}/favorites`, {
@@ -57,8 +69,8 @@ export default {
         }
       });
     },
-    register: function (email, password) {
-      return axios.post('/api/users', { email, password });
+    register: function (username, email, password) {
+      return axios.post('/api/users', { username, email, password });
     }
   },
 
