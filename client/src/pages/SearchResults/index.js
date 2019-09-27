@@ -36,7 +36,7 @@ class SearchResults extends Component {
         </div>
         {this.props.results.results ? (
           <div>
-            <div className="display-4">Search Results for <span className="capitalize">{`"${this.props.location.state.keyword}"`}</span></div>
+            {<div className="display-4">Search Results for <span className="capitalize">{`"${this.state.keyword || this.props.keyword}"`}</span></div>}
             <ResultsGrid results={this.props.results.results} />
           </div>
         ) : (

@@ -66,58 +66,60 @@ class HomePage extends Component {
           </div>
         </div>
 
-        {this.state.isLoaded &&
-          <div className="Featured">
-            <div className="h2 text-center">Movies</div>
-            <div className="row no-gutters">
-              <div className="col-12 col-md-8">
-                <div className="row no-gutters">
-                  <div className="col-12 col-xl-6 p-3">
-                    <div className="h5">Featured</div>
-                    <Carousel data={this.state.movies} type={"movie"} handler={console.log} />
+        {!this.state.isLoaded ? (
+          <div>Loading...</div>
+        ) : (
+            <div className="Featured">
+              <div className="h2 text-center">Movies</div>
+              <div className="row no-gutters">
+                <div className="col-12 col-md-8">
+                  <div className="row no-gutters">
+                    <div className="col-12 col-xl-6 p-3">
+                      <div className="h5">Featured</div>
+                      <Carousel data={this.state.movies} type={"movie"} handler={console.log} />
+                    </div>
+                    <div className="col-12 col-xl-6 p-3">
+                      <div className="h5">Top Rated</div>
+                      <Carousel data={this.state.topMovies} type={"topMovie"} />
+                    </div>
                   </div>
-                  <div className="col-12 col-xl-6 p-3">
-                    <div className="h5">Top Rated</div>
-                    <Carousel data={this.state.topMovies} type={"topMovie"} />
+                  <div className="row no-gutters">
+                    <div className="col-12">
+                      <div className="h4">Editor Picks</div>
+                    </div>
                   </div>
                 </div>
-                <div className="row no-gutters">
-                  <div className="col-12">
-                    <div className="h4">Editor Picks</div>
-                  </div>
+                <div className="col-12 col-md-4 p-3">
+                  <div className="h6">In Theaters</div>
+                  <Table dataSet={this.state.nowPlaying} type="movie" />
                 </div>
               </div>
-              <div className="col-12 col-md-4 p-3">
-                <div className="h6">In Theaters</div>
-                <Table dataSet={this.state.nowPlaying} type="movie" />
-              </div>
-            </div>
 
-            <div className="h2 text-center">TV Shows</div>
-            <div className="row no-gutters">
-              <div className="col-12 col-md-8">
-                <div className="row no-gutters">
-                  <div className="col-12 col-xl-6 p-3">
-                    <div className="h5">Featured</div>
-                    <Carousel data={this.state.shows} type={"show"} />
+              <div className="h2 text-center">TV Shows</div>
+              <div className="row no-gutters">
+                <div className="col-12 col-md-8">
+                  <div className="row no-gutters">
+                    <div className="col-12 col-xl-6 p-3">
+                      <div className="h5">Featured</div>
+                      <Carousel data={this.state.shows} type={"show"} />
+                    </div>
+                    <div className="col-12 col-xl-6 p-3">
+                      <div className="h5">Top Rated</div>
+                      <Carousel data={this.state.topShows} type={"topShow"} />
+                    </div>
                   </div>
-                  <div className="col-12 col-xl-6 p-3">
-                    <div className="h5">Top Rated</div>
-                    <Carousel data={this.state.topShows} type={"topShow"} />
+                  <div className="row no-gutters">
+                    <div className="col-12">
+                      <div className="h4">Editor Picks</div>
+                    </div>
                   </div>
                 </div>
-                <div className="row no-gutters">
-                  <div className="col-12">
-                    <div className="h4">Editor Picks</div>
-                  </div>
+                <div className="col-12 col-md-4 p-3">
+                  <div className="h6">Today's Most Popular</div>
+                  <Table dataSet={this.state.popularShows} type="show" />
                 </div>
               </div>
-              <div className="col-12 col-md-4 p-3">
-                <div className="h6">Today's Most Popular</div>
-                <Table dataSet={this.state.popularShows} type="show" />
-              </div>
-            </div>
-          </div>}
+            </div>)}
       </div>
     )
   }

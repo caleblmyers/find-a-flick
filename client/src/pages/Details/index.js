@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import PropTypes from 'prop-types'
@@ -18,9 +18,11 @@ class Details extends Component {
     isLoaded: false,
     message: "",
     messageType: "",
-    cast: [],
     comment: "",
-    comments: []
+    comments: [],
+    details: {},
+    credits: {},
+    combined_credits: {}
   }
 
   componentDidMount() {
@@ -36,8 +38,23 @@ class Details extends Component {
       .catch(err => console.log(err))
 
     setTimeout(() => this.setState({
+      details: this.props.details,
+      credits: this.props.details.credits,
+      combined_credits: this.props.details.combined_credits,
       isLoaded: true
     }), 2500)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.state)
+    console.log(nextState)
+    if (this.state.details === nextState.details) {
+      return setTimeout(true, 2000)
+    } else return true
+  }
+
+  componentWillUnmount() {
+    this.setState({ isLoaded: false })
   }
 
   addFavorite = (type, id, title, userId, token) => {
@@ -104,6 +121,9 @@ class Details extends Component {
           comments,
           message: "",
           messageType: "",
+          details: this.props.details,
+          credits: this.props.details.credits,
+          combined_credits: this.props.details.combined_credits,
           isLoaded: true
         }), 1000)
       })
@@ -111,7 +131,7 @@ class Details extends Component {
   }
 
   render() {
-    const { details } = this.props
+    const { details, credits, combined_credits } = this.state
     const { user, authToken } = this.context
     const { message, messageType, comment, comments } = this.state
     const { type, id } = this.props.location.state
@@ -131,7 +151,7 @@ class Details extends Component {
                   </div>
                 </div>}
               <div className="row p-3 bg-light-grey" id="details-body">
-                <div className="col-9 px-3">
+                <div className="col-8 px-3">
                   <div className="p-3" id="details-header">
                     <div className="row no-gutters">
                       <div className="col">
@@ -210,7 +230,7 @@ class Details extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-3">
+                <div className="col-4">
                   <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`} alt="Poster" />
                 </div>
               </div>
@@ -222,7 +242,7 @@ class Details extends Component {
                   ) : (
                       <div className="h4"><strong>Cast</strong></div>
                     )}
-                  <CastSlider cast={details.credits.cast || details.combined_credits.cast} handler={this.changeMedia} />
+                  <CastSlider cast={credits.cast || combined_credits.cast} handler={this.changeMedia} />
                   <div className="row mt-2">
                     <div className="col-12 col-md-6">
                       <div className="h4"><strong>Recommended</strong></div>
@@ -240,43 +260,36 @@ class Details extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-3 p-3 text-left">
+                <div className="col-12 col-lg-3 p-3 text-left">
                   <div className="h4"><strong>Crew</strong></div>
-                  <div className="row no-gutters bg-light-grey border-round py-2">
-                    {type !== "person" && <div className="col-12">
-                      {details.credits.crew.slice(0, 8).map(person => (
-                        <div className="pl-2 py-1" key={person.credit_id}>
-                          <div className="text-sm"><strong>{person.name}</strong></div>
-                          <div className="text-xs">{person.job}</div>
-                        </div>
-                      ))}
-                    </div>}
-                  </div>
-                  <div className="h4 mt-2"><strong>Facts</strong></div>
-                  <div className="row no-gutters bg-light-grey border-round py-2">
-                    {type === "movie" ? (
-                      <div className="col-12">
-                        <div className="pl-2 py-1">
-                          <div className="text-sm"><strong>Revenue</strong></div>
-                          <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
-                        </div>
-                        <div className="pl-2 py-1">
-                          <div className="text-sm"><strong>Budget</strong></div>
-                          <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
-                        </div>
-                        <div className="pl-2 py-1">
-                          <div className="text-sm"><strong>Production Companies</strong></div>
-                          {details.production_companies.map(company => (
-                            <div className="text-xs" key={company.id}>{company.name}</div>
-                          ))}
-                        </div>
+                  {type !== "person" && credits.crew && <div className="row no-gutters bg-light-grey border-round py-2">
+                    {credits.crew.slice(0, 8).map(person => (
+                      <div className="col-3 col-lg-12 pl-2 py-1 mr-0" key={person.credit_id}>
+                        <div className="text-sm"><strong>{person.name}</strong></div>
+                        <div className="text-xs">{person.job}</div>
                       </div>
-                    ) : (
-                        <div className="col-12">
-                          Tv Facts
-                        </div>
-                      )}
-                  </div>
+                    ))}
+                  </div>}
+                  <div className="h4 mt-2"><strong>Facts</strong></div>
+                  {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Revenue</strong></div>
+                      <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Budget</strong></div>
+                      <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Production Companies</strong></div>
+                      {details.production_companies.map(company => (
+                        <div className="text-xs" key={company.id}>{company.name}</div>
+                      ))}
+                    </div>
+                  </div>}
+                  {type === "tv" && <div className="col-12">
+                    Tv Facts
+                    </div>}
                 </div>
               </div>
 
@@ -341,7 +354,7 @@ class Details extends Component {
                   Reviews
                 </div>
               </div>
-            </div >
+            </div>
           )
         }
       </div>
@@ -358,4 +371,4 @@ const mapStateToProps = state => ({
   details: state.search.details
 })
 
-export default connect(mapStateToProps, { getDetails })(Details)
+export default withRouter(connect(mapStateToProps, { getDetails })(Details))
