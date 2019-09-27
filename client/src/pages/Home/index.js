@@ -52,6 +52,10 @@ class HomePage extends Component {
       .catch(err => console.log(err))
   }
 
+  submitHandler = e => {
+    e.preventDefault()
+  }
+
   render() {
     return (
       <div className='Home'>
@@ -59,7 +63,7 @@ class HomePage extends Component {
           <div className="container">
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>
-            <SearchBar />
+            <SearchBar onSubmit={this.submitHandler} />
           </div>
         </div>
 
@@ -86,7 +90,7 @@ class HomePage extends Component {
               </div>
               <div className="col-12 col-md-4 p-3">
                 <div className="h6">In Theaters</div>
-                <Table dataSet={this.state.nowPlaying} />
+                <Table dataSet={this.state.nowPlaying} type="movie" />
               </div>
             </div>
 
@@ -111,7 +115,7 @@ class HomePage extends Component {
               </div>
               <div className="col-12 col-md-4 p-3">
                 <div className="h6">Today's Most Popular</div>
-                <Table dataSet={this.state.popularShows} />
+                <Table dataSet={this.state.popularShows} type="show" />
               </div>
             </div>
           </div>}

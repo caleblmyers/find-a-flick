@@ -31,14 +31,12 @@ class Details extends Component {
     API.Comments.pageComments(type, id)
       .then(res => {
         const comments = res.data
-        console.log(comments)
         this.setState({ comments })
       })
       .catch(err => console.log(err))
 
     setTimeout(() => this.setState({
-      isLoaded: true,
-      cast: this.props.details.credits.cast
+      isLoaded: true
     }), 2500)
   }
 
@@ -55,7 +53,6 @@ class Details extends Component {
           messageType = "success"
         }
         this.setState({ message, messageType })
-        console.log(res)
       })
       .catch(err => console.log(err))
   }
@@ -87,14 +84,25 @@ class Details extends Component {
         API.Comments.pageComments(type, id)
           .then(res => {
             const comments = res.data
-            console.log(comments)
-            this.setState({ comments })
+            this.setState({
+              comments,
+              comment: ""
+            })
           })
           .catch(err => console.log(err))
       })
       .catch(err => console.log(err))
   }
 
+  changeMedia = (type, id) => {
+    this.props.getDetails(type, id)
+    API.Comments.pageComments(type, id)
+      .then(res => {
+        const comments = res.data
+        this.setState({ comments })
+      })
+      .catch(err => console.log(err))
+  }
 
   render() {
     const { details } = this.props
@@ -198,10 +206,10 @@ class Details extends Component {
                   </div>
                   <div className="row bg-light-grey border-round">
                     <div className="mr-auto col-12 col-md-6 p-3">
-                      <Carousel data={details.recommendations.results} type={type} />
+                      <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
                     </div>
                     <div className="mr-auto col-12 col-md-6 p-3">
-                      <Carousel data={details.similar.results} type={type} />
+                      <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
                     </div>
                   </div>
                 </div>
@@ -245,47 +253,59 @@ class Details extends Component {
                 </div>
               </div>
 
-              {user && <div className="row">
+              <div className="row">
                 <div className="col-9">
                   <div className="row no-gutters">
                     <div className="col-12">
                       <div className="h4 text-left">Add a Comment</div>
                       <div className="row bg-light-grey border-round my-3">
-                        {user && <div className="col-12 p-3">
-                          <form onSubmit={this.handleSubmit}>
-                            <div className='form-group mb-3'>
-                              <textarea
-                                className='form-control'
-                                id='comment'
-                                name='comment'
-                                placeholder='Post a comment'
-                                value={comment}
-                                onChange={this.handleInputChange}
-                                rows={4}
-                              />
+                        {user ? (
+                          <div className="col-12 p-3">
+                            <form onSubmit={this.handleSubmit}>
+                              <div className='form-group mb-3'>
+                                <textarea
+                                  className='form-control'
+                                  id='comment'
+                                  name='comment'
+                                  placeholder='Post a comment'
+                                  value={comment}
+                                  onChange={this.handleInputChange}
+                                  rows={4}
+                                />
+                              </div>
+                              <div className="form-group mb-3">
+                                <button className='btn btn-success float-right' type='submit'>Post</button>
+                              </div>
+                            </form>
+                          </div>
+                        ) : (
+                            <div className="col-12 p-3">
+                              <h4>Log in to comment!</h4>
                             </div>
-                            <div className="form-group mb-3">
-                              <button className='btn btn-success float-right' type='submit'>Post</button>
-                            </div>
-                          </form>
-                        </div>}
+                          )}
                       </div>
 
                       <div className="h4 text-left">Comments</div>
                       <div className="row bg-light-grey border-round py-2">
-                        {comments.map(comment => (
-                          <div className="col-12 py-2" key={comment.id}>
-                            <div class="card bg-dark text-white text-left">
-                              <div class="card-header">{comment.userName}</div>
-                              <div class="card-body">
-                                <blockquote class="blockquote mb-0">
-                                  <p>{comment.body}</p>
-                                  <footer class="blockquote-footer">Created at: {comment.createdAt}</footer>
-                                </blockquote>
+                        {comments[0] ? (
+                          comments.map(comment => (
+                            <div className="col-12 py-2" key={comment.id}>
+                              <div className="card bg-dark text-white text-left">
+                                <div className="card-header">{comment.userName}</div>
+                                <div className="card-body">
+                                  <blockquote className="blockquote mb-0">
+                                    <p>{comment.body}</p>
+                                    <footer className="blockquote-footer">Created at: {comment.createdAt}</footer>
+                                  </blockquote>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))
+                        ) : (
+                            <div className="col-12 py-2">
+                              <div className="h1">No comments yet!</div>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </div>
@@ -293,7 +313,7 @@ class Details extends Component {
                 <div className="col-3">
                   Reviews
                 </div>
-              </div>}
+              </div>
             </div>
           )
         }

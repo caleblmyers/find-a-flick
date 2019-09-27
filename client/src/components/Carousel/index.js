@@ -4,7 +4,15 @@ import { Link } from 'react-router-dom'
 class Carousel extends Component {
   state = {
     data: this.props.data,
-    index: 0
+    index: 0,
+  }
+
+  componentDidUpdate() {
+    const { data } = this.props
+    if (data !== this.state.data) this.setState({
+      index: 0,
+      data
+    })
   }
 
   changeSlide = (type, e) => {
@@ -28,7 +36,7 @@ class Carousel extends Component {
       <div className="Carousel">
         <div className="mx-auto div-featured">
           <img className="img-fluid" id="img-featured" src={`https://image.tmdb.org/t/p/original/${this.state.data[this.state.index].backdrop_path}`} alt="..." />
-          <Link to={{
+          <Link onClick={() => this.props.handler(mediaType, this.state.data[this.state.index].id)} to={{
             pathname: '/details',
             state: {
               type: mediaType,

@@ -19,6 +19,7 @@ function Table(props) {
               <Link className="now-playing" to={{
                 pathname: "/details",
                 state: {
+                  type: props.type,
                   id: data.id
                 }
               }}>
