@@ -97,18 +97,26 @@ class Discover extends Component {
 
     let queryParams = {
       cast: '',
+      companies: '',
+      crew: '',
       certification: '',
       certificationCountry: '',
       certificationGt: '',
       certificationLt: '',
       genres: '',
+      keywords: '',
+      languages: '',
+      noGenres: '',
+      noKeywords: '',
       people: '',
-      releaseDate: '',
+      primaryReleaseDateGt: '',
+      primaryReleaseDateLt: '',
+      region: '',
       releaseDateGt: '',
       releaseDateLt: '',
       releaseYear: '',
-      releaseYearGt: '',
-      releaseYearLt: '',
+      runtimeGt: '',
+      runtimeLt: '',
       sort: '',
       voteCount: '',
       voteCountGt: '',
@@ -164,18 +172,6 @@ class Discover extends Component {
                         {this.state.queries.map((query, index) => (
                           <option key={index}>{query.name}</option>
                         ))}
-                        {/* <option>What movies are in theatres?</option>
-                        <option>What are the most popular movies?</option>
-                        <option>What are the highest rated movies rated R?</option>
-                        <option>What are the most popular kids movies?</option>
-                        <option>What is are the best movies from 2010?</option>
-                        <option>What are the best dramas that were released this year?</option>
-                        <option>What are the highest rated science fiction movies that Tom Cruise has been in?</option>
-                        <option>What are the Will Ferrell's highest grossing comedies?</option>
-                        <option>Have Brad Pitt and Edward Norton ever been in a movie together?</option>
-                        <option>Has David Fincher ever worked with Rooney Mara?</option>
-                        <option>What are the best drama's?</option>
-                        <option>What are Liam Neeson's highest grossing rated 'R' movies?</option> */}
                       </select>
                       <div className="input-group-append">
                         <button className="btn btn-outline-secondary" type="submit">Discover</button>

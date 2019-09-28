@@ -19,35 +19,53 @@ tmdbController.get('/details/:type/:id', (req, res) => {
 
 tmdbController.post('/discover', (req, res) => {
   let {
-    cast, certification, certificationCountry, certificationGt, certificationLt,
-    genres, people, releaseDate, releaseDateGt, releaseDateLt, releaseYear,
-    releaseYearGt, releaseYearLt, sort, voteCount, voteCountGt, voteCountLt
+    cast,
+    companies,
+    crew,
+    certification,
+    certificationCountry,
+    certificationGt,
+    certificationLt,
+    genres,
+    keywords,
+    language,
+    noGenres,
+    noKeywords,
+    people,
+    primaryReleaseDateGt,
+    primaryReleaseDateLt,
+    region,
+    releaseDateGt,
+    releaseDateLt,
+    releaseYear,
+    runtimeGt,
+    runtimeLt,
+    sort,
+    voteCount,
+    voteCountGt,
+    voteCountLt
   } = req.body.query
 
   let discoverParams = [
     {
       param: 'primary_release_date.gte',
-      data: releaseDateGt
+      data: primaryReleaseDateGt
     },
     {
       param: 'primary_release_date.lte',
-      data: releaseDateLt
+      data: primaryReleaseDateLt
     },
     {
-      param: 'primary_release_date',
-      data: releaseDate
+      param: 'release_date.gte',
+      data: releaseDateGt
+    },
+    {
+      param: 'release_date.lte',
+      data: releaseDateLt
     },
     {
       param: 'primary_release_year',
       data: releaseYear
-    },
-    {
-      param: 'primary_release_year.gte',
-      data: releaseYearGt
-    },
-    {
-      param: 'primary_release_year.lte',
-      data: releaseYearLt
     },
     {
       param: 'vote_count',
@@ -82,6 +100,22 @@ tmdbController.post('/discover', (req, res) => {
       data: certificationGt
     },
     {
+      param: 'with_runtime.lte',
+      data: runtimeLt
+    },
+    {
+      param: 'with_runtime.gte',
+      data: runtimeGt
+    },
+    {
+      param: 'region',
+      data: region
+    },
+    {
+      param: 'language',
+      data: language
+    },
+    {
       param: 'with_genres',
       data: genres
     },
@@ -90,8 +124,32 @@ tmdbController.post('/discover', (req, res) => {
       data: cast
     },
     {
+      param: 'with_crew',
+      data: crew
+    },
+    {
+      param: 'with_companies',
+      data: companies
+    },
+    {
       param: 'with_people',
       data: people
+    },
+    {
+      param: 'with_keywords',
+      data: keywords
+    },
+    {
+      param: 'without_keywords',
+      data: noKeywords
+    },
+    {
+      param: 'with_genres',
+      data: genres
+    },
+    {
+      param: 'without_genres',
+      data: noGenres
     },
   ]
 
@@ -102,7 +160,7 @@ tmdbController.post('/discover', (req, res) => {
     queryString += `&${query.param}=${query.data}`
   })
 
-  axios.get(`https://api.themoviedb.org/3/discover/movie?&api_key=${tmdbKey}${queryString}`)
+  axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${tmdbKey}&include_adult=false${queryString}`)
     .then(data => res.json(data.data))
     .catch(err => res.json(err))
 })
