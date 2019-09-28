@@ -17,8 +17,94 @@ tmdbController.get('/details/:type/:id', (req, res) => {
     .catch(err => res.json(err))
 })
 
-tmdbController.get('/discover', (req, res) => {
-  axios.get('https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=2014-09-15&primary_release_date.lte=2014-10-22&$api_key=${tmdbKey}')
+tmdbController.post('/discover', (req, res) => {
+  let {
+    cast, certification, certificationCountry, certificationGt, certificationLt,
+    genres, people, releaseDate, releaseDateGt, releaseDateLt, releaseYear,
+    releaseYearGt, releaseYearLt, sort, voteCount, voteCountGt, voteCountLt
+  } = req.body.query
+
+  let discoverParams = [
+    {
+      param: 'primary_release_date.gte',
+      data: releaseDateGt
+    },
+    {
+      param: 'primary_release_date.lte',
+      data: releaseDateLt
+    },
+    {
+      param: 'primary_release_date',
+      data: releaseDate
+    },
+    {
+      param: 'primary_release_year',
+      data: releaseYear
+    },
+    {
+      param: 'primary_release_year.gte',
+      data: releaseYearGt
+    },
+    {
+      param: 'primary_release_year.lte',
+      data: releaseYearLt
+    },
+    {
+      param: 'vote_count',
+      data: voteCount
+    },
+    {
+      param: 'vote_count.gte',
+      data: voteCountGt
+    },
+    {
+      param: 'vote_count.lte',
+      data: voteCountLt
+    },
+    {
+      param: 'sort_by',
+      data: sort
+    },
+    {
+      param: 'certification_country',
+      data: certificationCountry
+    },
+    {
+      param: 'certification',
+      data: certification
+    },
+    {
+      param: 'certification.lte',
+      data: certificationLt
+    },
+    {
+      param: 'certification.gte',
+      data: certificationGt
+    },
+    {
+      param: 'with_genres',
+      data: genres
+    },
+    {
+      param: 'with_cast',
+      data: cast
+    },
+    {
+      param: 'with_people',
+      data: people
+    },
+  ]
+
+  let queries = discoverParams.filter(param => param.data !== '')
+
+  let queryString = ``
+  queries.forEach(query => {
+    queryString += `&${query.param}=${query.data}`
+  })
+
+  axios.get(`https://api.themoviedb.org/3/discover/movie?&api_key=${tmdbKey}${queryString}`)
+    .then(data => res.json(data.data))
+    .catch(err => res.json(err))
 })
 
 tmdbController.get('/now_playing', (req, res) => {

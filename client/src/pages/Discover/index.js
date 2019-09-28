@@ -1,17 +1,135 @@
 import React, { Component } from 'react'
 import SearchBar from '../../components/SearchBar'
 import API from '../../lib/API'
+import ResultsGrid from '../../components/ResultsGrid'
 
 class Discover extends Component {
   state = {
-    results: []
+    queries: [
+      {
+        name: "What movies are in theatres?",
+        data: {
+          releaseDateGt: "2019-08-25",
+          releaseDateLt: "2019-09-27"
+        }
+      },
+      {
+        name: "What are the most popular movies?",
+        data: {
+          sort: "popularity.desc"
+        }
+      },
+      {
+        name: "What are the highest rated movies rated R?",
+        data: {
+          certificationCountry: "US",
+          certification: "R",
+          sort: "vote_average.desc"
+        }
+      },
+      {
+        name: "What are the most popular kids movies?",
+        data: {
+
+        }
+      },
+      {
+        name: "What is are the best movies from 2010?",
+        data: {
+
+        }
+      },
+      {
+        name: "What are the best dramas that were released this year?",
+        data: {
+
+        }
+      },
+      {
+        name: "What are the highest rated science fiction movies that Tom Cruise has been in?",
+        data: {
+
+        }
+      },
+      {
+        name: "What are the Will Ferrell's highest grossing comedies?",
+        data: {
+
+        }
+      },
+      {
+        name: "Have Brad Pitt and Edward Norton ever been in a movie together?",
+        data: {
+
+        }
+      },
+      {
+        name: "Has David Fincher ever worked with Rooney Mara?",
+        data: {
+
+        }
+      },
+      {
+        name: "What are the best drama's?",
+        data: {
+
+        }
+      },
+      {
+        name: "What are Liam Neeson's highest grossing rated 'R' movies?",
+        data: {
+
+        }
+      },
+    ],
+    query: 'What movies are in theatres?',
+    results: undefined
+  }
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   handleSubmit = e => {
     e.preventDefault()
-    console.log('submitted')
-    API.TMDB.discover()
-      .then(res => console.log(res.data))
+
+    const { queries } = this.state
+
+    let queryParams = {
+      cast: '',
+      certification: '',
+      certificationCountry: '',
+      certificationGt: '',
+      certificationLt: '',
+      genres: '',
+      people: '',
+      releaseDate: '',
+      releaseDateGt: '',
+      releaseDateLt: '',
+      releaseYear: '',
+      releaseYearGt: '',
+      releaseYearLt: '',
+      sort: '',
+      voteCount: '',
+      voteCountGt: '',
+      voteCountLt: ''
+    }
+
+    let queryIndex = 0
+
+    queries.forEach((query, index) => {
+      if (query.name === this.state.query) queryIndex = index
+    })
+
+    Object.keys(queries[queryIndex].data).map((key, index) => {
+      queryParams[key] = queries[queryIndex].data[key]
+    })
+
+    API.TMDB.discover(queryParams)
+      .then(res => {
+        console.log(res.data)
+        this.setState({ results: res.data.results })
+      })
       .catch(err => console.log(err))
   }
 
@@ -35,8 +153,18 @@ class Discover extends Component {
                   <div className="form-group">
                     <label>Example select</label>
                     <div className="input-group">
-                      <select className="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                        <option>What movies are in theatres?</option>
+                      <select
+                        name="query"
+                        value={this.state.query}
+                        onChange={this.handleChange}
+                        className="custom-select"
+                        id="inputGroupSelect04"
+                        aria-label="Example select with button addon"
+                      >
+                        {this.state.queries.map((query, index) => (
+                          <option key={index}>{query.name}</option>
+                        ))}
+                        {/* <option>What movies are in theatres?</option>
                         <option>What are the most popular movies?</option>
                         <option>What are the highest rated movies rated R?</option>
                         <option>What are the most popular kids movies?</option>
@@ -47,7 +175,7 @@ class Discover extends Component {
                         <option>Have Brad Pitt and Edward Norton ever been in a movie together?</option>
                         <option>Has David Fincher ever worked with Rooney Mara?</option>
                         <option>What are the best drama's?</option>
-                        <option>What are Liam Neeson's highest grossing rated 'R' movies?</option>
+                        <option>What are Liam Neeson's highest grossing rated 'R' movies?</option> */}
                       </select>
                       <div className="input-group-append">
                         <button className="btn btn-outline-secondary" type="submit">Discover</button>
@@ -60,6 +188,7 @@ class Discover extends Component {
                   <div className="row">
                     <div className="col">
                       <h3>Query Data</h3>
+                      {this.state.results && <ResultsGrid results={this.state.results} />}
                     </div>
                   </div>
                 </div>
