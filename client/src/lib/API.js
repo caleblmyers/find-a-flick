@@ -41,6 +41,9 @@ export default {
       if (!type) type = 'movie'
       return axios.get(`/api/tmdb/details/${type}/${id}`)
     },
+    discover: function () {
+      return axios.get(`api/tmdb/discover`)
+    },
     nowPlaying: function () {
       return axios.get('/api/tmdb/now_playing')
     },

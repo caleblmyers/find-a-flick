@@ -5,26 +5,15 @@ const tmdbController = require('express').Router();
 const tmdbKey = process.env.TMDB_KEY
 const omdbKey = process.env.OMDB_KEY
 
-tmdbController.get('/genres', (req, res) => {
-  let genres = {}
-  axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}`)
-    .then(movie => {
-      axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=${tmdbKey}`)
-        .then(tv => {
-          genres.movie = movie.data
-          genres.tv = tv.data
-          res.json(genres)
-        })
-        .catch(err => res.json(err))
-    })
+tmdbController.post('/search', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.data}&include_adult=false&api_key=${tmdbKey}`)
+    .then(response => res.json(response.data))
     .catch(err => res.json(err))
 })
 
-tmdbController.get('/coming_soon', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}`)
-    .then(comingSoon => {
-      res.json(comingSoon.data)
-    })
+tmdbController.get('/details/:type/:id', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/${req.params.type}/${req.params.id}?api_key=${tmdbKey}&append_to_response=combined_credits,tagged_images,credits,images,keywords,recommendations,reviews,similar,videos`)
+    .then(movie => res.json(movie.data))
     .catch(err => res.json(err))
 })
 
@@ -44,12 +33,6 @@ tmdbController.get('/popular/:type', (req, res) => {
     .catch(err => res.json(err))
 })
 
-tmdbController.post('/search', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/search/multi?query=${req.body.data}&include_adult=false&api_key=${tmdbKey}`)
-    .then(response => res.json(response.data))
-    .catch(err => res.json(err))
-})
-
 tmdbController.get('/:type/top_rated', (req, res) => {
   axios.get(`https://api.themoviedb.org/3/${req.params.type}/top_rated?api_key=${tmdbKey}&region=US`)
     .then(response => res.json(response.data))
@@ -62,15 +45,26 @@ tmdbController.get('/trending/:type', (req, res) => {
     .catch(err => res.json(err))
 })
 
-tmdbController.get('/details/:type/:id', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/${req.params.type}/${req.params.id}?api_key=${tmdbKey}&append_to_response=combined_credits,tagged_images,credits,images,keywords,recommendations,reviews,similar,videos`)
-    .then(movie => res.json(movie.data))
+tmdbController.get('/coming_soon', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}`)
+    .then(comingSoon => {
+      res.json(comingSoon.data)
+    })
     .catch(err => res.json(err))
 })
 
-tmdbController.post('/omdb', (req, res) => {
-  axios.get(`http://www.omdbapi.com/?t=blade+runner&apikey=${omdbKey}`)
-    .then(response => res.json(response.data))
+tmdbController.get('/genres', (req, res) => {
+  let genres = {}
+  axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}`)
+    .then(movie => {
+      axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=${tmdbKey}`)
+        .then(tv => {
+          genres.movie = movie.data
+          genres.tv = tv.data
+          res.json(genres)
+        })
+        .catch(err => res.json(err))
+    })
     .catch(err => res.json(err))
 })
 
@@ -78,22 +72,6 @@ tmdbController.post('/people', (req, res) => {
   axios.get(`https://api.themoviedb.org/3/search/person?query=Harrison%20Ford&api_key=${tmdbKey}`)
     .then(response => {
       console.dir(response.data)
-      res.json(response.data)
-    })
-    .catch(err => res.json(err))
-})
-
-tmdbController.post('/person', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/person/3?api_key=${tmdbKey}`)
-    .then(response => {
-      res.json(response.data)
-    })
-    .catch(err => res.json(err))
-})
-
-tmdbController.post('/person/movies', (req, res) => {
-  axios.get(`https://api.themoviedb.org/3/person/3/combined_credits?api_key=${tmdbKey}`)
-    .then(response => {
       res.json(response.data)
     })
     .catch(err => res.json(err))
@@ -113,6 +91,12 @@ tmdbController.post('/director', (req, res) => {
     .then(response => {
       res.json(response.data)
     })
+    .catch(err => res.json(err))
+})
+
+tmdbController.post('/omdb', (req, res) => {
+  axios.get(`http://www.omdbapi.com/?t=blade+runner&apikey=${omdbKey}`)
+    .then(response => res.json(response.data))
     .catch(err => res.json(err))
 })
 

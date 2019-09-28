@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import SearchBar from '../../components/SearchBar'
+import API from '../../lib/API'
 
 class Discover extends Component {
   state = {
@@ -9,6 +10,9 @@ class Discover extends Component {
   handleSubmit = e => {
     e.preventDefault()
     console.log('submitted')
+    API.TMDB.discover()
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err))
   }
 
   render() {
