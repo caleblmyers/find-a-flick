@@ -80,7 +80,7 @@ class HomePage extends Component {
                     </div>
                     <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Top Rated</div>
-                      <Carousel data={this.state.topMovies} type={"topMovie"} />
+                      <Carousel data={this.state.topMovies} type={"topMovie"} handler={console.log} />
                     </div>
                   </div>
                   <div className="row no-gutters">
@@ -101,11 +101,11 @@ class HomePage extends Component {
                   <div className="row no-gutters">
                     <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Featured</div>
-                      <Carousel data={this.state.shows} type={"show"} />
+                      <Carousel data={this.state.shows} type={"show"} handler={console.log} />
                     </div>
                     <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Top Rated</div>
-                      <Carousel data={this.state.topShows} type={"topShow"} />
+                      <Carousel data={this.state.topShows} type={"topShow"} handler={console.log} />
                     </div>
                   </div>
                   <div className="row no-gutters">

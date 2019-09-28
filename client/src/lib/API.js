@@ -13,6 +13,7 @@ export default {
       return axios.get(`api/comments/${type}/${id}`)
     }
   },
+
   Favorites: {
     add: function (mediaType, tmdbId, title, userId, token) {
       return axios.post('/api/favorites', { mediaType, tmdbId, title, userId }, {
@@ -20,6 +21,12 @@ export default {
           'Authorization': `Bearer ${token}`
         }
       });
+    }
+  },
+
+  News: {
+    get: function () {
+      return axios.get('/api/tmdb/news');
     }
   },
 

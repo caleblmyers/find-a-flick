@@ -17,3 +17,6 @@
     margin-left: inherit
   }
 } */
+.pointer {
+  cursor: pointer;
+}

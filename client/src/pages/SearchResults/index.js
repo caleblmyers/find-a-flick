@@ -6,6 +6,7 @@ import { processSearch } from '../../store/actions/searchActions'
 import './style.css'
 import SearchBar from '../../components/SearchBar'
 import ResultsGrid from '../../components/ResultsGrid'
+import API from '../../lib/API'
 
 class SearchResults extends Component {
   state = {
@@ -24,6 +25,11 @@ class SearchResults extends Component {
     this.props.processSearch(keyword)
   }
 
+  newsApi() {
+    API.News.get()
+      .then(res => console.log(res))
+  }
+
   render() {
     return (
       <div className='SearchResults'>
@@ -32,6 +38,7 @@ class SearchResults extends Component {
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>
             <SearchBar handler={() => this.submitHandler(this.props.keyword)} />
+            <button onClick={this.newsApi} className="btn btn-info">News Api</button>
           </div>
         </div>
         {this.props.results.results ? (

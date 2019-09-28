@@ -45,12 +45,35 @@ class Details extends Component {
     }), 2500)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.state)
-    console.log(nextState)
-    if (this.state.details === nextState.details) {
-      return setTimeout(true, 2000)
-    } else return true
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      console.log('diff media')
+      console.log(this.props)
+      console.log(prevProps)
+    //   const { type, id } = this.props.location.state
+    //   this.setState({ isLoaded: false })
+
+    //   this.props.getDetails(type, id)
+
+    //   API.Comments.pageComments(type, id)
+    //     .then(res => {
+    //       const comments = res.data
+    //       this.setState({ comments })
+    //     })
+    //     .catch(err => console.log(err))
+
+    //   setTimeout(() => this.setState({
+    //     details: this.props.details,
+    //     credits: this.props.details.credits,
+    //     combined_credits: this.props.details.combined_credits,
+    //     isLoaded: true
+    //   }), 2500)
+    }
+
+    if (this.props.location.key !== prevProps.location.key) {
+      console.log('diff key')
+      // this.setState({ isLoaded: false })
+    }
   }
 
   componentWillUnmount() {
@@ -353,7 +376,7 @@ class Details extends Component {
                 <div className="col-3">
                   Reviews
                 </div>
-              </div>
+              </div>`
             </div>
           )
         }

@@ -15,7 +15,7 @@
   border-radius: 10px;
   min-height: 295px;
 }
-.no-link, .no-link:hover {
+.no-link, .no-link:hover, .no-link:active, .no-link:focus {
   text-decoration: none;
   color: inherit;
 }
