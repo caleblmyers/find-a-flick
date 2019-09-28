@@ -41,9 +41,10 @@ tmdbController.post('/discover', (req, res) => {
     runtimeGt,
     runtimeLt,
     sort,
-    voteCount,
     voteCountGt,
-    voteCountLt
+    voteCountLt,
+    voteAverageGt,
+    voteAverageLt
   } = req.body.query
 
   let discoverParams = [
@@ -68,16 +69,20 @@ tmdbController.post('/discover', (req, res) => {
       data: releaseYear
     },
     {
-      param: 'vote_count',
-      data: voteCount
-    },
-    {
       param: 'vote_count.gte',
       data: voteCountGt
     },
     {
       param: 'vote_count.lte',
       data: voteCountLt
+    },
+    {
+      param: 'vote_average.gte',
+      data: voteAverageGt
+    },
+    {
+      param: 'vote_average.lte',
+      data: voteAverageLt
     },
     {
       param: 'sort_by',
@@ -159,6 +164,7 @@ tmdbController.post('/discover', (req, res) => {
   queries.forEach(query => {
     queryString += `&${query.param}=${query.data}`
   })
+  console.log(queryString)
 
   axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${tmdbKey}&include_adult=false${queryString}`)
     .then(data => res.json(data.data))

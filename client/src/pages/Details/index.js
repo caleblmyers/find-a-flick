@@ -45,39 +45,40 @@ class Details extends Component {
     }), 2500)
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
-      console.log('diff media')
-      console.log(this.props)
-      console.log(prevProps)
-    //   const { type, id } = this.props.location.state
-    //   this.setState({ isLoaded: false })
-
-    //   this.props.getDetails(type, id)
-
-    //   API.Comments.pageComments(type, id)
-    //     .then(res => {
-    //       const comments = res.data
-    //       this.setState({ comments })
-    //     })
-    //     .catch(err => console.log(err))
-
-    //   setTimeout(() => this.setState({
-    //     details: this.props.details,
-    //     credits: this.props.details.credits,
-    //     combined_credits: this.props.details.combined_credits,
-    //     isLoaded: true
-    //   }), 2500)
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.location !== this.props.location) {
+      console.log('diff update')
+      console.log(nextProps)
+      console.log(nextState)
+      console.log(this.props.location.state.type)
+      console.log(nextProps.location.state.type)
+      this.setState({ isLoaded: false })
+      this.changeMedia(nextProps.location.state.type, nextProps.location.state.id)
+      return false
     }
-
-    if (this.props.location.key !== prevProps.location.key) {
-      console.log('diff key')
-      // this.setState({ isLoaded: false })
+    else if (this.props.location.state.type === "movie" && !this.state.details.revenue) {
+      console.log('movie wait')
+      console.log(nextProps)
+      console.log(nextState)
+      console.log(this.props.location.state.type)
+      console.log(nextProps.location.state.type)
+      return true
     }
-  }
-
-  componentWillUnmount() {
-    this.setState({ isLoaded: false })
+    else if (this.props.location.state.type === "movie" && this.state.details.revenue) {
+      console.log('movie update')
+      console.log(nextProps)
+      console.log(nextState)
+      console.log(this.props.location.state.type)
+      console.log(nextProps.location.state.type)
+      return true
+    }
+    else {
+      console.log('updating')
+      console.log(this.props.details)
+      console.log(this.props.location.state.type)
+      console.log(nextProps.location.state.type)
+      return true
+    }
   }
 
   addFavorite = (type, id, title, userId, token) => {
@@ -148,13 +149,14 @@ class Details extends Component {
           credits: this.props.details.credits,
           combined_credits: this.props.details.combined_credits,
           isLoaded: true
-        }), 1000)
+        }), 3000)
       })
       .catch(err => console.log(err))
   }
 
   render() {
-    const { details, credits, combined_credits } = this.state
+    const { details } = this.props
+    const { credits, combined_credits } = this.state
     const { user, authToken } = this.context
     const { message, messageType, comment, comments } = this.state
     const { type, id } = this.props.location.state
@@ -265,7 +267,13 @@ class Details extends Component {
                   ) : (
                       <div className="h4"><strong>Cast</strong></div>
                     )}
-                  <CastSlider cast={credits.cast || combined_credits.cast} handler={this.changeMedia} />
+                  {type === "movie" ? (
+                    <CastSlider cast={details.credits.cast} handler={this.changeMedia} />
+                  ) : (
+                      <div>
+                        {details.combined_credits && <CastSlider cast={details.combined_credits.cast} handler={this.changeMedia} />}
+                      </div>
+                    )}
                   <div className="row mt-2">
                     <div className="col-12 col-md-6">
                       <div className="h4"><strong>Recommended</strong></div>
@@ -274,14 +282,23 @@ class Details extends Component {
                       <div className="h4"><strong>Similar</strong></div>
                     </div>
                   </div>
-                  <div className="row bg-light-grey border-round">
-                    <div className="mr-auto col-12 col-md-6 p-3">
-                      {type !== "person" && <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />}
+                  {type === "movie" ? (
+                    <div className="row bg-light-grey border-round">
+                      <div className="mr-auto col-12 col-md-6 p-3">
+                        <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
+                      </div>
+                      <div className="mr-auto col-12 col-md-6 p-3">
+                        <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
+                      </div>
                     </div>
-                    <div className="mr-auto col-12 col-md-6 p-3">
-                      {type !== "person" && <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />}
-                    </div>
-                  </div>
+                  ) : (
+                      <div className="row bg-light-grey border-round">
+                        <div className="mr-auto col-12 col-md-6 p-3">
+                        </div>
+                        <div className="mr-auto col-12 col-md-6 p-3">
+                        </div>
+                      </div>
+                    )}
                 </div>
                 <div className="col-12 col-lg-3 p-3 text-left">
                   <div className="h4"><strong>Crew</strong></div>
@@ -294,7 +311,7 @@ class Details extends Component {
                     ))}
                   </div>}
                   <div className="h4 mt-2"><strong>Facts</strong></div>
-                  {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
+                  {details.revenue && <div className="row no-gutters bg-light-grey border-round py-2">
                     <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Revenue</strong></div>
                       <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
