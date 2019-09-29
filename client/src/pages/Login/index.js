@@ -10,7 +10,16 @@ class Login extends Component {
 
   state = {
     redirectToReferrer: false,
-    error: ""
+    error: "",
+    created: "",
+    deleted: ""
+  }
+
+  componentDidMount() {
+    const { from } = this.props.location.state || "Unknown"
+    const { newUser } = this.props.location.state || false
+    if (from && from.pathname === "/account") this.setState({ deleted: "Your account has been deleted" })
+    else if (newUser) this.setState({ created: "Account created successfully!" })
   }
 
   handleSubmit = (username, password) => {
@@ -34,13 +43,17 @@ class Login extends Component {
             message = 'Unknown error.';
         }
 
-        this.setState({ error: message });
+        this.setState({
+          error: message,
+          deleted: "",
+          created: ""
+        });
       });
   }
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: "/" } }
-    const { redirectToReferrer } = this.state;
+    const { created, deleted, error, redirectToReferrer } = this.state;
     if (redirectToReferrer) return <Redirect to={from} />
 
     return (
@@ -50,11 +63,27 @@ class Login extends Component {
             <h1>Login</h1>
           </div>
         </div>
-        {this.state.error &&
+        {created &&
+          <div className='row no-gutters'>
+            <div className='col'>
+              <div className='alert alert-success mb-3' role='alert'>
+                {created}
+              </div>
+            </div>
+          </div>}
+        {deleted &&
+          <div className='row no-gutters'>
+            <div className='col'>
+              <div className='alert alert-info mb-3' role='alert'>
+                {deleted}
+              </div>
+            </div>
+          </div>}
+        {error &&
           <div className='row no-gutters'>
             <div className='col'>
               <div className='alert alert-danger mb-3' role='alert'>
-                {this.state.error}
+                {error}
               </div>
             </div>
           </div>}

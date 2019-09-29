@@ -9,8 +9,29 @@ export default {
         }
       });
     },
+    delete: function (id, token) {
+      return axios.delete(`/api/comments/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    },
+    edit: function (id, body, token) {
+      return axios.put('/api/comments/', { id, body }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    },
     pageComments: function (type, id) {
       return axios.get(`api/comments/${type}/${id}`)
+    },
+    userComments: function (id, token) {
+      return axios.get(`/api/comments/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
     }
   },
 
@@ -72,6 +93,13 @@ export default {
   },
 
   Users: {
+    delete: function (id, token) {
+      return axios.delete(`/api/users/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+    },
     login: function (username, password) {
       return axios.post('/api/users/login', { username, password });
     },
@@ -91,6 +119,13 @@ export default {
     },
     register: function (username, email, password) {
       return axios.post('/api/users', { username, email, password });
+    },
+    update: function (field, value, id, token) {
+      return axios.put('/api/users/', { field, value, id }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
     }
   },
 

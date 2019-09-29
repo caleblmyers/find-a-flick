@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import Gravatar from 'react-gravatar';
 import PropTypes from 'prop-types'
 import { getDetails } from '../../store/actions/searchActions'
 
@@ -16,6 +17,8 @@ class Details extends Component {
 
   state = {
     isLoaded: false,
+    isEditing: "",
+    edit: "",
     message: "",
     messageType: "",
     comment: "",
@@ -98,14 +101,13 @@ class Details extends Component {
       .catch(err => console.log(err))
   }
 
-  handleInputChange = event => {
+  handleChange = event => {
     const { name, value } = event.target;
-
     this.setState({ [name]: value });
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
+  handleSubmit = e => {
+    e.preventDefault();
 
     const { comment } = this.state
     const { user, authToken } = this.context
@@ -149,24 +151,67 @@ class Details extends Component {
           credits: this.props.details.credits,
           combined_credits: this.props.details.combined_credits,
           isLoaded: true
-        }), 3000)
+        }), 4000)
       })
       .catch(err => console.log(err))
   }
 
+  deleteComment = e => {
+    console.log(e.target.value)
+    const { authToken } = this.context
+    const { type, id } = this.props.location.state
+
+    API.Comments.delete(e.target.value, authToken)
+      .then(res => {
+        API.Comments.pageComments(type, id)
+          .then(res => res.data)
+          .then(comments => this.setState({ comments }))
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
+  }
+
+  editComment = e => {
+    console.log(e.target.value)
+    if (this.state.isEditing === "") this.setState({ isEditing: e.target.value })
+    else this.setState({ isEditing: "" })
+  }
+
+  submitEdit = e => {
+    const { isEditing, edit } = this.state
+    const { authToken } = this.context
+    const { type, id } = this.props.location.state
+
+    if (isEditing) {
+      API.Comments.edit(isEditing, edit, authToken)
+        .then(res => {
+          API.Comments.pageComments(type, id)
+            .then(res => res.data)
+            .then(comments => this.setState({ comments }))
+            .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+        .finally(this.setState({ isEditing: "" }))
+    }
+  }
+
   render() {
     const { details } = this.props
-    const { credits, combined_credits } = this.state
     const { user, authToken } = this.context
-    const { message, messageType, comment, comments } = this.state
+    const { message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
     const { type, id } = this.props.location.state
 
     return (
-      <div className="Details p-4">
-        {!this.state.isLoaded ? (
+      <div className="Details">
+        {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
+          <div className="col-sm-12 d-md-none">
+            <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.backdrop_path || details.profile_path}`} alt="Poster" />
+          </div>
+        </div>}
+        {!isLoaded ? (
           <div>Loading...</div>
         ) : (
-            <div className="container">
+            <div className="container mt-3">
               {message &&
                 <div className='row'>
                   <div className='col'>
@@ -175,8 +220,8 @@ class Details extends Component {
                     </div>
                   </div>
                 </div>}
-              <div className="row p-3 bg-light-grey" id="details-body">
-                <div className="col-8 px-3">
+              <div className="row bg-light-grey" id="details-body">
+                <div className="col-12 col-md-8 py-3">
                   <div className="p-3" id="details-header">
                     <div className="row no-gutters">
                       <div className="col">
@@ -192,13 +237,13 @@ class Details extends Component {
                     {type === "person" ? (
                       <div className="row no-gutters">
                         <div className="col">
+                          Birthplace: {details.place_of_birth}
+                        </div>
+                        <div className="col">
                           Birthday:
                           {moment((
                             details.birthday
                           ), "YYYY-MM-DD").format(" MMMM Do, YYYY")}
-                        </div>
-                        <div className="col">
-                          Birthplace: {details.place_of_birth}
                         </div>
                         <div className="col">
                           Known for: {details.known_for_department}
@@ -207,37 +252,72 @@ class Details extends Component {
                     ) : (
                         <div className="row no-gutters">
                           <div className="col">
-                            <div>
-                              Released:
+                            <div className="row no-gutters">
+                              <div className="col">
+                                Released:
                               {moment((
-                                details.release_date || details.first_air_date
-                              ), "YYYY-MM-DD").format(" MMMM Do, YYYY")}
+                                  details.release_date || details.first_air_date
+                                ), "YYYY-MM-DD").format(" MMMM Do, YYYY")}
+                              </div>
                             </div>
+                            {details.runtime &&
+                              <div className="row no-gutters">
+                                <div className="col">
+                                  <div>
+                                    Runtime: {`${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`}
+                                  </div>
+                                </div>
+                              </div>}
                           </div>
-                          {details.genres && <div className="col">
+
+                          {details.genres && <div className="col-6">
+                            <div>Genres: </div>
                             <div>
-                              Genres:
-                              {details.genres.map(genre => (
-                                <span key={genre.id}> {genre.name}</span>
+                              {details.genres.map((genre, index) => (
+                                <span key={genre.id}> {genre.name}{index === details.genres.length - 1 ? "" : ","}</span>
                               ))}
                             </div>
                           </div>}
-                          {details.runtime &&
-                            <div className="col">
-                              <div>
-                                Runtime: {`${Math.floor(details.runtime / 60)}h ${details.runtime % 60}m`}
-                              </div>
-                            </div>}
                         </div>
                       )}
                   </div>
 
-                  <div className="row no-gutters my-4">
-                    <div className="col-8">
+                  <div className="row no-gutters my-4 text-left">
+                    <div className="col-12">
                       <div className="h5">Overview</div>
                       <p>{details.overview || details.biography}</p>
                     </div>
-                    <div className="col-4">
+                    <div className="col-8">
+                      <div className="h5">Featured Crew</div>
+                      {type === "tv" &&
+                        <div className="row no-gutters">
+                          {details.created_by.map(creator => (
+                            <div className="col" key={creator.id}>
+                              <div><strong>{creator.name}</strong></div>
+                              <div>Creator</div>
+                            </div>
+                          ))}
+                        </div>}
+                      {type === "movie" &&
+                        <div className="row no-gutters">
+                          {details.credits.crew.slice(0, 3).map(crew => (
+                            <div className="col" key={crew.id}>
+                              <div><strong>{crew.name}</strong></div>
+                              <div>{crew.job}</div>
+                            </div>
+                          ))}
+                        </div>}
+                      {type === "person" &&
+                        <div className="row no-gutters">
+                          {details.combined_credits && details.combined_credits.crew.slice(0, 3).map(credit => (
+                            <div className="col" key={credit.id}>
+                              <div><strong>{credit.title || credit.name}</strong></div>
+                              <div>{credit.job}</div>
+                            </div>
+                          ))}
+                        </div>}
+                    </div>
+                    <div className="col-4 text-right">
                       {details.vote_average && <div>
                         Rating: {details.vote_average} <small>({details.vote_count})</small>
                       </div>}
@@ -255,7 +335,7 @@ class Details extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-4">
+                <div className="col-4 py-3 d-none d-md-block">
                   <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`} alt="Poster" />
                 </div>
               </div>
@@ -267,11 +347,21 @@ class Details extends Component {
                   ) : (
                       <div className="h4"><strong>Cast</strong></div>
                     )}
-                  {type === "movie" ? (
+                  {type !== "person" ? (
                     <CastSlider cast={details.credits.cast} handler={this.changeMedia} />
                   ) : (
                       <div>
-                        {details.combined_credits && <CastSlider cast={details.combined_credits.cast} handler={this.changeMedia} />}
+                        {details.known_for_department === "Acting" ? (
+                          <CastSlider
+                            cast={details.combined_credits.cast.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
+                            handler={this.changeMedia}
+                          />
+                        ) : (
+                            <CastSlider
+                              cast={details.combined_credits.crew.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
+                              handler={this.changeMedia}
+                            />
+                          )}
                       </div>
                     )}
                   <div className="row mt-2">
@@ -282,7 +372,7 @@ class Details extends Component {
                       <div className="h4"><strong>Similar</strong></div>
                     </div>
                   </div>
-                  {type === "movie" ? (
+                  {type !== "person" ? (
                     <div className="row bg-light-grey border-round">
                       <div className="mr-auto col-12 col-md-6 p-3">
                         <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
@@ -302,8 +392,16 @@ class Details extends Component {
                 </div>
                 <div className="col-12 col-lg-3 p-3 text-left">
                   <div className="h4"><strong>Crew</strong></div>
-                  {type !== "person" && credits.crew && <div className="row no-gutters bg-light-grey border-round py-2">
-                    {credits.crew.slice(0, 8).map(person => (
+                  {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
+                    {details.credits.crew.slice(3, 10).map(person => (
+                      <div className="col-3 col-lg-12 pl-2 py-1 mr-0" key={person.credit_id}>
+                        <div className="text-sm"><strong>{person.name}</strong></div>
+                        <div className="text-xs">{person.job}</div>
+                      </div>
+                    ))}
+                  </div>}
+                  {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
+                    {details.credits.crew.slice(0, 8).map(person => (
                       <div className="col-3 col-lg-12 pl-2 py-1 mr-0" key={person.credit_id}>
                         <div className="text-sm"><strong>{person.name}</strong></div>
                         <div className="text-xs">{person.job}</div>
@@ -311,7 +409,7 @@ class Details extends Component {
                     ))}
                   </div>}
                   <div className="h4 mt-2"><strong>Facts</strong></div>
-                  {details.revenue && <div className="row no-gutters bg-light-grey border-round py-2">
+                  {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
                     <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Revenue</strong></div>
                       <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
@@ -349,7 +447,7 @@ class Details extends Component {
                                   name='comment'
                                   placeholder='Post a comment'
                                   value={comment}
-                                  onChange={this.handleInputChange}
+                                  onChange={this.handleChange}
                                   rows={4}
                                 />
                               </div>
@@ -371,11 +469,54 @@ class Details extends Component {
                           comments.map(comment => (
                             <div className="col-12 py-2" key={comment.id}>
                               <div className="card bg-dark text-white text-left">
-                                <div className="card-header">{comment.userName}</div>
+                                <div className="card-header">
+                                  <Gravatar className="rounded-circle" email={comment.userName} size={30} /> {comment.userName}
+                                  {(user && user.id === comment.userId) &&
+                                    <div className="float-right">
+                                      <button
+                                        className="btn btn-outline-info mx-2"
+                                        onClick={this.editComment}
+                                        value={comment.id}
+                                      >
+                                        Edit
+                                        </button>
+                                      <button
+                                        className="btn btn-outline-danger mx-2"
+                                        onClick={this.deleteComment}
+                                        value={comment.id}
+                                      >
+                                        Delete
+                                        </button>
+                                    </div>}
+                                </div>
                                 <div className="card-body">
+                                  {isEditing === comment.id.toString() ? (
+                                    <div>
+                                      <div className="input-group mb-3">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          placeholder={comment.body}
+                                          onChange={this.handleChange}
+                                          name="edit"
+                                          value={edit}
+                                        />
+                                        <div className="input-group-append">
+                                          <button
+                                            className="btn btn-outline-info"
+                                            type="button"
+                                            id="button-addon2"
+                                            onClick={this.submitEdit}
+                                          >Submit</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                      <p>{comment.body}</p>
+                                    )}
                                   <blockquote className="blockquote mb-0">
-                                    <p>{comment.body}</p>
-                                    <footer className="blockquote-footer">Created at: {comment.createdAt}</footer>
+                                    <footer className="blockquote-footer">Created: {moment(comment.createdAt).format("MM/DD/YYYY -- hh:mm a")}</footer>
+                                    {(comment.createdAt !== comment.updatedAt) && <div className="blockquote-footer">Updated: {moment(comment.updatedAt).format("MM/DD/YYYY -- hh:mm a")}</div>}
                                   </blockquote>
                                 </div>
                               </div>

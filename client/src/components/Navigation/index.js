@@ -12,15 +12,13 @@ class Navigation extends Component {
     collapsed: true
   }
 
-  toggleCollapse = () => {
-    this.setState({ collapsed: !this.state.collapsed })
-  }
+  toggleCollapse = () => this.setState({ collapsed: !this.state.collapsed })
 
   render() {
     const { user } = this.context;
     const { collapsed } = this.state;
-    const targetClass = `collapse navbar-collapse ${!collapsed && 'show'}`;
     const togglerClass = `navbar-toggler ${collapsed && 'collapsed'}`;
+    const targetClass = `collapse navbar-collapse ${!collapsed && 'show'}`;
 
     return (
       <div className='Navigation sticky-top'>
@@ -39,10 +37,10 @@ class Navigation extends Component {
                 <Link className='nav-link' to='/discover' onClick={this.toggleCollapse}>Discover</Link>
               </li>
               <li className='nav-item'>
-                <Link className='nav-link' to='/genres' onClick={this.toggleCollapse}>Genres</Link>
+                <Link className='nav-link' to='/results' onClick={this.toggleCollapse}>Search</Link>
               </li>
               <li className='nav-item'>
-                <Link className='nav-link' to='/results' onClick={this.toggleCollapse}>Search</Link>
+                <Link className='nav-link' to='/genres' onClick={this.toggleCollapse}>Genres</Link>
               </li>
               {user &&
                 <li className='nav-item'>
@@ -55,7 +53,6 @@ class Navigation extends Component {
                 : <>
                   <li className='nav-item'><Link className='nav-link' to='/login' onClick={this.toggleCollapse}>Login</Link></li>
                   <li className='nav-item'><Link className='nav-link' to='/register' onClick={this.toggleCollapse}>Register</Link></li>
-
                 </>}
             </ul>
           </div>

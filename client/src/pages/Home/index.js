@@ -69,16 +69,16 @@ class HomePage extends Component {
         {!this.state.isLoaded ? (
           <div>Loading...</div>
         ) : (
-            <div className="Featured">
+            <div className="Featured container">
               <div className="h2 text-center">Movies</div>
               <div className="row no-gutters">
                 <div className="col-12 col-md-8">
                   <div className="row no-gutters">
-                    <div className="col-12 col-xl-6 p-3">
+                    <div className="col-12 p-3">
                       <div className="h5">Featured</div>
                       <Carousel data={this.state.movies} type={"movie"} handler={console.log} />
                     </div>
-                    <div className="col-12 col-xl-6 p-3">
+                    <div className="col-12 p-3">
                       <div className="h5">Top Rated</div>
                       <Carousel data={this.state.topMovies} type={"topMovie"} handler={console.log} />
                     </div>

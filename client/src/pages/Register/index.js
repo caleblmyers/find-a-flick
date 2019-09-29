@@ -22,6 +22,8 @@ class Register extends Component {
         .catch(err => {
           if (err.response.status === 401) {
             this.setState({ error: "Sorry, that username and/or email is in use. Please try again." });
+          } else {
+            console.log(err)
           }
         });
     } else {
@@ -30,11 +32,15 @@ class Register extends Component {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: "/secret" } };
     const { redirectToReferrer } = this.state;
 
     if (redirectToReferrer) {
-      return <Redirect to={from} />;
+      return <Redirect to={{
+        pathname: "/login",
+        state: {
+          newUser: true
+        }
+      }} />;
     }
 
     return (

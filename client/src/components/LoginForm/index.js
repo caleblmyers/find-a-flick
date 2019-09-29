@@ -10,13 +10,11 @@ class LoginForm extends Component {
 
   handleInputChange = event => {
     const { name, value } = event.target;
-
     this.setState({ [name]: value });
   }
 
   handleSubmit = event => {
     const { username, password } = this.state;
-
     this.props.onSubmit(username, password);
     event.preventDefault();
   }
@@ -43,7 +41,6 @@ class LoginForm extends Component {
                   onChange={this.handleInputChange}
                 />
               </div>
-
               <div className='input-group mb-3'>
                 <div className="input-group-prepend">
                   <span className="input-group-text"><Octicon icon={Key} /></span>
@@ -58,7 +55,6 @@ class LoginForm extends Component {
                   onChange={this.handleInputChange}
                 />
               </div>
-
               <button className='btn btn-primary' type='submit'>Login</button>
             </form>
           </div>

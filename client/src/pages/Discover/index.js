@@ -139,21 +139,29 @@ class Discover extends Component {
   shouldComponentUpdate() {
     const { ratings } = this.state
     if (!Object.keys(ratings).length) {
-      console.log('getting ratings...')
-      API.TMDB.ratings()
-        .then(ratings => {
-          console.log(ratings)
-          this.setState({ ratings: ratings.data.certifications })
-        })
-        .catch(err => console.log(err))
+      // // console.log('getting ratings...')
+      // API.TMDB.ratings()
+      //   .then(ratings => {
+      //     // console.log(ratings)
+      //     this.setState({ ratings: ratings.data.certifications })
+      //   })
+      //   .catch(err => console.log(err))
       return true
     } else return true
+  }
+
+  componentDidMount() {
+    console.log('getting ratings...')
+    API.TMDB.ratings()
+      .then(ratings => this.setState({ ratings: ratings.data.certifications }))
+      .catch(err => console.log(err))
   }
 
   componentDidUpdate() {
     const { user, authToken } = this.context
 
     if (user && !this.state.peopleLoaded) {
+      console.log('getting people')
       API.Favorites.people(user.id, authToken)
         .then(res => {
           this.setState({
@@ -636,7 +644,7 @@ class Discover extends Component {
                     <div className="col">
                       <h3>Query Data</h3>
                       {this.state.results[0] ? (
-                        <ResultsGrid results={this.state.results} />
+                        <ResultsGrid results={this.state.results} type="movie" />
                       ) : (
                           <h1>No Matches!</h1>
                         )}

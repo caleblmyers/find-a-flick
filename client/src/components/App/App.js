@@ -13,7 +13,7 @@ import PrivateRoute from '../PrivateRoute'
 import Home from '../../pages/Home'
 import Login from '../../pages/Login'
 import Register from '../../pages/Register'
-import Favorites from '../../pages/Favorites'
+import Account from '../../pages/Account'
 import Secret from '../../pages/Secret'
 import Discover from '../../pages/Discover'
 import Genres from '../../pages/Genres'
@@ -25,22 +25,23 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-
     this.handleLogin = (user, authToken) => {
       TokenStore.setToken(authToken)
       this.setState(prevState => ({ auth: { ...prevState.auth, user, authToken } }))
     }
-
     this.handleLogout = () => {
       TokenStore.clearToken()
       this.setState(prevState => ({ auth: { ...prevState.auth, user: undefined, authToken: undefined } }))
     }
+    this.handleUpdate = user => this.setState(prevState => ({ auth: { ...prevState.auth, user } }))
+
     this.state = {
       auth: {
         user: undefined,
         authToken: TokenStore.getToken(),
         onLogin: this.handleLogin,
-        onLogout: this.handleLogout
+        onLogout: this.handleLogout,
+        onUpdate: this.handleUpdate
       }
     }
   }
@@ -71,7 +72,7 @@ class App extends Component {
                 <Route path='/details' component={Details} />
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={Register} />
-                <PrivateRoute path='/favorites' component={Favorites} />
+                <PrivateRoute path='/account' component={Account} />
                 <PrivateRoute path='/secret' component={Secret} />
                 <Route component={NotFound} />
               </Switch>

@@ -9,7 +9,7 @@
   border-radius: 10px;
 }
 .bg-light-grey {
-  background-color: rgba(170, 170, 170, 0.685);
+  background-color: rgb(170, 170, 170);
 }
 #cast-container {
   border-radius: 10px;
@@ -30,4 +30,14 @@
 }
 .cast-img {
   min-height: 200px;
+}
+#backdrop-row {
+  position: relative;
+  z-index: -10;
+}
+
+@media only screen and (max-width:767px) {
+  #backdrop-row {
+    margin-bottom: -25%;
+  }
 }

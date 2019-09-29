@@ -16,6 +16,43 @@ commentsController.post('/', (req, res) => {
     .catch(err => res.json(err))
 })
 
+commentsController.put('/', JWTVerifier, (req, res) => {
+  const { id, body } = req.body
+
+  db.Comment.update(
+    {
+      body,
+      updatedAt: new Date()
+    },
+    { where: { id } }
+  )
+    .then(comment => res.json(comment))
+    .catch(err => res.json(err))
+})
+
+commentsController.delete('/:id', JWTVerifier, (req, res) => {
+  const { id } = req.params
+
+  db.Comment.destroy({
+    where: { id }
+  })
+    .then(response => res.json(response))
+    .catch(err => res.json(err))
+})
+
+commentsController.get('/:id', JWTVerifier, (req, res) => {
+  const { id } = req.params
+
+  db.Comment.findAll({
+    where: {
+      userId: id
+    },
+    order: [['createdAt', 'DESC']]
+  })
+    .then(comments => res.json(comments))
+    .catch(err => res.json(err))
+})
+
 commentsController.get('/:type/:id', (req, res) => {
   const { type, id } = req.params
 
@@ -27,7 +64,6 @@ commentsController.get('/:type/:id', (req, res) => {
     order: [['id', 'DESC']]
   })
     .then(comments => {
-      console.log(comments.data)
       res.json(comments)
     })
     .catch(err => res.json(err))

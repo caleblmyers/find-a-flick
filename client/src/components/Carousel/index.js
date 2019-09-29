@@ -23,14 +23,13 @@ class Carousel extends Component {
     this.setState({ index })
   }
 
-  goToSlide = (type, e) => {
-    this.setState({ index: e.target.id.slice(type.length) })
-  }
+  goToSlide = (type, e) => this.setState({ index: e.target.id.slice(type.length) })
 
   render() {
     let mediaType
     if (this.props.type === "movie" || this.props.type === "topMovie") mediaType = "movie"
-    else mediaType = "tv"
+    else if (this.props.type === "show" || this.props.type === "topShow") mediaType = "tv"
+    else mediaType = this.props.type
 
     return (
       <div className="Carousel">
@@ -50,7 +49,12 @@ class Carousel extends Component {
         </div>
         <div className="mx-auto" id="dot-container">
           {this.state.data.map((feature, index) => (
-            <span onClick={event => this.goToSlide(this.props.type, event)} className={`dot ${index === this.state.index ? 'activeDot' : 'inactiveDot'}`} key={index} id={`${this.props.type}${index}`}></span>
+            <span
+              key={index}
+              id={`${this.props.type}${index}`}
+              onClick={event => this.goToSlide(this.props.type, event)}
+              className={`dot ${index === this.state.index ? 'activeDot' : 'inactiveDot'}`}
+            ></span>
           ))}
         </div>
       </div>

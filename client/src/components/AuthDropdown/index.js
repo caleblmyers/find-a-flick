@@ -11,11 +11,7 @@ class AuthDropdown extends Component {
     isOpen: false
   }
 
-  toggleOpen = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
+  toggleOpen = () => this.setState({ isOpen: !this.state.isOpen })
 
   handleLogout = () => {
     this.context.onLogout();
@@ -31,11 +27,11 @@ class AuthDropdown extends Component {
     return (
       <li className="nav-item dropdown">
         <button className="btn btn-link dropdown-toggle no-link" onClick={this.toggleOpen} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <Gravatar className="rounded-circle" email={user.email} size={30} /> {user.email}
+          <Gravatar className="rounded-circle" email={user.username} size={30} /> {user.username}
         </button>
         <div className={dropdownMenuClass} aria-labelledby="navbarDropdown">
-          <Link className="dropdown-item" to={"favorites"}>
-            <div>Favorites</div>
+          <Link className="dropdown-item" to="/account">
+            <div>Account</div>
           </Link>
           <div className="dropdown-item pointer" onClick={this.handleLogout}>Logout</div>
         </div>

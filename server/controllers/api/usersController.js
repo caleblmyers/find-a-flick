@@ -16,7 +16,31 @@ usersController.post('/', (req, res) => {
   })
     .then(user => res.json(user))
     .catch(err => res.json(err));
-});
+})
+
+usersController.put('/', JWTVerifier, (req, res) => {
+  const { field, value, id } = req.body
+
+  db.User.update(
+    {
+      [field]: value,
+      updatedAt: new Date()
+    },
+    { where: { id } }
+  )
+    .then(user => res.json(user))
+    .catch(err => res.json(err))
+})
+
+usersController.delete('/:id', JWTVerifier, (req, res) => {
+  const { id } = req.params
+
+  db.User.destroy({
+    where: { id }
+  })
+    .then(response => res.json(response))
+    .catch(err => res.json(err))
+})
 
 usersController.get('/:id/favorites', JWTVerifier, (req, res) => {
   db.Favorite.findAll({

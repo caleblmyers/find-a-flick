@@ -11,15 +11,11 @@ class RegistrationForm extends Component {
 
   handleInputChange = event => {
     const { name, value } = event.target;
-
-    this.setState({
-      [name]: value
-    });
+    this.setState({ [name]: value });
   }
 
   handleSubmit = event => {
     const { username, email, password, passwordConfirm } = this.state;
-
     this.props.onSubmit(username, email, password, passwordConfirm);
     event.preventDefault();
   }

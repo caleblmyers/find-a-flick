@@ -6,7 +6,6 @@ import { processSearch } from '../../store/actions/searchActions'
 import './style.css'
 import SearchBar from '../../components/SearchBar'
 import ResultsGrid from '../../components/ResultsGrid'
-import API from '../../lib/API'
 
 class SearchResults extends Component {
   state = {

@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom'
 class CastSlider extends Component {
   state = {
     slide: 1,
-    maxSlide: 0
-  }
-
-  componentDidMount() {
-    this.setState({ maxSlide: Math.floor(this.props.cast.length / 5) })
+    maxSlide: Math.floor(this.props.cast.length / 5)
   }
 
   changeSlide = (slide, e) => {
@@ -20,7 +16,7 @@ class CastSlider extends Component {
     const { cast } = this.props
     const { slide, maxSlide } = this.state
     const displayPrev = slide === 1 ? 'd-none' : ''
-    const displayNext = (slide > maxSlide) ? 'd-none' : ''
+    const displayNext = (slide >= maxSlide) ? 'd-none' : ''
 
     return (
       <div className="CastSlider position-relative row justify-content-center bg-light-grey py-2" id="cast-container">
@@ -39,7 +35,7 @@ class CastSlider extends Component {
                 <img src={`https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`} className="card-img-top" alt={credit.name} />
                 <div className="pl-1 py-3">
                   <div className="text-sm"><strong>{credit.name || credit.title}</strong></div>
-                  <div className="text-xs">{credit.character}</div>
+                  <div className="text-xs">{credit.character || credit.job}</div>
                 </div>
               </div>
             </Link>
