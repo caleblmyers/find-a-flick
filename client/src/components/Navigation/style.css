@@ -1,5 +1,8 @@
 .Navigation {
-  background-color: rgb(18, 8, 109);
   color: white;
   min-height: 70px;
+}
+
+.bg-navy {
+  background-color: rgb(41, 31, 133);
 }

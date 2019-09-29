@@ -27,7 +27,7 @@ class SearchResults extends Component {
   render() {
     return (
       <div className='SearchResults'>
-        <div className="jumbotron jumbotron-fluid">
+        <div className="bg-purple-lt jumbotron jumbotron-fluid">
           <div className="container">
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>

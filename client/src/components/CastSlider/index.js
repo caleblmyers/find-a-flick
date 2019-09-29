@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 class CastSlider extends Component {
   state = {
     slide: 1,
-    maxSlide: Math.floor(this.props.cast.length / 5)
+    maxSlide: Math.ceil(this.props.cast.length / 5)
   }
 
   changeSlide = (slide, e) => {

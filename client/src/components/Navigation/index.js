@@ -21,7 +21,7 @@ class Navigation extends Component {
     const targetClass = `collapse navbar-collapse ${!collapsed && 'show'}`;
 
     return (
-      <div className='Navigation sticky-top'>
+      <div className='Navigation sticky-top bg-navy'>
         <nav className='navbar navbar-dark navbar-expand-lg'>
           <Link className='navbar-brand' to='/'>Pop Media</Link>
           <button className={togglerClass} onClick={this.toggleCollapse} data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>

@@ -1,14 +1,15 @@
 .App {
   text-align: center;
+  min-height: 100vh;
 }
 .dropdown-item:active {
   background: none;
 }
-/* 
 #app-body {
-  margin-left: 180px
+  min-height: calc(100vh - 70px);
 }
 
+/* 
 @media only screen and (max-width: 992px) {
   .SideNav {
     display: none;
@@ -19,4 +20,37 @@
 } */
 .pointer {
   cursor: pointer;
+}
+.jumbotron {
+  background-color: inherit;
+}
+.bg-purple-xlt {
+  background-color: #e1e9ff;
+}
+.bg-purple-lt {
+  background-color: #d4e0ff;
+}
+.bg-green-lt {
+  background-color: #d4ffde;
+}
+.bg-blue-lt {
+  background-color: #d4fff3;
+}
+.bg-teal {
+  background-color: #e0ffd4;
+}
+.text-teal {
+  color: #e0ffd4;  
+}
+.bg-popcorn {
+  background-color: #fff7e2
+}
+.text-popcorn {
+  color: #fff3d4  
+}
+.bg-red-lt {
+  background-color: #ff447f
+}
+.text-red-lt {
+  color: #ff447f  
 }

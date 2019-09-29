@@ -63,7 +63,7 @@ class App extends Component {
           <div className='App'>
             <Navigation />
             {/* <SideNav /> */}
-            <div id="app-body">
+            <div className="bg-purple-lt" id="app-body">
               <Switch>
                 <Route exact path='/' component={Home} />
                 <Route path='/genres' component={Genres} />
