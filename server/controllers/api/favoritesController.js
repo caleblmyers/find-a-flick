@@ -18,4 +18,17 @@ favoritesController.post('/', JWTVerifier, (req, res) => {
     .catch(err => res.json(err))
 })
 
+favoritesController.get('/people/:id', JWTVerifier, (req, res) => {
+  const { id } = req.params
+  db.Favorite.findAll({
+    where: {
+      userId: id,
+      mediaType: "person"
+    },
+    order: [["title", "ASC"]]
+  })
+    .then(people => res.json(people))
+    .catch(err => res.json(err))
+})
+
 module.exports = favoritesController;

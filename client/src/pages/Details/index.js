@@ -393,7 +393,7 @@ class Details extends Component {
                 <div className="col-3">
                   Reviews
                 </div>
-              </div>`
+              </div>
             </div>
           )
         }

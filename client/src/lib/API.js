@@ -21,6 +21,13 @@ export default {
           'Authorization': `Bearer ${token}`
         }
       });
+    },
+    people: function (id, token) {
+      return axios.get(`/api/favorites/people/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
     }
   },
 
@@ -49,6 +56,9 @@ export default {
     },
     popular: function (type) {
       return axios.get(`/api/tmdb/popular/${type}`)
+    },
+    ratings: function (type) {
+      return axios.get('/api/tmdb/ratings')
     },
     search: function (data) {
       return axios.post('/api/tmdb/search', { data })

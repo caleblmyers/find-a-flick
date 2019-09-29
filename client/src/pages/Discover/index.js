@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 
+import AuthContext from '../../contexts/AuthContext'
 import API from '../../lib/API'
 import ResultsGrid from '../../components/ResultsGrid'
 
 class Discover extends Component {
+  static contextType = AuthContext
+
   state = {
     queries: [
       {
@@ -127,13 +130,51 @@ class Discover extends Component {
       voteAverageLt: ''
     },
     advanced: false,
-    results: undefined
+    results: undefined,
+    favPeople: [],
+    peopleLoaded: false,
+    ratings: {}
+  }
+
+  shouldComponentUpdate() {
+    const { ratings } = this.state
+    if (!Object.keys(ratings).length) {
+      console.log('getting ratings...')
+      API.TMDB.ratings()
+        .then(ratings => {
+          console.log(ratings)
+          this.setState({ ratings: ratings.data.certifications })
+        })
+        .catch(err => console.log(err))
+      return true
+    } else return true
+  }
+
+  componentDidUpdate() {
+    const { user, authToken } = this.context
+
+    if (user && !this.state.peopleLoaded) {
+      API.Favorites.people(user.id, authToken)
+        .then(res => {
+          this.setState({
+            peopleLoaded: true,
+            favPeople: res.data
+          })
+        })
+        .catch(err => console.log(err))
+    }
   }
 
   handleChange = e => {
     if (e.target.classList.contains("param")) {
       let params = this.state.params
-      params[e.target.name] = e.target.value
+      console.log(e.target)
+      if (e.target.classList.contains("enre")) {
+        let i = e.target.selectedIndex
+        let selected = e.target.childNodes[i]
+        params[e.target.name] = selected.value
+      } else params[e.target.name] = e.target.value
+
       this.setState({ params })
     }
     else if (e.target.type === "checkbox") this.setState({ advanced: !this.state.advanced })
@@ -142,9 +183,7 @@ class Discover extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-
     const { queries, params, advanced } = this.state
-
     let queryParams = {
       cast: '',
       companies: '',
@@ -176,11 +215,7 @@ class Discover extends Component {
 
     if (!advanced) {
       let queryIndex = 0
-
-      queries.forEach((query, index) => {
-        if (query.name === this.state.query) queryIndex = index
-      })
-
+      queries.forEach((query, index) => queryIndex = query.name === this.state.query ? index : queryIndex)
       Object.keys(queries[queryIndex].data).forEach(key => queryParams[key] = queries[queryIndex].data[key])
     } else {
       Object.keys(params).forEach(key => queryParams[key] = params[key])
@@ -199,7 +234,8 @@ class Discover extends Component {
   }
 
   render() {
-    let { params } = this.state
+    const { user } = this.context
+    const { query, queries, params, favPeople, ratings } = this.state
 
     return (
       <div className="Discover">
@@ -227,21 +263,22 @@ class Discover extends Component {
                       id="inputCheck1"
                       aria-label="Example select with button addon"
                     />
-                    <label className="form-check-label">Check me out</label>
+                    <label className="form-check-label">Advanced</label>
                   </div>
+
                   {!this.state.advanced ? (
                     <div className="form-group">
-                      <label>Example query</label>
+                      <label>Choose an option...</label>
                       <div className="input-group">
                         <select
                           name="query"
-                          value={this.state.query}
+                          value={query}
                           onChange={this.handleChange}
                           className="custom-select"
                           id="inputGroupSelect04"
                           aria-label="Example select with button addon"
                         >
-                          {this.state.queries.map((query, index) => (
+                          {queries.map((query, index) => (
                             <option key={index}>{query.name}</option>
                           ))}
                         </select>
@@ -296,6 +333,7 @@ class Discover extends Component {
                             />
                           </div>
                         </div>
+
                         <div className="form-row">
                           <div className="form-group col-md-3">
                             <label>Vote Count (max)</label>
@@ -352,40 +390,243 @@ class Discover extends Component {
 
                         </div>
 
-                        <div className="form-group">
-                          <label>Address</label>
-                          <input type="text" className="form-control" id="inputAddress" placeholder="1234 Main St" />
-                        </div>
-                        <div className="form-group">
-                          <label>Address 2</label>
-                          <input type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" />
-                        </div>
                         <div className="form-row">
-                          <div className="form-group col-md-6">
-                            <label>City</label>
-                            <input type="text" className="form-control" id="inputCity" />
+                          <div className="form-group col-md-4">
+                            <label>With Genres</label>
+                            <select
+                              type="text"
+                              className="form-control param genre"
+                              id="genres"
+                              name="genres"
+                              value={params.genres}
+                              onChange={this.handleChange}
+                            >
+                              <option value="28">Action</option>
+                              <option value="12">Adventure</option>
+                              <option value="16">Animation</option>
+                              <option value="35">Comedy</option>
+                              <option value="80">Crime</option>
+                              <option value="99">Documentary</option>
+                              <option value="18">Drama</option>
+                              <option value="10751">Family</option>
+                              <option value="14">Fantasy</option>
+                              <option value="36">History</option>
+                              <option value="27">Horror</option>
+                              <option value="10402">Music</option>
+                              <option value="9648">Mystery</option>
+                              <option value="10749">Romance</option>
+                              <option value="878">Science Fiction</option>
+                              <option value="10770">TV Movie</option>
+                              <option value="53">Thriller</option>
+                              <option value="10752">War</option>
+                              <option value="37">Western</option>
+                            </select>
                           </div>
                           <div className="form-group col-md-4">
-                            <label>State</label>
-                            <select id="inputState" className="form-control">
-                              <option selected>Choose...</option>
-                              <option>...</option>
+                            <label>Without Genres</label>
+                            <select
+                              type="text"
+                              className="form-control param genre"
+                              id="noGenres"
+                              name="noGenres"
+                              value={params.noGenres}
+                              onChange={this.handleChange}
+                            >
+                              <option value="28">Action</option>
+                              <option value="12">Adventure</option>
+                              <option value="16">Animation</option>
+                              <option value="35">Comedy</option>
+                              <option value="80">Crime</option>
+                              <option value="99">Documentary</option>
+                              <option value="18">Drama</option>
+                              <option value="10751">Family</option>
+                              <option value="14">Fantasy</option>
+                              <option value="36">History</option>
+                              <option value="27">Horror</option>
+                              <option value="10402">Music</option>
+                              <option value="9648">Mystery</option>
+                              <option value="10749">Romance</option>
+                              <option value="878">Science Fiction</option>
+                              <option value="10770">TV Movie</option>
+                              <option value="53">Thriller</option>
+                              <option value="10752">War</option>
+                              <option value="37">Western</option>
                             </select>
                           </div>
                           <div className="form-group col-md-2">
-                            <label>Zip</label>
-                            <input type="text" className="form-control" id="inputZip" />
+                            <label>Runtime (max)</label>
+                            <input
+                              type="number"
+                              className="form-control param"
+                              id="runtimeLt"
+                              name="runtimeLt"
+                              value={params.runtimeLt}
+                              onChange={this.handleChange}
+                              min="0"
+                              max="360"
+                              placeholder="10"
+                            />
+                          </div>
+                          <div className="form-group col-md-2">
+                            <label>Runtime (min)</label>
+                            <input
+                              type="number"
+                              className="form-control param"
+                              id="runtimeGt"
+                              name="runtimeGt"
+                              value={params.runtimeGt}
+                              onChange={this.handleChange}
+                              min="0"
+                              max="360"
+                              placeholder="6"
+                            />
+                          </div>
+
+                        </div>
+
+                        <div className="form-row">
+                          <div className="form-group col-md-4">
+                            <label>With People</label>
+                            {user && favPeople[0] ? (
+                              <select
+                                type="text"
+                                className="form-control param"
+                                id="people"
+                                name="people"
+                                value={params.people}
+                                onChange={this.handleChange}
+                              >
+                                {favPeople.map(person => (
+                                  <option value={person.tmdbId} key={person.id}>{person.title}</option>
+                                ))}
+                              </select>
+                            ) : (
+                                <select
+                                  type="text"
+                                  className="form-control param"
+                                  id="people"
+                                  name="people"
+                                  value={params.people}
+                                  onChange={this.handleChange}
+                                >
+                                  <option>Person</option>
+                                  <option>Person</option>
+                                  <option>Person</option>
+                                  <option>Person</option>
+                                  <option>Person</option>
+                                  <option>Person</option>
+                                </select>
+                              )}
+                          </div>
+                          <div className="form-group col-md-2">
+                            <label>Rating Country</label>
+                            <select
+                              type="text"
+                              className="form-control param"
+                              id="certificationCountry"
+                              name="certificationCountry"
+                              value={params.certificationCountry}
+                              onChange={this.handleChange}
+                            >
+                              <option value="">Countries</option>
+                              {Object.keys(ratings).map(country => (
+                                <option value={country} key={country}>{country}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="form-group col-md-2">
+                            <label>Rating</label>
+                            {params.certificationCountry !== "" ? (
+                              <select
+                                type="text"
+                                className="form-control param"
+                                id="certification"
+                                name="certification"
+                                value={params.certification}
+                                onChange={this.handleChange}
+                              >
+                                <option value="">--</option>
+                                {ratings[params.certificationCountry].map(rating => (
+                                  <option value={rating.certification} key={rating.order}>{rating.certification}</option>
+                                ))}
+                              </select>
+                            ) : (
+                                <select
+                                  type="text"
+                                  className="form-control param"
+                                  id="certification"
+                                  name="certification"
+                                  value={params.certification}
+                                  onChange={this.handleChange}
+                                  disabled
+                                >
+                                  <option>Ratings</option>
+                                </select>
+                              )}
+                          </div>
+                          <div className="form-group col-md-2">
+                            <label>Min Rating</label>
+                            {params.certificationCountry !== "" ? (
+                              <select
+                                type="text"
+                                className="form-control param"
+                                id="certificationGt"
+                                name="certificationGt"
+                                value={params.certificationGt}
+                                onChange={this.handleChange}
+                              >
+                                <option value="">--</option>
+                                {ratings[params.certificationCountry].map(rating => (
+                                  <option value={rating.certification} key={rating.order}>{rating.certification}</option>
+                                ))}
+                              </select>
+                            ) : (
+                                <select
+                                  type="text"
+                                  className="form-control param"
+                                  id="certificationGt"
+                                  name="certificationGt"
+                                  value={params.certificationGt}
+                                  onChange={this.handleChange}
+                                  disabled
+                                >
+                                  <option>Ratings</option>
+                                </select>
+                              )}
+                          </div>
+                          <div className="form-group col-md-2">
+                            <label>Max Rating</label>
+                            {params.certificationCountry !== "" ? (
+                              <select
+                                type="text"
+                                className="form-control param"
+                                id="certificationLt"
+                                name="certificationLt"
+                                value={params.certificationLt}
+                                onChange={this.handleChange}
+                              >
+                                <option value="">--</option>
+                                {ratings[params.certificationCountry].map(rating => (
+                                  <option value={rating.certification} key={rating.order}>{rating.certification}</option>
+                                ))}
+                              </select>
+                            ) : (
+                                <select
+                                  type="text"
+                                  className="form-control param"
+                                  id="certificationLt"
+                                  name="certificationLt"
+                                  value={params.certificationLt}
+                                  onChange={this.handleChange}
+                                  disabled
+                                >
+                                  <option>Ratings</option>
+                                </select>
+                              )}
                           </div>
                         </div>
-                        <div className="form-group">
-                          <div className="form-check">
-                            <input className="form-check-input" type="checkbox" id="gridCheck" />
-                            <label className="form-check-label">
-                              Check me out
-                          </label>
-                          </div>
-                        </div>
-                        <button type="submit" className="btn btn-primary">Sign in</button>
+
+                        <button type="submit" className="btn btn-outline-secondary">Discover</button>
                       </div>
                     )}
                 </form>
@@ -394,12 +635,17 @@ class Discover extends Component {
                   <div className="row">
                     <div className="col">
                       <h3>Query Data</h3>
-                      {this.state.results && <ResultsGrid results={this.state.results} />}
+                      {this.state.results[0] ? (
+                        <ResultsGrid results={this.state.results} />
+                      ) : (
+                          <h1>No Matches!</h1>
+                        )}
                     </div>
                   </div>
                 </div>}
 
               </div>
+
               <div className="tab-pane fade" id="nav-tv" role="tabpanel" aria-labelledby="nav-tv-tab">
                 <h1>TV Shows</h1>
               </div>

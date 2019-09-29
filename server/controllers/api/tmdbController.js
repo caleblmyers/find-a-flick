@@ -171,6 +171,12 @@ tmdbController.post('/discover', (req, res) => {
     .catch(err => res.json(err))
 })
 
+tmdbController.get('/ratings', (req, res) => {
+  axios.get(`https://api.themoviedb.org/3/certification/movie/list?api_key=${tmdbKey}`)
+    .then(ratings => res.json(ratings.data))
+    .catch(err => res.json(err))
+})
+
 tmdbController.get('/now_playing', (req, res) => {
   axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}`)
     .then(nowPlaying => {
