@@ -60,7 +60,7 @@ class App extends Component {
     return (
       <AuthContext.Provider value={this.state.auth}>
         <Provider store={store}>
-          <div className='App'>
+          <div className='App bg-popcorn'>
             <Navigation />
             {/* <SideNav /> */}
             <div className="bg-popcorn" id="app-body">

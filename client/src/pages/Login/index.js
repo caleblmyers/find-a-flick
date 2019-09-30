@@ -57,14 +57,14 @@ class Login extends Component {
     if (redirectToReferrer) return <Redirect to={from} />
 
     return (
-      <div className='Login'>
-        <div className='row no-gutters'>
+      <div className='Login container'>
+        <div className='row mb-3'>
           <div className='col'>
             <h1>Login</h1>
           </div>
         </div>
         {created &&
-          <div className='row no-gutters'>
+          <div className='row'>
             <div className='col'>
               <div className='alert alert-success mb-3' role='alert'>
                 {created}
@@ -72,7 +72,7 @@ class Login extends Component {
             </div>
           </div>}
         {deleted &&
-          <div className='row no-gutters'>
+          <div className='row'>
             <div className='col'>
               <div className='alert alert-info mb-3' role='alert'>
                 {deleted}
@@ -80,14 +80,14 @@ class Login extends Component {
             </div>
           </div>}
         {error &&
-          <div className='row no-gutters'>
+          <div className='row'>
             <div className='col'>
               <div className='alert alert-danger mb-3' role='alert'>
                 {error}
               </div>
             </div>
           </div>}
-        <div className='row no-gutters'>
+        <div className='row mt-3'>
           <div className='col'>
             <LoginForm onSubmit={this.handleSubmit} />
             <div className='mt-3'>Don't have an account? <Link to='/register'>Click here to register.</Link></div>

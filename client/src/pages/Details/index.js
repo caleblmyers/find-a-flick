@@ -45,7 +45,7 @@ class Details extends Component {
       credits: this.props.details.credits,
       combined_credits: this.props.details.combined_credits,
       isLoaded: true
-    }), 2500)
+    }), 3500)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -56,7 +56,9 @@ class Details extends Component {
       console.log(this.props.location.state.type)
       console.log(nextProps.location.state.type)
       this.setState({ isLoaded: false })
-      this.changeMedia(nextProps.location.state.type, nextProps.location.state.id)
+      if (this.props.history.action === "POP") {
+        this.changeMedia(nextProps.location.state.type, nextProps.location.state.id)
+      }
       return false
     }
     else if (this.props.location.state.type === "movie" && !this.state.details.revenue) {
@@ -138,6 +140,7 @@ class Details extends Component {
   }
 
   changeMedia = (type, id) => {
+    console.log('changeMedia', this.props.location.state.id)
     this.setState({ isLoaded: false })
     this.props.getDetails(type, id)
     API.Comments.pageComments(type, id)
@@ -202,7 +205,7 @@ class Details extends Component {
     const { type, id } = this.props.location.state
 
     return (
-      <div className="Details">
+      <div className="Details pb-5">
         {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
           <div className="col-sm-12 d-md-none">
             <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.backdrop_path || details.profile_path}`} alt="Poster" />
@@ -211,7 +214,7 @@ class Details extends Component {
         {!isLoaded ? (
           <div>Loading...</div>
         ) : (
-            <div className="container mt-3">
+            <div className="container pt-3">
               {message &&
                 <div className='row'>
                   <div className='col'>
@@ -524,7 +527,7 @@ class Details extends Component {
                           ))
                         ) : (
                             <div className="col-12 py-2">
-                              <div className="h1">No comments yet!</div>
+                              <div className="h4">No comments yet!</div>
                             </div>
                           )}
                       </div>
@@ -532,7 +535,7 @@ class Details extends Component {
                   </div>
                 </div>
                 <div className="col-3">
-                  Reviews
+                  <div className="h4 text-left">Reviews</div>
                 </div>
               </div>
             </div>

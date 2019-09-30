@@ -7,10 +7,10 @@ function ResultsGrid(props) {
     <div className="ResultsGrid row no-gutters justify-content-center">
       {props.results.map(result => (
         <div className="col-12 col-md-6 col-xl-3 p-3" key={result.id}>
-          <div className="card mb-3">
+          <div className="card border-secondary rounded bg-blue-lt mb-3">
             <div className="row no-gutters">
               <div className="col-12 col-md-5">
-                <img className="img-fluid" src={`https://image.tmdb.org/t/p/original/${result.poster_path}`} alt="..." />
+                <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${result.poster_path}`} alt="..." />
               </div>
               <div className="col-12 col-md-7">
                 <div className="card-body">
@@ -27,7 +27,7 @@ function ResultsGrid(props) {
                       id: result.id
                     }
                   }}>
-                    <button className="btn btn-info">
+                    <button className="btn btn-outline-secondary">
                       Details
                     </button>
                   </Link>

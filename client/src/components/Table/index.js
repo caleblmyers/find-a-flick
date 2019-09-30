@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function Table(props) {
   return (
-    <table className="table table-sm table-hover">
+    <table className="table table-sm table-hover table-borderless">
       <thead>
         <tr>
           <th scope="col">#</th>

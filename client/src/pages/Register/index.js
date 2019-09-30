@@ -44,8 +44,8 @@ class Register extends Component {
     }
 
     return (
-      <div className='Login'>
-        <div className='row'>
+      <div className='Register container'>
+        <div className='row mb-3'>
           <div className='col'>
             <h1>Register Account</h1>
           </div>
@@ -58,7 +58,7 @@ class Register extends Component {
               </div>
             </div>
           </div>}
-        <div className='row'>
+        <div className='row mt-3'>
           <div className='col'>
             <RegistrationForm onSubmit={this.handleSubmit} />
           </div>

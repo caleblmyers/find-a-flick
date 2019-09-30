@@ -24,7 +24,7 @@ class HomePage extends Component {
     API.TMDB.trending('movie')
       .then(movies => {
         API.TMDB.topRated('movie')
-          .then(topMovie => {
+          .then(topMovies => {
             API.TMDB.nowPlaying()
               .then(nowPlaying => {
                 API.TMDB.trending('tv')
@@ -33,9 +33,15 @@ class HomePage extends Component {
                       .then(topShows => {
                         API.TMDB.popular('tv')
                           .then(popularShows => {
+                            // console.log(movies.data)
+                            // console.log(topMovies.data)
+                            // console.log(nowPlaying.data)
+                            // console.log(shows.data)
+                            // console.log(topShows.data)
+                            // console.log(popularShows.data)
                             this.setState({
                               movies: movies.data.results,
-                              topMovies: topMovie.data.results,
+                              topMovies: topMovies.data.results,
                               nowPlaying: nowPlaying.data.results,
                               shows: shows.data.results,
                               topShows: topShows.data.results,
@@ -52,7 +58,8 @@ class HomePage extends Component {
       .catch(err => console.log(err))
   }
 
-  submitHandler = () => {
+  submitHandler = e => {
+    e.preventDefault()
   }
 
   render() {
@@ -62,36 +69,36 @@ class HomePage extends Component {
           <div className="container">
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>
-            <SearchBar handler={this.submitHandler} />
+            <SearchBar handler={e => this.submitHandler(e)} />
           </div>
         </div>
 
         {!this.state.isLoaded ? (
           <div>Loading...</div>
         ) : (
-            <div className="Featured container">
+            <div className="Featured">
               <div className="h2 text-center">Movies</div>
               <div className="row no-gutters">
                 <div className="col-12 col-md-8">
                   <div className="row no-gutters">
-                    <div className="col-12 p-3">
+                    <div className="col-12 col-lg-6 p-3">
                       <div className="h5">Featured</div>
                       <Carousel data={this.state.movies} type={"movie"} handler={console.log} />
                     </div>
-                    <div className="col-12 p-3">
+                    <div className="col-12 col-lg-6 p-3">
                       <div className="h5">Top Rated</div>
                       <Carousel data={this.state.topMovies} type={"topMovie"} handler={console.log} />
                     </div>
                   </div>
-                  <div className="row no-gutters">
+                  {/* <div className="row no-gutters">
                     <div className="col-12">
                       <div className="h5">Editor Picks</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-12 col-md-4 p-3">
-                  <div className="h6">In Theaters</div>
-                  <Table dataSet={this.state.nowPlaying} type="movie" />
+                  <div className="h5">In Theaters</div>
+                  <Table dataSet={this.state.nowPlaying.slice(0, 10)} type="movie" />
                 </div>
               </div>
 
@@ -99,24 +106,24 @@ class HomePage extends Component {
               <div className="row no-gutters">
                 <div className="col-12 col-md-8">
                   <div className="row no-gutters">
-                    <div className="col-12 col-xl-6 p-3">
+                    <div className="col-12 col-lg-6 p-3">
                       <div className="h5">Featured</div>
                       <Carousel data={this.state.shows} type={"show"} handler={console.log} />
                     </div>
-                    <div className="col-12 col-xl-6 p-3">
+                    <div className="col-12 col-lg-6 p-3">
                       <div className="h5">Top Rated</div>
                       <Carousel data={this.state.topShows} type={"topShow"} handler={console.log} />
                     </div>
                   </div>
-                  <div className="row no-gutters">
+                  {/* <div className="row no-gutters">
                     <div className="col-12">
                       <div className="h5">Editor Picks</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-12 col-md-4 p-3">
                   <div className="h6">Today's Most Popular</div>
-                  <Table dataSet={this.state.popularShows} type="show" />
+                  <Table dataSet={this.state.popularShows.slice(0, 10)} type="show" />
                 </div>
               </div>
             </div>)}

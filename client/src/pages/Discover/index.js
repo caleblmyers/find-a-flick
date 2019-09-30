@@ -11,24 +11,27 @@ class Discover extends Component {
     queries: {
       movie: [
         {
-          name: "What movies are in theatres?",
+          name: "What movies are new?",
           data: {
             releaseDateGt: "2019-08-25",
-            releaseDateLt: "2019-09-27"
+            releaseDateLt: "2019-09-27",
+            sort: "release_date.desc",
+            voteCountGt: "50"
           }
         },
-        {
-          name: "What are the most popular movies?",
-          data: {
-            sort: "popularity.desc"
-          }
-        },
+        // {
+        //   name: "What are the most popular movies?",
+        //   data: {
+        //     sort: "popularity.desc"
+        //   }
+        // },
         {
           name: "What are the highest rated movies rated R?",
           data: {
             certificationCountry: "US",
             certification: "R",
-            sort: "vote_average.desc"
+            sort: "vote_average.desc",
+            voteCountGt: "500"
           }
         },
         {
@@ -36,21 +39,24 @@ class Discover extends Component {
           data: {
             certificationCountry: "US",
             certificationLt: "G",
-            sort: "popularity.desc"
+            sort: "popularity.desc",
+            voteCountGt: "250"
           }
         },
         {
-          name: "What is are the best movies from 2010?",
+          name: "What are the best movies from 2010?",
           data: {
             releaseYear: "2010",
-            sort: "vote_average.desc"
+            sort: "vote_average.desc",
+            voteCountGt: "500"
           }
         },
         {
           name: "What are the best dramas that were released this year?",
           data: {
             genres: "18",
-            releaseYear: "2019"
+            releaseYear: "2019",
+            voteCountGt: "500"
           }
         },
         {
@@ -103,21 +109,22 @@ class Discover extends Component {
       ],
       tv: [
         {
-          name: "What movies are in theatres?",
+          name: "What shows are new?",
+          data: {
+            releaseDateGt: "2019-08-25",
+            releaseDateLt: "2019-09-27",
+            sort: "first_air_date.desc"
+          }
+        },
+        {
+          name: "What shows are new?",
           data: {
             releaseDateGt: "2019-08-25",
             releaseDateLt: "2019-09-27"
           }
         },
         {
-          name: "What movies are in theatres?",
-          data: {
-            releaseDateGt: "2019-08-25",
-            releaseDateLt: "2019-09-27"
-          }
-        },
-        {
-          name: "What movies are in theatres?",
+          name: "What shows are new?",
           data: {
             releaseDateGt: "2019-08-25",
             releaseDateLt: "2019-09-27"
@@ -125,8 +132,8 @@ class Discover extends Component {
         },
       ]
     },
-    activeTab: 'tv',
-    query: 'What movies are in theatres?',
+    activeTab: 'movie',
+    query: 'What movies are new?',
     params: {
       cast: '',
       companies: '',
@@ -234,7 +241,7 @@ class Discover extends Component {
       runtimeGt: '',
       runtimeLt: '',
       sort: '',
-      voteCountGt: '',
+      voteCountGt: '50',
       voteCountLt: '',
       voteAverageGt: '',
       voteAverageLt: ''
@@ -1030,19 +1037,17 @@ class Discover extends Component {
               </div>
             </form>
           </div>
-          {this.state.results && <div className="container">
-            <div className="row">
-              <div className="col">
-                <h3>Results</h3>
-                {this.state.results[0] ? (
-                  <ResultsGrid results={this.state.results} type="movie" />
-                ) : (
-                    <h1>No Matches!</h1>
-                  )}
-              </div>
-            </div>
-          </div>}
         </div>
+        {this.state.results && <div className="row no-gutters bg-popcorn">
+          <div className="col">
+            <h3>Results</h3>
+            {this.state.results[0] ? (
+              <ResultsGrid results={this.state.results} type="movie" />
+            ) : (
+                <h1>No Matches!</h1>
+              )}
+          </div>
+        </div>}
       </div>
     )
   }
