@@ -85,7 +85,7 @@ class HomePage extends Component {
                   </div>
                   <div className="row no-gutters">
                     <div className="col-12">
-                      <div className="h4">Editor Picks</div>
+                      <div className="h5">Editor Picks</div>
                     </div>
                   </div>
                 </div>
@@ -110,7 +110,7 @@ class HomePage extends Component {
                   </div>
                   <div className="row no-gutters">
                     <div className="col-12">
-                      <div className="h4">Editor Picks</div>
+                      <div className="h5">Editor Picks</div>
                     </div>
                   </div>
                 </div>

@@ -69,8 +69,8 @@ export default {
       if (!type) type = 'movie'
       return axios.get(`/api/tmdb/details/${type}/${id}`)
     },
-    discover: function (query) {
-      return axios.post('api/tmdb/discover', { query })
+    discover: function (type, query) {
+      return axios.post('api/tmdb/discover', { type, query })
     },
     nowPlaying: function () {
       return axios.get('/api/tmdb/now_playing')

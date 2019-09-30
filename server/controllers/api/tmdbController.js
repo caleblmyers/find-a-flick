@@ -18,6 +18,7 @@ tmdbController.get('/details/:type/:id', (req, res) => {
 })
 
 tmdbController.post('/discover', (req, res) => {
+  const { type } = req.body
   let {
     cast,
     companies,
@@ -166,7 +167,7 @@ tmdbController.post('/discover', (req, res) => {
   })
   console.log(queryString)
 
-  axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${tmdbKey}&include_adult=false${queryString}`)
+  axios.get(`https://api.themoviedb.org/3/discover/${type}?api_key=${tmdbKey}&include_adult=false${queryString}`)
     .then(data => res.json(data.data))
     .catch(err => res.json(err))
 })

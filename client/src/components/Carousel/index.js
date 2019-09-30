@@ -2,9 +2,13 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 class Carousel extends Component {
-  state = {
-    data: this.props.data,
-    index: 0,
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      data: this.props.data,
+      index: 0,
+    }
   }
 
   componentDidUpdate() {
