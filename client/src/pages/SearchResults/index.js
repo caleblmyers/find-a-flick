@@ -19,7 +19,6 @@ class SearchResults extends Component {
   }
 
   submitHandler = keyword => {
-    console.log('handler')
     this.setState({ keyword })
     this.props.processSearch(keyword)
   }

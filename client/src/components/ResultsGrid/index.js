@@ -20,13 +20,7 @@ function ResultsGrid(props) {
                     Release Date: {moment((result.release_date || result.first_air_date)).format("MM/DD/YYYY")}
                   </h6>
                   <p>Rating: {result.vote_average} <small>({result.vote_count})</small></p>
-                  <Link to={{
-                    pathname: '/details',
-                    state: {
-                      type: result.media_type || props.type,
-                      id: result.id
-                    }
-                  }}>
+                  <Link to={`/details/${result.media_type || props.type}/${result.id}`}>
                     <button className="btn btn-outline-secondary">
                       Details
                     </button>

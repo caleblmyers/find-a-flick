@@ -34,13 +34,14 @@ class Carousel extends Component {
     if (this.props.type === "movie" || this.props.type === "topMovie") mediaType = "movie"
     else if (this.props.type === "show" || this.props.type === "topShow") mediaType = "tv"
     else mediaType = this.props.type
-
+    console.log(this.state.data)
+    console.log(this.state.index)
     return (
       <div className="Carousel">
         <div className="mx-auto div-featured">
           <img className="img-fluid" id="img-featured" src={`https://image.tmdb.org/t/p/original/${this.state.data[this.state.index].backdrop_path}`} alt="..." />
           <Link onClick={() => this.props.handler(mediaType, this.state.data[this.state.index].id)} to={{
-            pathname: '/details',
+            pathname: `/details/${mediaType}/${this.state.data[this.state.index].id}`,
             state: {
               type: mediaType,
               id: this.state.data[this.state.index].id

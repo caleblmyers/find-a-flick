@@ -29,7 +29,7 @@ class Details extends Component {
   }
 
   componentDidMount() {
-    const { type, id } = this.props.location.state
+    const { type, id } = this.props.match.params
 
     this.props.getDetails(type, id)
 
@@ -53,35 +53,35 @@ class Details extends Component {
       console.log('diff update')
       console.log(nextProps)
       console.log(nextState)
-      console.log(this.props.location.state.type)
-      console.log(nextProps.location.state.type)
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       this.setState({ isLoaded: false })
       if (this.props.history.action === "POP") {
-        this.changeMedia(nextProps.location.state.type, nextProps.location.state.id)
+        this.changeMedia(nextProps.match.params.type, nextProps.match.params.id)
       }
       return false
     }
-    else if (this.props.location.state.type === "movie" && !this.state.details.revenue) {
+    else if (this.props.match.params.type === "movie" && !this.state.details.revenue) {
       console.log('movie wait')
       console.log(nextProps)
       console.log(nextState)
-      console.log(this.props.location.state.type)
-      console.log(nextProps.location.state.type)
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       return true
     }
-    else if (this.props.location.state.type === "movie" && this.state.details.revenue) {
+    else if (this.props.match.params.type === "movie" && this.state.details.revenue) {
       console.log('movie update')
       console.log(nextProps)
       console.log(nextState)
-      console.log(this.props.location.state.type)
-      console.log(nextProps.location.state.type)
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       return true
     }
     else {
       console.log('updating')
       console.log(this.props.details)
-      console.log(this.props.location.state.type)
-      console.log(nextProps.location.state.type)
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       return true
     }
   }
@@ -113,7 +113,7 @@ class Details extends Component {
 
     const { comment } = this.state
     const { user, authToken } = this.context
-    const { type, id } = this.props.location.state
+    const { type, id } = this.props.match.params
 
     let newComment = {
       userId: user.id,
@@ -140,7 +140,7 @@ class Details extends Component {
   }
 
   changeMedia = (type, id) => {
-    console.log('changeMedia', this.props.location.state.id)
+    console.log('changeMedia', this.props.match.params.id)
     this.setState({ isLoaded: false })
     this.props.getDetails(type, id)
     API.Comments.pageComments(type, id)
@@ -162,7 +162,7 @@ class Details extends Component {
   deleteComment = e => {
     console.log(e.target.value)
     const { authToken } = this.context
-    const { type, id } = this.props.location.state
+    const { type, id } = this.props.match.params
 
     API.Comments.delete(e.target.value, authToken)
       .then(res => {
@@ -183,7 +183,7 @@ class Details extends Component {
   submitEdit = e => {
     const { isEditing, edit } = this.state
     const { authToken } = this.context
-    const { type, id } = this.props.location.state
+    const { type, id } = this.props.match.params
 
     if (isEditing) {
       API.Comments.edit(isEditing, edit, authToken)
@@ -202,7 +202,7 @@ class Details extends Component {
     const { details } = this.props
     const { user, authToken } = this.context
     const { message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
-    const { type, id } = this.props.location.state
+    const { type, id } = this.props.match.params
 
     return (
       <div className="Details pb-5">
@@ -345,13 +345,15 @@ class Details extends Component {
 
               <div className="row">
                 <div className="col-12 col-lg-9 p-3 text-left">
-                  {type === "person" ? (
-                    <div className="h4"><strong>Credits</strong></div>
+                  {type !== "person" ? (
+                    <div className="h4"><strong>Cast</strong></div>
                   ) : (
-                      <div className="h4"><strong>Cast</strong></div>
+                      <div className="h4"><strong>Credits</strong></div>
                     )}
                   {type !== "person" ? (
-                    <CastSlider cast={details.credits.cast} handler={this.changeMedia} />
+                    <div>
+                      <CastSlider cast={details.credits.cast} handler={this.changeMedia} />
+                    </div>
                   ) : (
                       <div>
                         {details.known_for_department === "Acting" ? (
@@ -367,23 +369,49 @@ class Details extends Component {
                           )}
                       </div>
                     )}
-                  <div className="row mt-2">
-                    <div className="col-12 col-md-6">
-                      <div className="h4"><strong>Recommended</strong></div>
-                    </div>
-                    <div className="col-12 col-md-6">
-                      <div className="h4"><strong>Similar</strong></div>
-                    </div>
-                  </div>
                   {type !== "person" ? (
-                    <div className="row bg-light-grey border-round">
-                      <div className="mr-auto col-12 col-md-6 p-3">
-                        <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
+                    <div className="row mt-3">
+                      <div className="col-6">
+                        <div className="h4"><strong>Recommended</strong></div>
+                        <div className="row bg-light-grey border-round mr-1">
+                          <div className="col-12 p-2">
+                            {details.recommendations.results.length >= 1 ? (
+                              <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
+                            ) : (
+                                <div className="h6">No recommendations!</div>
+                              )}
+                          </div>
+                        </div>
                       </div>
-                      <div className="mr-auto col-12 col-md-6 p-3">
-                        <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
+                      <div className="col-6">
+                        <div className="h4"><strong>Similar</strong></div>
+                        <div className="row bg-light-grey border-round ml-1">
+                          <div className="col-12 p-2">
+                            {details.similar.results.length >= 1 ? (
+                              <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
+                            ) : (
+                                <div className="h6">Nothing listed as similar!</div>
+                              )}
+                          </div>
+                        </div>
                       </div>
                     </div>
+                    // <div className="row bg-light-grey border-round">
+                    //   <div className="col-12 col-md-6 p-3">
+                    //     {details.recommendations.results.length >= 1 ? (
+                    //       <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
+                    //     ) : (
+                    //         <div className="h6">No recommendations!</div>
+                    //       )}
+                    //   </div>
+                    //   <div className="col-12 col-md-6 p-3">
+                    //     {details.similar.results.length >= 1 ? (
+                    //       <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
+                    //     ) : (
+                    //         <div className="h6">Nothing listed as similar!</div>
+                    //       )}
+                    //   </div>
+                    // </div>
                   ) : (
                       <div className="row bg-light-grey border-round">
                         <div className="mr-auto col-12 col-md-6 p-3">
@@ -393,7 +421,7 @@ class Details extends Component {
                       </div>
                     )}
                 </div>
-                <div className="col-12 col-lg-3 p-3 text-left">
+                <div className="col-12 col-lg-3 text-left side-col-lg">
                   <div className="h4"><strong>Crew</strong></div>
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
                     {details.credits.crew.slice(3, 10).map(person => (
@@ -402,6 +430,11 @@ class Details extends Component {
                         <div className="text-xs">{person.job}</div>
                       </div>
                     ))}
+                    {details.credits.crew.length === 0 && <div>
+                      <div className="col-12 px-3 py-2">
+                        <div className="h6">Crew unavailable.</div>
+                      </div>
+                    </div>}
                   </div>}
                   {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
                     {details.credits.crew.slice(0, 8).map(person => (

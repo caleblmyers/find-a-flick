@@ -58,10 +58,6 @@ class HomePage extends Component {
       .catch(err => console.log(err))
   }
 
-  submitHandler = e => {
-    e.preventDefault()
-  }
-
   render() {
     return (
       <div className='Home'>
@@ -69,7 +65,7 @@ class HomePage extends Component {
           <div className="container">
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>
-            <SearchBar handler={e => this.submitHandler(e)} />
+            <SearchBar handler={() => { }} />
           </div>
         </div>
 
