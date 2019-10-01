@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+
 module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define('Comment', {
     id: {
@@ -39,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
         fields: ['id', 'userId']
       }
     ]
-  });
+  })
   Comment.associate = function (models) {
     Comment.belongsTo(models.User, { foreignKey: "userId" })
-  };
-  return Comment;
-};
+  }
+  return Comment
+}

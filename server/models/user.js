@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -35,16 +35,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     underscored: true,
     timestamps: false
-  });
+  })
 
   User.associate = function (models) {
     User.hasMany(models.Favorite)
     User.hasMany(models.Comment)
-  };
-
-  User.prototype.comparePassword = function (challenge) {
-    return this.password === challenge;
   }
 
-  return User;
-};
+  User.prototype.comparePassword = function (challenge) {
+    return this.password === challenge
+  }
+
+  return User
+}

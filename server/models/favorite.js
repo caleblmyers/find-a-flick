@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = (sequelize, DataTypes) => {
   const Favorite = sequelize.define('Favorite', {
@@ -40,11 +40,11 @@ module.exports = (sequelize, DataTypes) => {
         fields: ['userId', 'tmdbId']
       }
     ]
-  });
+  })
 
   Favorite.associate = function (models) {
     Favorite.belongsTo(models.User, { foreignKey: "userId" })
-  };
+  }
 
-  return Favorite;
-};
+  return Favorite
+}

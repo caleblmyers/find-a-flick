@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import API from '../../lib/API'
 import AuthContext from '../../contexts/AuthContext'
-import RegistrationForm from '../../components/RegistrationForm/RegistrationForm'
+import RegistrationForm from '../../components/RegistrationForm'
 
 class Register extends Component {
   static contextType = AuthContext

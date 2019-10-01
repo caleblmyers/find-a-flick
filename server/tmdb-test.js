@@ -2,7 +2,7 @@ const axios = require('axios')
 const express = require('express')
 
 const app = express()
-const PORT = 3001
+const PORT = 7777
 
 app.get('/search', (req, res) => {
   axios.get(`https://api.themoviedb.org/3/search/movie?query=Blade%20Runner&api_key=38050460e68774c8a8cf7af02fac33cc`)
