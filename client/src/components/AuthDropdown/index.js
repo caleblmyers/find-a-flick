@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Gravatar from 'react-gravatar';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import Gravatar from 'react-gravatar'
 
-import AuthContext from '../../contexts/AuthContext';
+import AuthContext from '../../contexts/AuthContext'
 
 class AuthDropdown extends Component {
-  static contextType = AuthContext;
+  static contextType = AuthContext
 
   state = {
     isOpen: false
@@ -14,15 +14,15 @@ class AuthDropdown extends Component {
   toggleOpen = () => this.setState({ isOpen: !this.state.isOpen })
 
   handleLogout = () => {
-    this.context.onLogout();
-    this.props.onClick();
+    this.context.onLogout()
+    this.props.onClick()
   }
 
   render() {
-    const { user } = this.context;
-    const { isOpen } = this.state;
+    const { user } = this.context
+    const { isOpen } = this.state
 
-    const dropdownMenuClass = `dropdown-menu dropdown-menu-right ${isOpen && 'show'}`;
+    const dropdownMenuClass = `dropdown-menu dropdown-menu-right ${isOpen && 'show'}`
 
     return (
       <li className="nav-item dropdown">
@@ -36,8 +36,8 @@ class AuthDropdown extends Component {
           <div className="dropdown-item pointer" onClick={this.handleLogout}>Logout</div>
         </div>
       </li>
-    );
+    )
   }
 }
 
-export default AuthDropdown;
+export default AuthDropdown

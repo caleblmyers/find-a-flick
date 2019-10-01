@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Octicon, { Person, Mail, Key } from '@githubprimer/octicons-react';
+import React, { Component } from 'react'
+import Octicon, { Person, Mail, Key } from '@githubprimer/octicons-react'
 
 class RegistrationForm extends Component {
   state = {
@@ -7,21 +7,21 @@ class RegistrationForm extends Component {
     email: '',
     password: '',
     passwordConfirm: ''
-  };
+  }
 
   handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+    const { name, value } = event.target
+    this.setState({ [name]: value })
   }
 
   handleSubmit = event => {
-    const { username, email, password, passwordConfirm } = this.state;
-    this.props.onSubmit(username, email, password, passwordConfirm);
-    event.preventDefault();
+    const { username, email, password, passwordConfirm } = this.state
+    this.props.onSubmit(username, email, password, passwordConfirm)
+    event.preventDefault()
   }
 
   render() {
-    const { username, email, password, passwordConfirm } = this.state;
+    const { username, email, password, passwordConfirm } = this.state
 
     return (
       <div className='LoginForm'>
@@ -93,4 +93,4 @@ class RegistrationForm extends Component {
   }
 }
 
-export default RegistrationForm;
+export default RegistrationForm

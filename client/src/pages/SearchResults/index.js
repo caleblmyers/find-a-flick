@@ -43,7 +43,7 @@ class SearchResults extends Component {
           )
         }
       </div>
-    );
+    )
   }
 }
 

@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 
-import API from '../../lib/API';
-import AuthContext from '../../contexts/AuthContext';
-import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
+import API from '../../lib/API'
+import AuthContext from '../../contexts/AuthContext'
+import RegistrationForm from '../../components/RegistrationForm/RegistrationForm'
 
 class Register extends Component {
-  static contextType = AuthContext;
+  static contextType = AuthContext
 
   state = {
     redirectToReferrer: false,
@@ -21,18 +21,18 @@ class Register extends Component {
         })
         .catch(err => {
           if (err.response.status === 401) {
-            this.setState({ error: "Sorry, that username and/or email is in use. Please try again." });
+            this.setState({ error: "Sorry, that username and/or email is in use. Please try again." })
           } else {
             console.log(err)
           }
-        });
+        })
     } else {
       this.setState({ error: "Please enter the same password in both fields." })
     }
   }
 
   render() {
-    const { redirectToReferrer } = this.state;
+    const { redirectToReferrer } = this.state
 
     if (redirectToReferrer) {
       return <Redirect to={{
@@ -40,7 +40,7 @@ class Register extends Component {
         state: {
           newUser: true
         }
-      }} />;
+      }} />
     }
 
     return (
@@ -64,8 +64,8 @@ class Register extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Register;
+export default Register

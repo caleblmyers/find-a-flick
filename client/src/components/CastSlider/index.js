@@ -29,19 +29,33 @@ class CastSlider extends Component {
 
     return (
       <div className="CastSlider position-relative row justify-content-center bg-light-grey py-2" id="cast-container">
-        <button onClick={event => this.changeSlide(slide, event)} className={`btn ${displayPrev}`} id="prev">&#10094;</button>
-        <button onClick={event => this.changeSlide(slide, event)} className={`btn ${displayNext}`} id="next">&#10095;</button>
+        <button
+          id="prev"
+          className={`btn ${displayPrev}`}
+          onClick={event => this.changeSlide(slide, event)}
+        >
+          &#10094;
+        </button>
+        <button
+          id="next"
+          className={`btn ${displayNext}`}
+          onClick={event => this.changeSlide(slide, event)}
+        >
+          &#10095;
+        </button>
         {cast.slice(((slide - 1) * 5), (slide * 5)).map(credit => (
           <div className="col-4 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.id}>
-            <Link onClick={() => this.props.handler(credit.media_type || "person", credit.id)} className="no-link" to={{
-              pathname: `/details/${credit.media_type || "person"}/${credit.id}`,
-              state: {
-                type: credit.media_type || "person",
-                id: credit.id
-              }
-            }}>
+            <Link
+              className="no-link"
+              to={`/details/${credit.media_type || "person"}/${credit.id}`}
+              onClick={() => this.props.handler(credit.media_type || "person", credit.id)}
+            >
               <div className="card">
-                <img src={`https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`} className="card-img-top" alt={credit.name} />
+                <img
+                  alt={credit.name}
+                  className="card-img-top"
+                  src={`https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`}
+                />
                 <div className="pl-1 py-3">
                   <div className="text-sm"><strong>{credit.name || credit.title}</strong></div>
                   <div className="text-xs">{credit.character || credit.job}</div>

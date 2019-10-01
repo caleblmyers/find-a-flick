@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Link, Redirect } from 'react-router-dom'
 
-import API from '../../lib/API';
-import AuthContext from '../../contexts/AuthContext';
-import LoginForm from '../../components/LoginForm';
+import API from '../../lib/API'
+import AuthContext from '../../contexts/AuthContext'
+import LoginForm from '../../components/LoginForm'
 
 class Login extends Component {
-  static contextType = AuthContext;
+  static contextType = AuthContext
 
   state = {
     redirectToReferrer: false,
@@ -26,34 +26,34 @@ class Login extends Component {
     API.Users.login(username, password)
       .then(response => response.data)
       .then(({ user, token }) => {
-        this.context.onLogin(user, token);
-        this.setState({ redirectToReferrer: true, error: "" });
+        this.context.onLogin(user, token)
+        this.setState({ redirectToReferrer: true, error: "" })
       })
       .catch(err => {
-        let message;
+        let message
 
         switch (err.response.status) {
           case 401:
-            message = 'Sorry, that username/password combination is not valid. Please try again.';
-            break;
+            message = 'Sorry, that username/password combination is not valid. Please try again.'
+            break
           case 500:
-            message = 'Server error. Please try again later.';
-            break;
+            message = 'Server error. Please try again later.'
+            break
           default:
-            message = 'Unknown error.';
+            message = 'Unknown error.'
         }
 
         this.setState({
           error: message,
           deleted: "",
           created: ""
-        });
-      });
+        })
+      })
   }
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: "/" } }
-    const { created, deleted, error, redirectToReferrer } = this.state;
+    const { created, deleted, error, redirectToReferrer } = this.state
     if (redirectToReferrer) return <Redirect to={from} />
 
     return (
@@ -94,8 +94,8 @@ class Login extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Login;
+export default Login

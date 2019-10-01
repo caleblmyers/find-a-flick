@@ -70,7 +70,6 @@ class App extends Component {
                 <Route path='/discover' component={Discover} />
                 <Route path='/results' component={SearchResults} />
                 <Route path='/details/:type/:id' component={Details} />
-                <Route path='/details' component={Details} />
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={Register} />
                 <PrivateRoute path='/account' component={Account} />

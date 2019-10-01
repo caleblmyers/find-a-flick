@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import Octicon, { Person, Key } from '@githubprimer/octicons-react';
+import Octicon, { Person, Key } from '@githubprimer/octicons-react'
 
 class LoginForm extends Component {
   state = {
     username: '',
     password: ''
-  };
+  }
 
   handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+    const { name, value } = event.target
+    this.setState({ [name]: value })
   }
 
   handleSubmit = event => {
-    const { username, password } = this.state;
-    this.props.onSubmit(username, password);
-    event.preventDefault();
+    const { username, password } = this.state
+    this.props.onSubmit(username, password)
+    event.preventDefault()
   }
 
   render() {
-    const { username, password } = this.state;
+    const { username, password } = this.state
 
     return (
       <div className='LoginForm'>
@@ -30,11 +30,11 @@ class LoginForm extends Component {
               <span className="input-group-text"><Octicon icon={Person} /></span>
             </div>
             <input
-              className='form-control'
               id='username'
               type='username'
               name='username'
               placeholder='MovieBuff25'
+              className='form-control'
               value={username}
               onChange={this.handleInputChange}
             />
@@ -44,11 +44,11 @@ class LoginForm extends Component {
               <span className="input-group-text"><Octicon icon={Key} /></span>
             </div>
             <input
-              className='form-control'
               id='password'
               type='password'
               name='password'
               placeholder='password'
+              className='form-control'
               value={password}
               onChange={this.handleInputChange}
             />
@@ -60,5 +60,5 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+export default LoginForm
 

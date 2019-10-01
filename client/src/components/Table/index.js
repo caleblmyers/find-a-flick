@@ -16,13 +16,7 @@ function Table(props) {
           <tr key={index}>
             <th scope="row">{index + 1}</th>
             <td>
-              <Link className="now-playing" to={{
-                pathname: "/details",
-                state: {
-                  type: props.type,
-                  id: data.id
-                }
-              }}>
+              <Link className="now-playing" to={`/details/${props.type}/${data.id}`}>
                 <span>
                   {data.title || data.name}
                 </span>

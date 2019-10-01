@@ -50,9 +50,7 @@ class Details extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.location !== this.props.location) {
-      console.log('diff update')
-      console.log(nextProps)
-      console.log(nextState)
+      console.log('diff type')
       console.log(this.props.match.params.type)
       console.log(nextProps.match.params.type)
       this.setState({ isLoaded: false })
@@ -63,16 +61,12 @@ class Details extends Component {
     }
     else if (this.props.match.params.type === "movie" && !this.state.details.revenue) {
       console.log('movie wait')
-      console.log(nextProps)
-      console.log(nextState)
       console.log(this.props.match.params.type)
       console.log(nextProps.match.params.type)
       return true
     }
     else if (this.props.match.params.type === "movie" && this.state.details.revenue) {
       console.log('movie update')
-      console.log(nextProps)
-      console.log(nextState)
       console.log(this.props.match.params.type)
       console.log(nextProps.match.params.type)
       return true
@@ -396,22 +390,6 @@ class Details extends Component {
                         </div>
                       </div>
                     </div>
-                    // <div className="row bg-light-grey border-round">
-                    //   <div className="col-12 col-md-6 p-3">
-                    //     {details.recommendations.results.length >= 1 ? (
-                    //       <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
-                    //     ) : (
-                    //         <div className="h6">No recommendations!</div>
-                    //       )}
-                    //   </div>
-                    //   <div className="col-12 col-md-6 p-3">
-                    //     {details.similar.results.length >= 1 ? (
-                    //       <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
-                    //     ) : (
-                    //         <div className="h6">Nothing listed as similar!</div>
-                    //       )}
-                    //   </div>
-                    // </div>
                   ) : (
                       <div className="row bg-light-grey border-round">
                         <div className="mr-auto col-12 col-md-6 p-3">

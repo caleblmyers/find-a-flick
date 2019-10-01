@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 import './style.css'
-import AuthContext from '../../contexts/AuthContext';
-import AuthDropdown from '../../components/AuthDropdown';
+import AuthContext from '../../contexts/AuthContext'
+import AuthDropdown from '../../components/AuthDropdown'
 
 class Navigation extends Component {
-  static contextType = AuthContext;
+  static contextType = AuthContext
 
   state = {
     collapsed: true
@@ -15,10 +15,10 @@ class Navigation extends Component {
   toggleCollapse = () => this.setState({ collapsed: !this.state.collapsed })
 
   render() {
-    const { user } = this.context;
-    const { collapsed } = this.state;
-    const togglerClass = `navbar-toggler ${collapsed && 'collapsed'}`;
-    const targetClass = `collapse navbar-collapse ${!collapsed && 'show'}`;
+    const { user } = this.context
+    const { collapsed } = this.state
+    const togglerClass = `navbar-toggler ${collapsed && 'collapsed'}`
+    const targetClass = `collapse navbar-collapse ${!collapsed && 'show'}`
 
     return (
       <div className='Navigation sticky-top bg-navy'>
@@ -58,8 +58,8 @@ class Navigation extends Component {
           </div>
         </nav>
       </div>
-    );
+    )
   }
 }
 
-export default Navigation;
+export default Navigation

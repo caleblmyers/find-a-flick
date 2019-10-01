@@ -1,7 +1,7 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React from 'react'
+import { Route, Redirect } from 'react-router-dom'
 
-import AuthContext from '../../contexts/AuthContext';
+import AuthContext from '../../contexts/AuthContext'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <AuthContext.Consumer>
@@ -23,6 +23,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       />
     )}
   </AuthContext.Consumer>
-);
+)
 
-export default PrivateRoute;
+export default PrivateRoute

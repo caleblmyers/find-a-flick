@@ -30,34 +30,36 @@ class Carousel extends Component {
   goToSlide = (type, e) => this.setState({ index: e.target.id.slice(type.length) })
 
   render() {
+    const { data, index } = this.state
+    const { type } = this.props
+
     let mediaType
-    if (this.props.type === "movie" || this.props.type === "topMovie") mediaType = "movie"
-    else if (this.props.type === "show" || this.props.type === "topShow") mediaType = "tv"
-    else mediaType = this.props.type
-    console.log(this.state.data)
-    console.log(this.state.index)
+    if (type === "movie" || type === "topMovie") mediaType = "movie"
+    else if (type === "show" || type === "topShow") mediaType = "tv"
+    else mediaType = type
+
     return (
       <div className="Carousel">
         <div className="mx-auto div-featured">
-          <img className="img-fluid" id="img-featured" src={`https://image.tmdb.org/t/p/original/${this.state.data[this.state.index].backdrop_path}`} alt="..." />
-          <Link onClick={() => this.props.handler(mediaType, this.state.data[this.state.index].id)} to={{
-            pathname: `/details/${mediaType}/${this.state.data[this.state.index].id}`,
-            state: {
-              type: mediaType,
-              id: this.state.data[this.state.index].id
-            }
-          }}>
-            <div id="caption"><strong>{this.state.data[this.state.index].title || this.state.data[this.state.index].name}</strong></div>
+          <img
+            className="img-fluid"
+            id="img-featured"
+            src={`https://image.tmdb.org/t/p/original/${data[index].backdrop_path}`} alt={data[index].title || data[index].name} />
+          <Link
+            to={`/details/${mediaType}/${data[index].id}`}
+            onClick={() => this.props.handler(mediaType, data[index].id)}
+          >
+            <div id="caption"><strong>{data[index].title || data[index].name}</strong></div>
           </Link>
-          <button onClick={event => this.changeSlide(this.props.type, event)} className="btn" id="prev">&#10094;</button>
-          <button onClick={event => this.changeSlide(this.props.type, event)} className="btn" id="next">&#10095;</button>
+          <button onClick={event => this.changeSlide(type, event)} className="btn" id="prev">&#10094;</button>
+          <button onClick={event => this.changeSlide(type, event)} className="btn" id="next">&#10095;</button>
         </div>
         <div className="mx-auto" id="dot-container">
-          {this.state.data.map((feature, index) => (
+          {data.map((dot, index) => (
             <span
               key={index}
-              id={`${this.props.type}${index}`}
-              onClick={event => this.goToSlide(this.props.type, event)}
+              id={`${type}${index}`}
+              onClick={event => this.goToSlide(type, event)}
               className={`dot ${index === this.state.index ? 'activeDot' : 'inactiveDot'}`}
             ></span>
           ))}
