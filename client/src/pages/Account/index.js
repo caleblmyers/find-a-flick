@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import Gravatar from 'react-gravatar';
+import Gravatar from 'react-gravatar'
 import moment from 'moment'
 
 import API from '../../lib/API'
@@ -60,8 +60,8 @@ class Account extends Component {
   }
 
   handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+    const { name, value } = e.target
+    this.setState({ [name]: value })
   }
 
   changeInfo = e => {

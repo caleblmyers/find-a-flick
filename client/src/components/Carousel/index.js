@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+import Media from '../../img/media_placeholder.png'
+
 class Carousel extends Component {
   constructor(props) {
     super(props)
@@ -19,7 +21,7 @@ class Carousel extends Component {
     })
   }
 
-  changeSlide = (type, e) => {
+  changeSlide = e => {
     let { index } = this.state
     e.target.id === "next" ? index++ : index--
     if (index >= this.props.data.length) index = 0
@@ -42,17 +44,21 @@ class Carousel extends Component {
       <div className="Carousel">
         <div className="mx-auto div-featured">
           <img
-            className="img-fluid"
             id="img-featured"
-            src={`https://image.tmdb.org/t/p/original/${data[index].backdrop_path}`} alt={data[index].title || data[index].name} />
+            className="img-fluid"
+            alt={data[index].title || data[index].name}
+            src={data[index].backdrop_path
+              ? `https://image.tmdb.org/t/p/original/${data[index].backdrop_path}`
+              : Media}
+          />
           <Link
             to={`/details/${mediaType}/${data[index].id}`}
             onClick={() => this.props.handler(mediaType, data[index].id)}
           >
             <div id="caption"><strong>{data[index].title || data[index].name}</strong></div>
           </Link>
-          <button onClick={event => this.changeSlide(type, event)} className="btn" id="prev">&#10094;</button>
-          <button onClick={event => this.changeSlide(type, event)} className="btn" id="next">&#10095;</button>
+          <button onClick={event => this.changeSlide(event)} className="btn" id="prev">&#10094;</button>
+          <button onClick={event => this.changeSlide(event)} className="btn" id="next">&#10095;</button>
         </div>
         <div className="mx-auto" id="dot-container">
           {data.map((dot, index) => (

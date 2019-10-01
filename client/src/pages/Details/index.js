@@ -11,6 +11,7 @@ import AuthContext from '../../contexts/AuthContext'
 import API from '../../lib/API'
 import CastSlider from '../../components/CastSlider'
 import Carousel from '../../components/Carousel'
+import Person from '../../img/person_placeholder.png'
 
 class Details extends Component {
   static contextType = AuthContext
@@ -202,7 +203,11 @@ class Details extends Component {
       <div className="Details pb-5">
         {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
           <div className="col-sm-12 d-md-none">
-            <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.backdrop_path || details.profile_path}`} alt="Poster" />
+            <img
+              alt="Poster"
+              className="img-fluid rounded"
+              src={`https://image.tmdb.org/t/p/original/${details.backdrop_path || details.profile_path}`}
+            />
           </div>
         </div>}
         {!isLoaded ? (
@@ -333,7 +338,14 @@ class Details extends Component {
                   </div>
                 </div>
                 <div className="col-4 py-3 d-none d-md-block">
-                  <img className="img-fluid rounded" src={`https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`} alt="Poster" />
+                  <img
+                    alt="Poster"
+                    className="img-fluid rounded"
+                    src={
+                      (details.poster_path || details.profile_path)
+                        ? `https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`
+                        : Person}
+                  />
                 </div>
               </div>
 

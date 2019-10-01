@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const AuthContext = React.createContext({
   user: undefined,
@@ -6,6 +6,6 @@ const AuthContext = React.createContext({
   onLogin: () => undefined,
   onLogout: () => undefined,
   onUpdate: () => undefined
-});
+})
 
-export default AuthContext;
+export default AuthContext

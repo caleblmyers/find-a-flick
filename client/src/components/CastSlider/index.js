@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+import Person from '../../img/person_placeholder.png'
+
 class CastSlider extends Component {
   state = {
     slide: 1,
@@ -54,7 +56,10 @@ class CastSlider extends Component {
                 <img
                   alt={credit.name}
                   className="card-img-top"
-                  src={`https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`}
+                  src={
+                    (credit.profile_path || credit.poster_path)
+                      ? `https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`
+                      : Person}
                 />
                 <div className="pl-1 py-3">
                   <div className="text-sm"><strong>{credit.name || credit.title}</strong></div>
