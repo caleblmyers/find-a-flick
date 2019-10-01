@@ -20,6 +20,7 @@ class CastSlider extends Component {
     const { slide, maxSlide } = this.state
     const displayPrev = slide === 1 ? 'd-none' : ''
     const displayNext = (slide >= maxSlide) ? 'd-none' : ''
+    
     if (cast.length === 0) {
       return (
         <div className="row bg-light-grey py-2 border-round" id="">
@@ -29,7 +30,7 @@ class CastSlider extends Component {
         </div>
       )
     }
-    console.log(cast.slice(((slide - 1) * 4), (slide * 4)))
+
     return (
       <div className="CastSlider position-relative row justify-content-center bg-light-grey py-2" id="cast-container">
         <button

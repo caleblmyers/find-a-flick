@@ -19,6 +19,7 @@ class Details extends Component {
 
   state = {
     isLoaded: false,
+    error: "",
     isEditing: "",
     edit: "",
     message: "",
@@ -31,50 +32,73 @@ class Details extends Component {
   componentDidMount() {
     const { type, id } = this.props.match.params
 
-    this.props.getDetails(type, id)
-    API.Comments.pageComments(type, id)
-      .then(res => {
-        const comments = res.data
-        this.setState({ comments })
-      })
-      .catch(err => console.log(err))
+    this.getDetails(type, id)
 
-    setTimeout(() => this.setState({
-      details: this.props.details,
-      isLoaded: true
-    }), 4000)
+    // this.props.getDetails(type, id)
+    // API.Comments.pageComments(type, id)
+    //   .then(res => {
+    //     const comments = res.data
+    //     this.setState({ comments })
+    //   })
+    //   .catch(err => console.log(err))
+
+    // setTimeout(() => this.setState({
+    //   details: this.props.details,
+    //   isLoaded: true
+    // }), 4000)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.location !== this.props.location) {
-      console.log('diff type')
-      console.log(this.props.match.params.type)
-      console.log(nextProps.match.params.type)
+      // console.log('diff type')
+      // console.log(this.props.match.params.type)
+      // console.log(nextProps.match.params.type)
       this.setState({ isLoaded: false })
       if (this.props.history.action === "POP") {
-        this.changeMedia(nextProps.match.params.type, nextProps.match.params.id)
+        this.getDetails(nextProps.match.params.type, nextProps.match.params.id)
       }
       return false
     }
     else if (this.props.match.params.type === "movie" && !this.state.details.revenue) {
-      console.log('movie wait')
-      console.log(this.props.match.params.type)
-      console.log(nextProps.match.params.type)
+      // console.log('movie wait')
+      // console.log(this.props.match.params.type)
+      // console.log(nextProps.match.params.type)
       return true
     }
     else if (this.props.match.params.type === "movie" && this.state.details.revenue) {
-      console.log('movie update')
-      console.log(this.props.match.params.type)
-      console.log(nextProps.match.params.type)
+      // console.log('movie update')
+      // console.log(this.props.match.params.type)
+      // console.log(nextProps.match.params.type)
       return true
     }
     else {
-      console.log('updating')
-      console.log(this.props.details)
-      console.log(this.props.match.params.type)
-      console.log(nextProps.match.params.type)
+      // console.log('updating')
+      // console.log(this.props.details)
+      // console.log(this.props.match.params.type)
+      // console.log(nextProps.match.params.type)
       return true
     }
+  }
+
+  getDetails(type, id) {
+    this.setState({ isLoaded: false })
+    API.TMDB.details(type, id)
+      .then(pageDetails => {
+        const details = pageDetails.data
+        console.log(pageDetails.data)
+        if (pageDetails.data.name === "Error") return this.getDetails(type, id)
+        API.Comments.pageComments(type, id)
+          .then(pageComments => {
+            const comments = pageComments.data
+            this.setState({
+              details,
+              comments,
+              isLoaded: true
+            })
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
   }
 
   addFavorite = (type, id, title, userId, token) => {
@@ -181,13 +205,13 @@ class Details extends Component {
   }
 
   render() {
-    const { details } = this.props
+    // const { details } = this.props
     const { user, authToken } = this.context
     const { type, id } = this.props.match.params
-    const { message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
+    const { details, message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
 
     return (
-      <div className="Details pb-5">
+      <div className="Details pb-5 position-relative">
         {/* {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
           <div className="col-sm-12 d-md-none">
             <img
@@ -198,7 +222,13 @@ class Details extends Component {
           </div>
         </div>} */}
         {!isLoaded ? (
-          <div>Loading...</div>
+          <div className="align-center" id="loader">
+            <div className="bounce-loader mt-4">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
         ) : (
             <div className="container pt-3">
               {message &&
@@ -209,6 +239,7 @@ class Details extends Component {
                     </div>
                   </div>
                 </div>}
+
               <div className="row bg-light-grey" id="details-body">
                 <div className="col-12 col-md-8 py-3">
                   <div className="p-3" id="details-header">
@@ -339,33 +370,34 @@ class Details extends Component {
               <div className="row">
                 <div className="col-12 col-lg-9 pt-3 text-left">
                   {type !== "person" ? (
-                    <div className="h4"><strong>Cast</strong></div>
-                  ) : (
-                      <div className="h4"><strong>Credits</strong></div>
-                    )}
-                  {type !== "person" ? (
                     <div>
-                      <CastSlider
-                        cast={details.credits.cast.sort((a, b) => a.order - b.order)}
-                        handler={this.changeMedia}
-                        type={type}
-                      />
+                      <div className="h4"><strong>Cast</strong></div>
+                      <div>
+                        <CastSlider
+                          cast={details.credits.cast.sort((a, b) => a.order - b.order)}
+                          handler={this.changeMedia}
+                          type={type}
+                        />
+                      </div>
                     </div>
                   ) : (
                       <div>
-                        {details.known_for_department === "Acting" ? (
-                          <CastSlider
-                            cast={details.combined_credits.cast.sort((a, b) => b.vote_count - a.vote_count)}
-                            handler={this.changeMedia}
-                            type={type}
-                          />
-                        ) : (
+                        <div className="h4"><strong>Credits</strong></div>
+                        <div>
+                          {details.known_for_department === "Acting" ? (
                             <CastSlider
-                              cast={details.combined_credits.crew.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
+                              cast={details.combined_credits.cast.sort((a, b) => b.vote_count - a.vote_count)}
                               handler={this.changeMedia}
                               type={type}
                             />
-                          )}
+                          ) : (
+                              <CastSlider
+                                cast={details.combined_credits.crew.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
+                                handler={this.changeMedia}
+                                type={type}
+                              />
+                            )}
+                        </div>
                       </div>
                     )}
                   {type !== "person" ? (
@@ -541,7 +573,7 @@ class Details extends Component {
                         </div>
                       ))
                     ) : (
-                        <div className="col-12 py-2">
+                        <div className="col-12 p-2">
                           <div className="h4">No comments yet!</div>
                         </div>
                       )}
@@ -564,14 +596,15 @@ class Details extends Component {
                         </div>
                       ))
                     ) : (
-                        <div className="col-12 py-2">
+                        <div className="col-12 p-2">
                           <div className="h4">No reviews yet!</div>
                         </div>
                       )}
                   </div>
                 </div>
               </div>
-            </div >
+
+            </div>
           )
         }
       </div>
