@@ -36,6 +36,16 @@
   z-index: -10;
 }
 
+.side-col-lg {
+  padding: 1rem 0 1rem 1rem;
+}
+
+@media only screen and (max-width:991px) {
+  .side-col-lg {
+    padding: 0
+  }
+}
+
 @media only screen and (max-width:767px) {
   #backdrop-row {
     margin-bottom: -25%;

@@ -24,7 +24,7 @@ export default {
       });
     },
     pageComments: function (type, id) {
-      return axios.get(`api/comments/${type}/${id}`)
+      return axios.get(`/api/comments/${type}/${id}`)
     },
     userComments: function (id, token) {
       return axios.get(`/api/comments/${id}`, {

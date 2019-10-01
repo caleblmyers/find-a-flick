@@ -17,6 +17,15 @@ class CastSlider extends Component {
     const { slide, maxSlide } = this.state
     const displayPrev = slide === 1 ? 'd-none' : ''
     const displayNext = (slide >= maxSlide) ? 'd-none' : ''
+    if (cast.length === 0) {
+      return (
+        <div className="row bg-light-grey py-2 border-round" id="">
+          <div className="col-12 px-3 py-2 align-self-center">
+            <div className="h6">Cast Unavailable</div>
+          </div>
+        </div>
+      )
+    }
 
     return (
       <div className="CastSlider position-relative row justify-content-center bg-light-grey py-2" id="cast-container">
@@ -25,7 +34,7 @@ class CastSlider extends Component {
         {cast.slice(((slide - 1) * 5), (slide * 5)).map(credit => (
           <div className="col-4 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.id}>
             <Link onClick={() => this.props.handler(credit.media_type || "person", credit.id)} className="no-link" to={{
-              pathname: '/details',
+              pathname: `/details/${credit.media_type || "person"}/${credit.id}`,
               state: {
                 type: credit.media_type || "person",
                 id: credit.id
