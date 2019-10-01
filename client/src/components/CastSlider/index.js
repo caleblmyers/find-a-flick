@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 import Person from '../../img/person_placeholder.png'
+import MediaTall from '../../img/media_placeholder_tall.png'
 
 class CastSlider extends Component {
   state = {
@@ -59,7 +60,7 @@ class CastSlider extends Component {
                   src={
                     (credit.profile_path || credit.poster_path)
                       ? `https://image.tmdb.org/t/p/original/${credit.profile_path || credit.poster_path}`
-                      : Person}
+                      : this.props.type === "person" ? MediaTall : Person}
                 />
                 <div className="pl-1 py-3">
                   <div className="text-sm"><strong>{credit.name || credit.title}</strong></div>

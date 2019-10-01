@@ -59,10 +59,7 @@ class Account extends Component {
       .catch(err => console.log(err))
   }
 
-  handleChange = e => {
-    const { name, value } = e.target
-    this.setState({ [name]: value })
-  }
+  handleChange = e => this.setState({ [e.target.name]: e.target.value })
 
   changeInfo = e => {
     const { user } = this.context
@@ -77,7 +74,6 @@ class Account extends Component {
 
   submitInfo = e => {
     const { user, authToken } = this.context
-
     const { isEditing } = this.state
 
     API.Users.update(isEditing, this.state[isEditing], user.id, authToken)
@@ -110,118 +106,166 @@ class Account extends Component {
 
     return (
       <div>
-        <h1>Account</h1>
         {isLoading ? (
           <div>
             Loading...
           </div>
         ) : (
-            <div className="container">
+            <div className="container pt-5">
               <div className="row mb-2">
-                <div className="col">
+                <div className="col-12">
                   <div>
                     <Gravatar className="rounded-circle" email={user.username} size={100} />
-                  </div>
-                  <div>
                     <h1>Hi there, {user.username}</h1>
-                    <h4>Created: {moment(user.createdAt).format("MMMM Do, YYYY")}</h4>
-                    <h4>Updated: {moment(user.updatedAt).format("MMMM Do, YYYY")}</h4>
-                    <h6>Number of Favorites: {favorites.length}</h6>
-                    <h6>Number of Comments: {comments.length}</h6>
                   </div>
                 </div>
               </div>
-              <h4>Settings</h4>
-              <div className="row mb-4">
-                {isEditing && <div className="col-12">
-                  <div className="input-group mb-3">
-                    <input
-                      type="text"
-                      onChange={this.handleChange}
-                      name={isEditing}
-                      value={this.state[isEditing]}
-                      className="form-control"
-                      placeholder={editStart} />
-                    <div className="input-group-append">
-                      <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        id="button-addon2"
-                        onClick={this.submitInfo}
-                      >Submit</button>
+              <div className="row mb-3">
+                <div className="col-12 col-md-6 my-auto">
+                  <h5>Created: {moment(user.createdAt).format("MMMM Do, YYYY")}</h5>
+                  <h5>Updated: {moment(user.updatedAt).format("MMMM Do, YYYY")}</h5>
+                  <h6>Number of Favorites: {favorites.length}</h6>
+                  <h6>Number of Comments: {comments.length}</h6>
+                </div>
+
+                <div className="col-12 col-md-6">
+                  <div className="row">
+                    <div className="col-12 mt-3">
+                      <h4>Settings</h4>
+                      {isEditing && <div className="col-12">
+                        <form onSubmit={this.submitInfo}>
+                          <div className="input-group mb-3">
+                            <input
+                              type="text"
+                              onChange={this.handleChange}
+                              name={isEditing}
+                              value={this.state[isEditing]}
+                              className="form-control"
+                              placeholder={isEditing === "password" ? editStart.replace(/./g, '*') : editStart} />
+                            <div className="input-group-append">
+                              <button
+                                type="submit"
+                                id="button-addon2"
+                                className="btn btn-outline-secondary"
+                              >Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>}
+                      <div className="row my-3">
+                        <div className="col-12">
+                          <button
+                            className="btn btn-success"
+                            onClick={this.changeInfo}
+                            name="username"
+                          >Change Username</button>
+                        </div>
+                      </div>
+                      <div className="row my-3">
+                        <div className="col-12">
+                          <button
+                            className="btn btn-info"
+                            onClick={this.changeInfo}
+                            name="password"
+                          >Change Password</button>
+                        </div>
+                      </div>
+                      <div className="row my-3">
+                        <div className="col-12">
+                          <button
+                            className="btn btn-danger"
+                            onClick={this.deleteAccount}
+                          >Delete Account</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>}
-                <div className="col-4">
-                  <button
-                    className="btn btn-success"
-                    onClick={this.changeInfo}
-                    name="username"
-                  >Change Username</button>
                 </div>
-                <div className="col-4">
-                  <button
-                    className="btn btn-info"
-                    onClick={this.changeInfo}
-                    name="password"
-                  >Change Password</button>
-                </div>
-                <div className="col-4">
-                  <button
-                    className="btn btn-danger"
-                    onClick={this.deleteAccount}
-                  >Delete Account</button>
-                </div>
+
               </div>
+              <h4 className="text-left my-2">Movies</h4>
               <div className="row">
-                <div className="col-4">
-                  <h4>Movies</h4>
-                  {movies.map(movie => (
-                    <div className="col" key={movie.id}>
-                      <div>{movie.title}</div>
-                      <Link to={{
-                        pathname: '/details',
-                        state: {
-                          type: movie.mediaType,
-                          id: movie.tmdbId
-                        }
-                      }}>
-                        <button className="btn btn-info">
-                          Details
+                {movies.map(movie => (
+                  <div className="col-6 col-lg-3" key={movie.id}>
+                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                      <div className="card-body">
+                        <h6 className="card-title">{movie.title}</h6>
+                        {/* <p className="mb-0">Added:</p>
+                        <p>{moment(movie.createdAt).format("MM/DD/YYYY -- hh:mm a")}</p> */}
+                        <Link to={`/details/${movie.mediaType}/${movie.tmdbId}`}>
+                          <button className="btn btn-outline-dark">
+                            Details
                         </button>
-                      </Link>
+                        </Link>
+                      </div>
                     </div>
-                  ))}
-                </div>
-                <div className="col-4">
-                  <h4>Shows</h4>
-                  {shows.map(show => (
-                    <div className="col" key={show.id}>
-                      <div>{show.title}</div>
+                  </div>
+                ))}
+              </div>
+              <h4 className="text-left my-2">Shows</h4>
+              <div className="row">
+                {shows.map(show => (
+                  <div className="col-6 col-lg-3" key={show.id}>
+                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                      <div className="card-body">
+                        <h6 className="card-title">{show.title}</h6>
+                        {/* <p className="mb-0">Added:</p>
+                        <p>{moment(show.createdAt).format("MM/DD/YYYY -- hh:mm a")}</p> */}
+                        <Link to={`/details/${show.mediaType}/${show.tmdbId}`}>
+                          <button className="btn btn-outline-dark">
+                            Details
+                        </button>
+                        </Link>
+                      </div>
                     </div>
-                  ))}
-                </div>
-                <div className="col-4">
-                  <h4>People</h4>
-                  {people.map(person => (
-                    <div className="col" key={person.id}>
-                      <div>{person.title}</div>
+                  </div>
+                ))}
+              </div>
+              <h4 className="text-left my-2">People</h4>
+              <div className="row">
+                {people.map(person => (
+                  <div className="col-6 col-lg-3" key={person.id}>
+                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                      <div className="card-body">
+                        <h6 className="card-title">{person.title}</h6>
+                        {/* <p className="mb-0">Added:</p>
+                        <p>{moment(person.createdAt).format("MM/DD/YYYY -- hh:mm a")}</p> */}
+                        <Link to={`/details/${person.mediaType}/${person.tmdbId}`}>
+                          <button className="btn btn-outline-dark">
+                            Details
+                        </button>
+                        </Link>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
+              </div>
+              <h4 className="text-left my-2">Comments</h4>
+              <div className="row">
+                {comments.map(comment => (
+                  <div className="col-6 col-lg-3" key={comment.id}>
+                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                      <div className="card-body">
+                        <h6 className="card-title">{comment.body}</h6>
+                        {/* <p className="mb-0">Added:</p>
+                        <p>{moment(comment.createdAt).format("MM/DD/YYYY -- hh:mm a")}</p>
+                        {(comment.createdAt !== comment.updatedAt) && <div>
+                          <p className="mb-0">Updated:</p>
+                          <p>{moment(comment.updatedAt).format("MM/DD/YYYY -- hh:mm a")}</p>
+                        </div>} */}
+                        <Link to={`/details/${comment.mediaType}/${comment.tmdbId}`}>
+                          <button className="btn btn-outline-dark">
+                            Go to Page
+                        </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
               <div className="row">
-                <div className="col-8">
-                  <h4>Comments</h4>
-                  {comments.map(comment => (
-                    <div className="col" key={comment.id}>
-                      <div>{comment.body}</div>
-                    </div>
-                  ))}
-                </div>
                 <div className="col-4">
                   <h4>Settings</h4>
-
                 </div>
               </div>
             </div>

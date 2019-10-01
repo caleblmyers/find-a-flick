@@ -12,6 +12,7 @@ import API from '../../lib/API'
 import CastSlider from '../../components/CastSlider'
 import Carousel from '../../components/Carousel'
 import Person from '../../img/person_placeholder.png'
+import MediaTall from '../../img/media_placeholder_tall.png'
 
 class Details extends Component {
   static contextType = AuthContext
@@ -344,7 +345,7 @@ class Details extends Component {
                     src={
                       (details.poster_path || details.profile_path)
                         ? `https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`
-                        : Person}
+                        : type === "person" ? Person : MediaTall}
                   />
                 </div>
               </div>
@@ -358,7 +359,7 @@ class Details extends Component {
                     )}
                   {type !== "person" ? (
                     <div>
-                      <CastSlider cast={details.credits.cast} handler={this.changeMedia} />
+                      <CastSlider cast={details.credits.cast} handler={this.changeMedia} type={type} />
                     </div>
                   ) : (
                       <div>
@@ -366,11 +367,13 @@ class Details extends Component {
                           <CastSlider
                             cast={details.combined_credits.cast.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
                             handler={this.changeMedia}
+                            type={type}
                           />
                         ) : (
                             <CastSlider
                               cast={details.combined_credits.crew.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
                               handler={this.changeMedia}
+                              type={type}
                             />
                           )}
                       </div>

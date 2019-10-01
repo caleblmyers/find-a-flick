@@ -691,7 +691,6 @@ class Discover extends Component {
                       </div>
                     ) : (
                         <div className="form-group">
-
                           <div className="form-row">
                             <div className="form-group col-md-5">
                               <label>Start Date</label>
@@ -1042,7 +1041,7 @@ class Discover extends Component {
           <div className="col">
             <h3>Results</h3>
             {this.state.results[0] ? (
-              <ResultsGrid results={this.state.results} type="movie" />
+              <ResultsGrid results={this.state.results} type={activeTab} />
             ) : (
                 <h1>No Matches!</h1>
               )}
