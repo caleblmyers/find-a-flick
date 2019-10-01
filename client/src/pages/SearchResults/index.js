@@ -21,6 +21,7 @@ class SearchResults extends Component {
   submitHandler = keyword => {
     this.setState({ keyword })
     this.props.processSearch(keyword)
+    console.log(this.props.results.results)
   }
 
   render() {
@@ -30,7 +31,7 @@ class SearchResults extends Component {
           <div className="container">
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>
-            <SearchBar handler={() => this.submitHandler(this.props.keyword)} />
+            <SearchBar handler={this.submitHandler} />
           </div>
         </div>
         {this.props.results.results ? (

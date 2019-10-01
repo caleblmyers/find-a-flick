@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import moment from 'moment'
-import Gravatar from 'react-gravatar';
+import Gravatar from 'react-gravatar'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { getDetails } from '../../store/actions/searchActions'
 
 import './style.css'
@@ -25,16 +25,13 @@ class Details extends Component {
     messageType: "",
     comment: "",
     comments: [],
-    details: {},
-    credits: {},
-    combined_credits: {}
+    details: {}
   }
 
   componentDidMount() {
     const { type, id } = this.props.match.params
 
     this.props.getDetails(type, id)
-
     API.Comments.pageComments(type, id)
       .then(res => {
         const comments = res.data
@@ -44,10 +41,8 @@ class Details extends Component {
 
     setTimeout(() => this.setState({
       details: this.props.details,
-      credits: this.props.details.credits,
-      combined_credits: this.props.details.combined_credits,
       isLoaded: true
-    }), 3500)
+    }), 4000)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -99,14 +94,10 @@ class Details extends Component {
       .catch(err => console.log(err))
   }
 
-  handleChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  }
+  handleChange = e => this.setState({ [e.target.name]: e.target.value })
 
   handleSubmit = e => {
-    e.preventDefault();
-
+    e.preventDefault()
     const { comment } = this.state
     const { user, authToken } = this.context
     const { type, id } = this.props.match.params
@@ -136,7 +127,6 @@ class Details extends Component {
   }
 
   changeMedia = (type, id) => {
-    console.log('changeMedia', this.props.match.params.id)
     this.setState({ isLoaded: false })
     this.props.getDetails(type, id)
     API.Comments.pageComments(type, id)
@@ -147,8 +137,6 @@ class Details extends Component {
           message: "",
           messageType: "",
           details: this.props.details,
-          credits: this.props.details.credits,
-          combined_credits: this.props.details.combined_credits,
           isLoaded: true
         }), 4000)
       })
@@ -156,7 +144,6 @@ class Details extends Component {
   }
 
   deleteComment = e => {
-    console.log(e.target.value)
     const { authToken } = this.context
     const { type, id } = this.props.match.params
 
@@ -171,14 +158,13 @@ class Details extends Component {
   }
 
   editComment = e => {
-    console.log(e.target.value)
     if (this.state.isEditing === "") this.setState({ isEditing: e.target.value })
     else this.setState({ isEditing: "" })
   }
 
   submitEdit = e => {
-    const { isEditing, edit } = this.state
     const { authToken } = this.context
+    const { isEditing, edit } = this.state
     const { type, id } = this.props.match.params
 
     if (isEditing) {
@@ -197,12 +183,12 @@ class Details extends Component {
   render() {
     const { details } = this.props
     const { user, authToken } = this.context
-    const { message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
     const { type, id } = this.props.match.params
+    const { message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
 
     return (
       <div className="Details pb-5">
-        {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
+        {/* {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
           <div className="col-sm-12 d-md-none">
             <img
               alt="Poster"
@@ -210,7 +196,7 @@ class Details extends Component {
               src={`https://image.tmdb.org/t/p/original/${details.backdrop_path || details.profile_path}`}
             />
           </div>
-        </div>}
+        </div>} */}
         {!isLoaded ? (
           <div>Loading...</div>
         ) : (
@@ -228,13 +214,13 @@ class Details extends Component {
                   <div className="p-3" id="details-header">
                     <div className="row no-gutters">
                       <div className="col">
-                        <div className="h2">{details.title || details.name}</div>
+                        <div className="h3">{details.title || details.name}</div>
                       </div>
                     </div>
                     {details.tagline &&
                       <div className="row no-gutters">
                         <div className="col">
-                          <small>{details.tagline}</small>
+                          <div className="h6">{details.tagline}</div>
                         </div>
                       </div>}
                     {type === "person" ? (
@@ -258,7 +244,7 @@ class Details extends Component {
                             <div className="row no-gutters">
                               <div className="col">
                                 Released:
-                              {moment((
+                                {moment((
                                   details.release_date || details.first_air_date
                                 ), "YYYY-MM-DD").format(" MMMM Do, YYYY")}
                               </div>
@@ -304,7 +290,7 @@ class Details extends Component {
                       {type === "movie" &&
                         <div className="row no-gutters">
                           {details.credits.crew.slice(0, 3).map(crew => (
-                            <div className="col" key={crew.id}>
+                            <div className="col" key={crew.credit_id}>
                               <div><strong>{crew.name}</strong></div>
                               <div>{crew.job}</div>
                             </div>
@@ -351,7 +337,7 @@ class Details extends Component {
               </div>
 
               <div className="row">
-                <div className="col-12 col-lg-9 p-3 text-left">
+                <div className="col-12 col-lg-9 pt-3 text-left">
                   {type !== "person" ? (
                     <div className="h4"><strong>Cast</strong></div>
                   ) : (
@@ -359,7 +345,11 @@ class Details extends Component {
                     )}
                   {type !== "person" ? (
                     <div>
-                      <CastSlider cast={details.credits.cast} handler={this.changeMedia} type={type} />
+                      <CastSlider
+                        cast={details.credits.cast}
+                        handler={this.changeMedia}
+                        type={type}
+                      />
                     </div>
                   ) : (
                       <div>
@@ -380,9 +370,9 @@ class Details extends Component {
                     )}
                   {type !== "person" ? (
                     <div className="row mt-3">
-                      <div className="col-6">
+                      <div className="col-12 col-md-6 my-2">
                         <div className="h4"><strong>Recommended</strong></div>
-                        <div className="row bg-light-grey border-round mr-1">
+                        <div className="row bg-light-grey border-round" id="section-recs">
                           <div className="col-12 p-2">
                             {details.recommendations.results.length >= 1 ? (
                               <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
@@ -392,9 +382,9 @@ class Details extends Component {
                           </div>
                         </div>
                       </div>
-                      <div className="col-6">
+                      <div className="col-12 col-md-6 my-2">
                         <div className="h4"><strong>Similar</strong></div>
-                        <div className="row bg-light-grey border-round ml-1">
+                        <div className="row bg-light-grey border-round" id="section-similar">
                           <div className="col-12 p-2">
                             {details.similar.results.length >= 1 ? (
                               <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
@@ -414,7 +404,7 @@ class Details extends Component {
                       </div>
                     )}
                 </div>
-                <div className="col-12 col-lg-3 text-left side-col-lg">
+                <div className="col-12 col-lg-3 pt-3 text-left side-col-lg">
                   <div className="h4"><strong>Crew</strong></div>
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
                     {details.credits.crew.slice(3, 10).map(person => (
@@ -461,110 +451,127 @@ class Details extends Component {
               </div>
 
               <div className="row">
-                <div className="col-9">
-                  <div className="row no-gutters">
-                    <div className="col-12">
-                      <div className="h4 text-left">Add a Comment</div>
-                      <div className="row bg-light-grey border-round my-3">
-                        {user ? (
-                          <div className="col-12 p-3">
-                            <form onSubmit={this.handleSubmit}>
-                              <div className='form-group mb-3'>
-                                <textarea
-                                  className='form-control'
-                                  id='comment'
-                                  name='comment'
-                                  placeholder='Post a comment'
-                                  value={comment}
-                                  onChange={this.handleChange}
-                                  rows={4}
-                                />
-                              </div>
-                              <div className="form-group mb-3">
-                                <button className='btn btn-success float-right' type='submit'>Post</button>
-                              </div>
-                            </form>
-                          </div>
-                        ) : (
-                            <div className="col-12 p-3">
-                              <h4>Log in to comment!</h4>
-                            </div>
-                          )}
-                      </div>
 
-                      <div className="h4 text-left">Comments</div>
-                      <div className="row bg-light-grey border-round py-2">
-                        {comments[0] ? (
-                          comments.map(comment => (
-                            <div className="col-12 py-2" key={comment.id}>
-                              <div className="card bg-dark text-white text-left">
-                                <div className="card-header">
-                                  <Gravatar className="rounded-circle" email={comment.userName} size={30} /> {comment.userName}
-                                  {(user && user.id === comment.userId) &&
-                                    <div className="float-right">
-                                      <button
-                                        className="btn btn-outline-info mx-2"
-                                        onClick={this.editComment}
-                                        value={comment.id}
-                                      >
-                                        Edit
-                                        </button>
-                                      <button
-                                        className="btn btn-outline-danger mx-2"
-                                        onClick={this.deleteComment}
-                                        value={comment.id}
-                                      >
-                                        Delete
-                                        </button>
-                                    </div>}
-                                </div>
-                                <div className="card-body">
-                                  {isEditing === comment.id.toString() ? (
-                                    <div>
-                                      <div className="input-group mb-3">
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          placeholder={comment.body}
-                                          onChange={this.handleChange}
-                                          name="edit"
-                                          value={edit}
-                                        />
-                                        <div className="input-group-append">
-                                          <button
-                                            className="btn btn-outline-info"
-                                            type="button"
-                                            id="button-addon2"
-                                            onClick={this.submitEdit}
-                                          >Submit</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ) : (
-                                      <p>{comment.body}</p>
-                                    )}
-                                  <blockquote className="blockquote mb-0">
-                                    <footer className="blockquote-footer">Created: {moment(comment.createdAt).format("MM/DD/YYYY -- hh:mm a")}</footer>
-                                    {(comment.createdAt !== comment.updatedAt) && <div className="blockquote-footer">Updated: {moment(comment.updatedAt).format("MM/DD/YYYY -- hh:mm a")}</div>}
-                                  </blockquote>
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                            <div className="col-12 py-2">
-                              <div className="h4">No comments yet!</div>
-                            </div>
-                          )}
+                <div className="col-12 col-lg-9 my-2 text-left px-0">
+                  <div className="h4"><strong>Add a Comment</strong></div>
+                  <div className="row no-gutters bg-light-grey border-round my-3">
+                    {user ? (
+                      <div className="col-12 p-3">
+                        <form onSubmit={this.handleSubmit}>
+                          <div className='form-group mb-3'>
+                            <textarea
+                              className='form-control'
+                              id='comment'
+                              name='comment'
+                              placeholder='Post a comment'
+                              value={comment}
+                              onChange={this.handleChange}
+                              rows={4}
+                            />
+                          </div>
+                          <div className="form-group mb-3">
+                            <button className='btn btn-success float-right' type='submit'>Post</button>
+                          </div>
+                        </form>
                       </div>
-                    </div>
+                    ) : (
+                        <div className="col-12 p-3">
+                          <h4>Log in to comment!</h4>
+                        </div>
+                      )}
+                  </div>
+
+                  <div className="h4"><strong>Comments</strong></div>
+                  <div className="row no-gutters bg-light-grey border-round py-2">
+                    {comments[0] ? (
+                      comments.map(comment => (
+                        <div className="col-12 p-2" key={comment.id}>
+                          <div className="card bg-dark text-white text-left">
+                            <div className="card-header">
+                              <Gravatar className="rounded-circle" email={comment.userName} size={30} /> {comment.userName}
+                              {(user && user.id === comment.userId) &&
+                                <div className="float-right">
+                                  <button
+                                    className="btn btn-outline-info mx-2"
+                                    onClick={this.editComment}
+                                    value={comment.id}
+                                  >
+                                    Edit
+                                        </button>
+                                  <button
+                                    className="btn btn-outline-danger mx-2"
+                                    onClick={this.deleteComment}
+                                    value={comment.id}
+                                  >
+                                    Delete
+                                        </button>
+                                </div>}
+                            </div>
+                            <div className="card-body">
+                              {isEditing === comment.id.toString() ? (
+                                <div>
+                                  <div className="input-group mb-3">
+                                    <input
+                                      type="text"
+                                      className="form-control"
+                                      placeholder={comment.body}
+                                      onChange={this.handleChange}
+                                      name="edit"
+                                      value={edit}
+                                    />
+                                    <div className="input-group-append">
+                                      <button
+                                        className="btn btn-outline-info"
+                                        type="button"
+                                        id="button-addon2"
+                                        onClick={this.submitEdit}
+                                      >Submit</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                  <p>{comment.body}</p>
+                                )}
+                              <blockquote className="blockquote mb-0">
+                                <footer className="blockquote-footer">Created: {moment(comment.createdAt).format("MM/DD/YYYY -- hh:mm a")}</footer>
+                                {(comment.createdAt !== comment.updatedAt) && <div className="blockquote-footer">Updated: {moment(comment.updatedAt).format("MM/DD/YYYY -- hh:mm a")}</div>}
+                              </blockquote>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                        <div className="col-12 py-2">
+                          <div className="h4">No comments yet!</div>
+                        </div>
+                      )}
                   </div>
                 </div>
-                <div className="col-3">
+                <div className="col-12 col-lg-3 my-2 side-col-lg">
                   <div className="h4 text-left">Reviews</div>
+                  <div className="row no-gutters bg-light-grey border-round py-2">
+                    {(details.reviews.results && details.reviews.results[0]) ? (
+                      details.reviews.results.map(review => (
+                        <div className="col-12 p-2" key={review.id}>
+                          <div className="card bg-dark text-white text-left">
+                            <div className="card-header">
+                              <Gravatar className="rounded-circle" email={review.author} size={30} /> {review.author}
+                            </div>
+                            <div className="card-body">
+                              <p>{review.content.slice(0, 255)}...</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                        <div className="col-12 py-2">
+                          <div className="h4">No reviews yet!</div>
+                        </div>
+                      )}
+                  </div>
                 </div>
               </div>
-            </div>
+            </div >
           )
         }
       </div>

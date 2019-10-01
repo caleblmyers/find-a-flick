@@ -77,11 +77,11 @@ class HomePage extends Component {
               <div className="row no-gutters">
                 <div className="col-12 col-md-8">
                   <div className="row no-gutters">
-                    <div className="col-12 col-lg-6 p-3">
+                    <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Featured</div>
                       <Carousel data={this.state.movies} type={"movie"} handler={console.log} />
                     </div>
-                    <div className="col-12 col-lg-6 p-3">
+                    <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Top Rated</div>
                       <Carousel data={this.state.topMovies} type={"topMovie"} handler={console.log} />
                     </div>
@@ -102,11 +102,11 @@ class HomePage extends Component {
               <div className="row no-gutters">
                 <div className="col-12 col-md-8">
                   <div className="row no-gutters">
-                    <div className="col-12 col-lg-6 p-3">
+                    <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Featured</div>
                       <Carousel data={this.state.shows} type={"show"} handler={console.log} />
                     </div>
-                    <div className="col-12 col-lg-6 p-3">
+                    <div className="col-12 col-xl-6 p-3">
                       <div className="h5">Top Rated</div>
                       <Carousel data={this.state.topShows} type={"topShow"} handler={console.log} />
                     </div>
@@ -119,7 +119,7 @@ class HomePage extends Component {
                 </div>
                 <div className="col-12 col-md-4 p-3">
                   <div className="h6">Today's Most Popular</div>
-                  <Table dataSet={this.state.popularShows.slice(0, 10)} type="show" />
+                  <Table dataSet={this.state.popularShows.slice(0, 10)} type="tv" />
                 </div>
               </div>
             </div>)}

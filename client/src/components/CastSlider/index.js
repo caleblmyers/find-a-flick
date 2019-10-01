@@ -7,7 +7,7 @@ import MediaTall from '../../img/media_placeholder_tall.png'
 class CastSlider extends Component {
   state = {
     slide: 1,
-    maxSlide: Math.ceil(this.props.cast.length / 5)
+    maxSlide: Math.ceil(this.props.cast.length / 4)
   }
 
   changeSlide = (slide, e) => {
@@ -46,8 +46,8 @@ class CastSlider extends Component {
         >
           &#10095;
         </button>
-        {cast.slice(((slide - 1) * 5), (slide * 5)).map(credit => (
-          <div className="col-4 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.id}>
+        {cast.slice(((slide - 1) * 4), (slide * 4)).map(credit => (
+          <div className="col-2 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.id}>
             <Link
               className="no-link"
               to={`/details/${credit.media_type || "person"}/${credit.id}`}

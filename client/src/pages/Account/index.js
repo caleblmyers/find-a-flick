@@ -21,7 +21,9 @@ class Account extends Component {
     editStart: "",
     editValue: "",
     username: "",
-    password: ""
+    password: "",
+    message: "",
+    messageType: ""
   }
 
   componentDidMount() {
@@ -62,33 +64,48 @@ class Account extends Component {
   handleChange = e => this.setState({ [e.target.name]: e.target.value })
 
   changeInfo = e => {
-    const { user } = this.context
+    if (this.state.isEditing) return this.setState({ isEditing: false })
 
+    const { user } = this.context
     this.setState({
       username: "",
       password: "",
       isEditing: e.target.name,
-      editStart: user[e.target.name]
+      editStart: user[e.target.name],
+      message: "",
+      messageType: ""
     })
   }
 
   submitInfo = e => {
+    e.preventDefault()
     const { user, authToken } = this.context
     const { isEditing } = this.state
 
     API.Users.update(isEditing, this.state[isEditing], user.id, authToken)
       .then(update => {
-        API.Users.getMe(authToken)
-          .then(res => res.data)
-          .then(user => {
-            console.log(user)
-            this.setState({
-              user,
-              isEditing: false
-            })
-            this.context.onUpdate(user)
+        console.log(update)
+        if (update.data.errors) {
+          this.setState({
+            message: "Username already taken. Try something else.",
+            messageType: "danger",
+            isEditing: false
           })
-          .catch(err => console.log(err))
+        } else {
+          API.Users.getMe(authToken)
+            .then(res => res.data)
+            .then(user => {
+              console.log(user)
+              this.setState({
+                user,
+                isEditing: false,
+                message: "Account update successful!",
+                messageType: "success"
+              })
+              this.context.onUpdate(user)
+            })
+            .catch(err => console.log(err))
+        }
       })
       .catch(err => console.log(err))
   }
@@ -102,7 +119,7 @@ class Account extends Component {
   }
 
   render() {
-    const { user, movies, shows, people, comments, favorites, isLoading, isEditing, editStart, editValue } = this.state
+    const { user, movies, shows, people, comments, favorites, isLoading, isEditing, editStart, message, messageType } = this.state
 
     return (
       <div>
@@ -120,6 +137,14 @@ class Account extends Component {
                   </div>
                 </div>
               </div>
+              {message &&
+                <div className='row'>
+                  <div className='col'>
+                    <div className={`alert alert-${messageType} mb-3`} role='alert'>
+                      {message}
+                    </div>
+                  </div>
+                </div>}
               <div className="row mb-3">
                 <div className="col-12 col-md-6 my-auto">
                   <h5>Created: {moment(user.createdAt).format("MMMM Do, YYYY")}</h5>
@@ -262,11 +287,6 @@ class Account extends Component {
                     </div>
                   </div>
                 ))}
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <h4>Settings</h4>
-                </div>
               </div>
             </div>
           )}

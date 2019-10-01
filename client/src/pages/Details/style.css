@@ -37,17 +37,31 @@
 }
 
 .side-col-lg {
-  padding: 1rem 0 1rem 1rem;
+  padding: 0 0 1rem 1rem;
+}
+
+#section-recs {
+  margin-right: .25rem;
+}
+
+#section-similar {
+  margin-left: .25rem;
 }
 
 @media only screen and (max-width:991px) {
   .side-col-lg {
-    padding: 0
+    padding: 0;
   }
 }
 
 @media only screen and (max-width:767px) {
   #backdrop-row {
     margin-bottom: -25%;
+  }
+  #section-recs, #section-similar {
+    margin: 0 -10px;
+  }
+  .Details {
+    margin: 0 10px;
   }
 }
