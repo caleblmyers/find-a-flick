@@ -50,11 +50,11 @@ tmdbController.post('/discover', (req, res) => {
 
   let discoverParams = [
     {
-      param: 'primary_release_date.gte',
+      param: type === 'movie' ? 'primary_release_date.gte' : 'first_air_date.gte',
       data: primaryReleaseDateGt
     },
     {
-      param: 'primary_release_date.lte',
+      param: type === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte',
       data: primaryReleaseDateLt
     },
     {
@@ -66,7 +66,7 @@ tmdbController.post('/discover', (req, res) => {
       data: releaseDateLt
     },
     {
-      param: 'primary_release_year',
+      param: type === 'movie' ? 'primary_release_year' : 'first_air_date_year',
       data: releaseYear
     },
     {
@@ -126,6 +126,10 @@ tmdbController.post('/discover', (req, res) => {
       data: genres
     },
     {
+      param: 'without_genres',
+      data: noGenres
+    },
+    {
       param: 'with_cast',
       data: cast
     },
@@ -148,15 +152,7 @@ tmdbController.post('/discover', (req, res) => {
     {
       param: 'without_keywords',
       data: noKeywords
-    },
-    {
-      param: 'with_genres',
-      data: genres
-    },
-    {
-      param: 'without_genres',
-      data: noGenres
-    },
+    }
   ]
 
   let queries = discoverParams.filter(param => param.data !== '')

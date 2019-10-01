@@ -44,7 +44,7 @@ class Navigation extends Component {
               </li> */}
               {user &&
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/secret' onClick={this.toggleCollapse}>Secret</Link>
+                  <Link className='nav-link' to='/account' onClick={this.toggleCollapse}>Account</Link>
                 </li>}
             </ul>
             <ul className="navbar-nav ml-auto">

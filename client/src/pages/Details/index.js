@@ -299,7 +299,7 @@ class Details extends Component {
                       {type === "person" &&
                         <div className="row no-gutters">
                           {details.combined_credits && details.combined_credits.crew.slice(0, 3).map(credit => (
-                            <div className="col" key={credit.id}>
+                            <div className="col" key={credit.credit_id || credit.id}>
                               <div><strong>{credit.title || credit.name}</strong></div>
                               <div>{credit.job}</div>
                             </div>
@@ -346,7 +346,7 @@ class Details extends Component {
                   {type !== "person" ? (
                     <div>
                       <CastSlider
-                        cast={details.credits.cast}
+                        cast={details.credits.cast.sort((a, b) => a.order - b.order)}
                         handler={this.changeMedia}
                         type={type}
                       />
@@ -355,7 +355,7 @@ class Details extends Component {
                       <div>
                         {details.known_for_department === "Acting" ? (
                           <CastSlider
-                            cast={details.combined_credits.cast.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
+                            cast={details.combined_credits.cast.sort((a, b) => b.vote_count - a.vote_count)}
                             handler={this.changeMedia}
                             type={type}
                           />

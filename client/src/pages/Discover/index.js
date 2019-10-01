@@ -273,7 +273,7 @@ class Discover extends Component {
 
     return (
       <div className="Discover">
-        <div className="jumbotron jumbotron-fluid">
+        <div className="jumbotron jumbotron-fluid mb-0">
           <div className="container">
             <div className="display-3">Pop Media</div>
             <div className="lead pt-2">Discover something new!</div>
@@ -336,7 +336,6 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="1900-01-01"
                                 max="2019-10-01"
-                                placeholder="1950/01/20"
                               />
                             </div>
                             <div className="form-group col-md-5">
@@ -350,7 +349,6 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="1900-01-01"
                                 max="2019-10-01"
-                                placeholder="2019/01/20"
                               />
                             </div>
                             <div className="form-group col-md-2">
@@ -361,10 +359,8 @@ class Discover extends Component {
                                 name="releaseYear"
                                 value={params.releaseYear}
                                 onChange={this.handleChange}
-                                placeholder="2010"
                                 min="1900"
                                 max="2019"
-                                id=""
                               />
                             </div>
                           </div>
@@ -380,7 +376,6 @@ class Discover extends Component {
                                 value={params.voteCountLt}
                                 onChange={this.handleChange}
                                 min="0"
-                                placeholder="10000"
                               />
                             </div>
                             <div className="form-group col-md-3">
@@ -393,7 +388,6 @@ class Discover extends Component {
                                 value={params.voteCountGt}
                                 onChange={this.handleChange}
                                 min="0"
-                                placeholder="0"
                               />
                             </div>
                             <div className="form-group col-md-3">
@@ -406,7 +400,6 @@ class Discover extends Component {
                                 value={params.voteAverageLt}
                                 onChange={this.handleChange}
                                 min="0"
-                                placeholder="10"
                               />
                             </div>
                             <div className="form-group col-md-3">
@@ -419,7 +412,6 @@ class Discover extends Component {
                                 value={params.voteAverageGt}
                                 onChange={this.handleChange}
                                 min="0"
-                                placeholder="6"
                               />
                             </div>
 
@@ -427,7 +419,7 @@ class Discover extends Component {
 
                           <div className="form-row">
                             <div className="form-group col-md-4">
-                              <label>With Genres</label>
+                              <label>Includes Genre</label>
                               <select
                                 type="text"
                                 className="form-control param genre"
@@ -436,6 +428,7 @@ class Discover extends Component {
                                 value={params.genres}
                                 onChange={this.handleChange}
                               >
+                                <option value="">--</option>
                                 <option value="28">Action</option>
                                 <option value="12">Adventure</option>
                                 <option value="16">Animation</option>
@@ -458,7 +451,7 @@ class Discover extends Component {
                               </select>
                             </div>
                             <div className="form-group col-md-4">
-                              <label>Without Genres</label>
+                              <label>Excludes Genre</label>
                               <select
                                 type="text"
                                 className="form-control param genre"
@@ -467,6 +460,7 @@ class Discover extends Component {
                                 value={params.noGenres}
                                 onChange={this.handleChange}
                               >
+                                <option value="">--</option>
                                 <option value="28">Action</option>
                                 <option value="12">Adventure</option>
                                 <option value="16">Animation</option>
@@ -499,7 +493,6 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="0"
                                 max="360"
-                                placeholder="10"
                               />
                             </div>
                             <div className="form-group col-md-2">
@@ -513,7 +506,6 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="0"
                                 max="360"
-                                placeholder="6"
                               />
                             </div>
 
@@ -531,6 +523,7 @@ class Discover extends Component {
                                   value={params.people}
                                   onChange={this.handleChange}
                                 >
+                                  <option value="">--</option>
                                   {favPeople.map(person => (
                                     <option value={person.tmdbId} key={person.id}>{person.title}</option>
                                   ))}
@@ -658,6 +651,30 @@ class Discover extends Component {
                                     <option>Ratings</option>
                                   </select>
                                 )}
+                            </div>
+                          </div>
+
+                          <div className="form-row">
+                            <div className="form-group col-6 mx-auto">
+                              <label>Sort</label>
+                              <select
+                                type="text"
+                                className="form-control param"
+                                id="sort"
+                                name="sort"
+                                value={params.sort}
+                                onChange={this.handleChange}
+                              >
+                                <option value="">--</option>
+                                <option value="popularity.desc">Popularity (Descending)</option>
+                                <option value="popularity.asc">Popularity (Ascending)</option>
+                                <option value="primary_release_date.desc">Release Date (Descending)</option>
+                                <option value="primary_release_date.asc">Release Date (Ascending)</option>
+                                <option value="vote_average.desc">Vote Average (Descending)</option>
+                                <option value="vote_average.asc">Vote Average (Ascending)</option>
+                                <option value="vote_count.desc">Vote Count (Descending)</option>
+                                <option value="vote_count.asc">Vote Count (Ascending)</option>
+                              </select>
                             </div>
                           </div>
 
@@ -693,7 +710,7 @@ class Discover extends Component {
                         <div className="form-group">
                           <div className="form-row">
                             <div className="form-group col-md-5">
-                              <label>Start Date</label>
+                              <label>First Aired After</label>
                               <input
                                 type="date"
                                 className="form-control param"
@@ -703,11 +720,10 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="1900-01-01"
                                 max="2019-10-01"
-                                placeholder="1950/01/20"
                               />
                             </div>
                             <div className="form-group col-md-5">
-                              <label>End Date</label>
+                              <label>First Aired Before</label>
                               <input
                                 type="date"
                                 className="form-control param"
@@ -717,18 +733,16 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="1900-01-01"
                                 max="2019-10-01"
-                                placeholder="2019/01/20"
                               />
                             </div>
                             <div className="form-group col-md-2">
-                              <label>Release Year</label>
+                              <label>First Aired Year</label>
                               <input
                                 className="form-control param"
                                 type="number"
                                 name="releaseYear"
                                 value={params.releaseYear}
                                 onChange={this.handleChange}
-                                placeholder="2010"
                                 min="1900"
                                 max="2019"
                                 id=""
@@ -737,20 +751,7 @@ class Discover extends Component {
                           </div>
 
                           <div className="form-row">
-                            <div className="form-group col-md-3">
-                              <label>Vote Count (max)</label>
-                              <input
-                                type="number"
-                                className="form-control param"
-                                id="voteCountLt"
-                                name="voteCountLt"
-                                value={params.voteCountLt}
-                                onChange={this.handleChange}
-                                min="0"
-                                placeholder="10000"
-                              />
-                            </div>
-                            <div className="form-group col-md-3">
+                            <div className="form-group col-md-6">
                               <label>Vote Count (min)</label>
                               <input
                                 type="number"
@@ -760,23 +761,9 @@ class Discover extends Component {
                                 value={params.voteCountGt}
                                 onChange={this.handleChange}
                                 min="0"
-                                placeholder="0"
                               />
                             </div>
-                            <div className="form-group col-md-3">
-                              <label>Vote Average (max)</label>
-                              <input
-                                type="number"
-                                className="form-control param"
-                                id="voteAverageLt"
-                                name="voteAverageLt"
-                                value={params.voteAverageLt}
-                                onChange={this.handleChange}
-                                min="0"
-                                placeholder="10"
-                              />
-                            </div>
-                            <div className="form-group col-md-3">
+                            <div className="form-group col-md-6">
                               <label>Vote Average (min)</label>
                               <input
                                 type="number"
@@ -786,7 +773,6 @@ class Discover extends Component {
                                 value={params.voteAverageGt}
                                 onChange={this.handleChange}
                                 min="0"
-                                placeholder="6"
                               />
                             </div>
 
@@ -794,7 +780,7 @@ class Discover extends Component {
 
                           <div className="form-row">
                             <div className="form-group col-md-4">
-                              <label>With Genres</label>
+                              <label>Includes Genre</label>
                               <select
                                 type="text"
                                 className="form-control param genre"
@@ -803,29 +789,27 @@ class Discover extends Component {
                                 value={params.genres}
                                 onChange={this.handleChange}
                               >
-                                <option value="28">Action</option>
-                                <option value="12">Adventure</option>
+                                <option value="">--</option>
+                                <option value="10759">Action & Adventure</option>
                                 <option value="16">Animation</option>
                                 <option value="35">Comedy</option>
                                 <option value="80">Crime</option>
                                 <option value="99">Documentary</option>
                                 <option value="18">Drama</option>
                                 <option value="10751">Family</option>
-                                <option value="14">Fantasy</option>
-                                <option value="36">History</option>
-                                <option value="27">Horror</option>
-                                <option value="10402">Music</option>
+                                <option value="10762">Kids</option>
                                 <option value="9648">Mystery</option>
-                                <option value="10749">Romance</option>
-                                <option value="878">Science Fiction</option>
-                                <option value="10770">TV Movie</option>
-                                <option value="53">Thriller</option>
-                                <option value="10752">War</option>
+                                <option value="10763">News</option>
+                                <option value="10764">Reality</option>
+                                <option value="10765">Sci-Fi & Fantasy</option>
+                                <option value="10766">Soap</option>
+                                <option value="10767">Talk</option>
+                                <option value="10768">War & Politics</option>
                                 <option value="37">Western</option>
                               </select>
                             </div>
                             <div className="form-group col-md-4">
-                              <label>Without Genres</label>
+                              <label>Excludes Genre</label>
                               <select
                                 type="text"
                                 className="form-control param genre"
@@ -834,24 +818,22 @@ class Discover extends Component {
                                 value={params.noGenres}
                                 onChange={this.handleChange}
                               >
-                                <option value="28">Action</option>
-                                <option value="12">Adventure</option>
+                                <option value="">--</option>
+                                <option value="10759">Action & Adventure</option>
                                 <option value="16">Animation</option>
                                 <option value="35">Comedy</option>
                                 <option value="80">Crime</option>
                                 <option value="99">Documentary</option>
                                 <option value="18">Drama</option>
                                 <option value="10751">Family</option>
-                                <option value="14">Fantasy</option>
-                                <option value="36">History</option>
-                                <option value="27">Horror</option>
-                                <option value="10402">Music</option>
+                                <option value="10762">Kids</option>
                                 <option value="9648">Mystery</option>
-                                <option value="10749">Romance</option>
-                                <option value="878">Science Fiction</option>
-                                <option value="10770">TV Movie</option>
-                                <option value="53">Thriller</option>
-                                <option value="10752">War</option>
+                                <option value="10763">News</option>
+                                <option value="10764">Reality</option>
+                                <option value="10765">Sci-Fi & Fantasy</option>
+                                <option value="10766">Soap</option>
+                                <option value="10767">Talk</option>
+                                <option value="10768">War & Politics</option>
                                 <option value="37">Western</option>
                               </select>
                             </div>
@@ -866,7 +848,6 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="0"
                                 max="360"
-                                placeholder="10"
                               />
                             </div>
                             <div className="form-group col-md-2">
@@ -880,151 +861,30 @@ class Discover extends Component {
                                 onChange={this.handleChange}
                                 min="0"
                                 max="360"
-                                placeholder="6"
                               />
                             </div>
 
                           </div>
 
                           <div className="form-row">
-                            <div className="form-group col-md-4">
-                              <label>With People</label>
-                              {user && favPeople[0] ? (
-                                <select
-                                  type="text"
-                                  className="form-control param"
-                                  id="people"
-                                  name="people"
-                                  value={params.people}
-                                  onChange={this.handleChange}
-                                >
-                                  {favPeople.map(person => (
-                                    <option value={person.tmdbId} key={person.id}>{person.title}</option>
-                                  ))}
-                                </select>
-                              ) : (
-                                  <select
-                                    type="text"
-                                    className="form-control param"
-                                    id="people"
-                                    name="people"
-                                    value={params.people}
-                                    onChange={this.handleChange}
-                                  >
-                                    <option>Person</option>
-                                    <option>Person</option>
-                                    <option>Person</option>
-                                    <option>Person</option>
-                                    <option>Person</option>
-                                    <option>Person</option>
-                                  </select>
-                                )}
-                            </div>
-                            <div className="form-group col-md-2">
-                              <label>Rating Country</label>
+                            <div className="form-group col-6 mx-auto">
+                              <label>Sort</label>
                               <select
                                 type="text"
                                 className="form-control param"
-                                id="certificationCountry"
-                                name="certificationCountry"
-                                value={params.certificationCountry}
+                                id="sort"
+                                name="sort"
+                                value={params.sort}
                                 onChange={this.handleChange}
                               >
-                                <option value="">Countries</option>
-                                {Object.keys(ratings).map(country => (
-                                  <option value={country} key={country}>{country}</option>
-                                ))}
+                                <option value="">--</option>
+                                <option value="popularity.asc">Popularity (Ascending)</option>
+                                <option value="popularity.desc">Popularity (Descending)</option>
+                                <option value="first_air_date.asc">First Air Date (Ascending)</option>
+                                <option value="first_air_date.desc">First Air Date (Descending)</option>
+                                <option value="vote_average.asc">Vote Average (Ascending)</option>
+                                <option value="vote_average.desc">Vote Average (Descending)</option>
                               </select>
-                            </div>
-                            <div className="form-group col-md-2">
-                              <label>Rating</label>
-                              {params.certificationCountry !== "" ? (
-                                <select
-                                  type="text"
-                                  className="form-control param"
-                                  id="certification"
-                                  name="certification"
-                                  value={params.certification}
-                                  onChange={this.handleChange}
-                                >
-                                  <option value="">--</option>
-                                  {ratings[params.certificationCountry].map(rating => (
-                                    <option value={rating.certification} key={rating.order}>{rating.certification}</option>
-                                  ))}
-                                </select>
-                              ) : (
-                                  <select
-                                    type="text"
-                                    className="form-control param"
-                                    id="certification"
-                                    name="certification"
-                                    value={params.certification}
-                                    onChange={this.handleChange}
-                                    disabled
-                                  >
-                                    <option>Ratings</option>
-                                  </select>
-                                )}
-                            </div>
-                            <div className="form-group col-md-2">
-                              <label>Min Rating</label>
-                              {params.certificationCountry !== "" ? (
-                                <select
-                                  type="text"
-                                  className="form-control param"
-                                  id="certificationGt"
-                                  name="certificationGt"
-                                  value={params.certificationGt}
-                                  onChange={this.handleChange}
-                                >
-                                  <option value="">--</option>
-                                  {ratings[params.certificationCountry].map(rating => (
-                                    <option value={rating.certification} key={rating.order}>{rating.certification}</option>
-                                  ))}
-                                </select>
-                              ) : (
-                                  <select
-                                    type="text"
-                                    className="form-control param"
-                                    id="certificationGt"
-                                    name="certificationGt"
-                                    value={params.certificationGt}
-                                    onChange={this.handleChange}
-                                    disabled
-                                  >
-                                    <option>Ratings</option>
-                                  </select>
-                                )}
-                            </div>
-                            <div className="form-group col-md-2">
-                              <label>Max Rating</label>
-                              {params.certificationCountry !== "" ? (
-                                <select
-                                  type="text"
-                                  className="form-control param"
-                                  id="certificationLt"
-                                  name="certificationLt"
-                                  value={params.certificationLt}
-                                  onChange={this.handleChange}
-                                >
-                                  <option value="">--</option>
-                                  {ratings[params.certificationCountry].map(rating => (
-                                    <option value={rating.certification} key={rating.order}>{rating.certification}</option>
-                                  ))}
-                                </select>
-                              ) : (
-                                  <select
-                                    type="text"
-                                    className="form-control param"
-                                    id="certificationLt"
-                                    name="certificationLt"
-                                    value={params.certificationLt}
-                                    onChange={this.handleChange}
-                                    disabled
-                                  >
-                                    <option>Ratings</option>
-                                  </select>
-                                )}
                             </div>
                           </div>
 

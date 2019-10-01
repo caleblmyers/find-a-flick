@@ -9,15 +9,25 @@
   min-height: calc(100vh - 70px);
 }
 
-/* 
-@media only screen and (max-width: 992px) {
-  .SideNav {
-    display: none;
-  } 
-  #app-body {
-    margin-left: inherit
-  }
-} */
+.text-roboto {
+  font-family: 'Roboto', sans-serif;
+}
+.text-roboto-sm {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.text-open-sans {
+  font-family: 'Open Sans', sans-serif;
+}
+.text-lato {
+  font-family: 'Lato', sans-serif;
+}
+.text-oswald {
+  font-family: 'Oswald', sans-serif;
+}
+.text-source-sans-pro {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
 .pointer {
   cursor: pointer;
 }

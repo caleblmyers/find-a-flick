@@ -4,6 +4,5 @@ apiControllers.use('/tmdb', require('./tmdbController'))
 apiControllers.use('/users', require('./usersController'))
 apiControllers.use('/favorites', require('./favoritesController'))
 apiControllers.use('/comments', require('./commentsController'))
-apiControllers.use('/secrets', require('./secretsController'))
 
 module.exports = apiControllers

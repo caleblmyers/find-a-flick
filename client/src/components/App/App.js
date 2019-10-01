@@ -8,17 +8,14 @@ import store from '../../store'
 import TokenStore from '../../lib/TokenStore'
 import AuthContext from '../../contexts/AuthContext'
 import Navigation from '../Navigation'
-// import SideNav from '../SideNav'
 import PrivateRoute from '../PrivateRoute'
 import Home from '../../pages/Home'
+import SearchResults from '../../pages/SearchResults'
+import Discover from '../../pages/Discover'
+import Details from '../../pages/Details'
+import Account from '../../pages/Account'
 import Login from '../../pages/Login'
 import Register from '../../pages/Register'
-import Account from '../../pages/Account'
-import Secret from '../../pages/Secret'
-import Discover from '../../pages/Discover'
-import Genres from '../../pages/Genres'
-import SearchResults from '../../pages/SearchResults'
-import Details from '../../pages/Details'
 import NotFound from '../../pages/NotFound'
 
 class App extends Component {
@@ -60,20 +57,18 @@ class App extends Component {
     return (
       <AuthContext.Provider value={this.state.auth}>
         <Provider store={store}>
-          <div className='App bg-popcorn'>
+          <div className='App bg-popcorn text-roboto-sm'>
             <Navigation />
             {/* <SideNav /> */}
             <div className="bg-popcorn" id="app-body">
               <Switch>
                 <Route exact path='/' component={Home} />
-                <Route path='/genres' component={Genres} />
                 <Route path='/discover' component={Discover} />
                 <Route path='/results' component={SearchResults} />
                 <Route path='/details/:type/:id' component={Details} />
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={Register} />
                 <PrivateRoute path='/account' component={Account} />
-                <PrivateRoute path='/secret' component={Secret} />
                 <Route component={NotFound} />
               </Switch>
             </div>

@@ -29,7 +29,7 @@ class CastSlider extends Component {
         </div>
       )
     }
-
+    console.log(cast.slice(((slide - 1) * 4), (slide * 4)))
     return (
       <div className="CastSlider position-relative row justify-content-center bg-light-grey py-2" id="cast-container">
         <button
@@ -47,7 +47,7 @@ class CastSlider extends Component {
           &#10095;
         </button>
         {cast.slice(((slide - 1) * 4), (slide * 4)).map(credit => (
-          <div className="col-2 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.id}>
+          <div className="col-2 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.credit_id || credit.id}>
             <Link
               className="no-link"
               to={`/details/${credit.media_type || "person"}/${credit.id}`}

@@ -34,7 +34,7 @@ class SearchResults extends Component {
             <SearchBar handler={this.submitHandler} />
           </div>
         </div>
-        {this.props.results.results ? (
+        {this.props.results.results && this.props.results.results[0] ? (
           <div>
             {<div className="display-4">Search Results for <span className="capitalize">{`"${this.state.keyword || this.props.keyword}"`}</span></div>}
             <ResultsGrid results={this.props.results.results} />
