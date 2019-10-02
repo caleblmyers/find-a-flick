@@ -318,14 +318,14 @@ class Discover extends Component {
                   id="inputCheck1"
                   aria-label="Example select with button addon"
                 />
-                <label className="form-check-label">Advanced</label>
+                <label className="form-check-label"><strong>Advanced</strong></label>
               </div>
               <div className="tab-content" id="nav-tabContent">
                 <div className="tab-pane show active" id="nav-movie" role="tabpanel" aria-labelledby="nav-movie-tab">
                   <div className="form-group">
                     {!advanced ? (
                       <div className="form-group">
-                        <label>Choose an option...</label>
+                        <label><strong>Choose an option...</strong></label>
                         <div className="input-group">
                           <select
                             name="query"
@@ -710,7 +710,7 @@ class Discover extends Component {
                   <div className="form-group">
                     {!advanced ? (
                       <div className="form-group">
-                        <label>Choose an option...</label>
+                        <label><strong>Choose an option...</strong></label>
                         <div className="input-group">
                           <select
                             name="query"

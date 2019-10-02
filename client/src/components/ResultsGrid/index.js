@@ -59,7 +59,7 @@ function ResultsGrid(props) {
   return (
     <div className="ResultsGrid row no-gutters justify-content-center">
       {props.results.map(result => (
-        <div className="col-12 col-md-4 col-lg-6 col-xl-3 p-3" key={result.id}>
+        <div className="col-6 col-md-4 col-lg-6 col-xl-3 p-3" key={result.id}>
           <div className="card border-dark rounded bg-blue-lt mb-3">
             <div className="row no-gutters">
               <div className="col-12 col-lg-5">
@@ -85,7 +85,7 @@ function ResultsGrid(props) {
                   </h6>}
                   <div className="row no-gutters mt-3">
                     {result.vote_average >= 0 &&
-                      <div className="col-6">
+                      <div className="col-12 col-md-6">
                         <div>
                           <div className="text-sm pb-2">Rating <span className="text-xs">({`${result.vote_count} votes`})</span></div>
                           <svg
@@ -123,7 +123,7 @@ function ResultsGrid(props) {
                       </div>}
                     <div className="col align-self-center">
                       <Link to={`/details/${result.media_type || props.type}/${result.id}`}>
-                        <button className="btn btn-outline-dark">
+                        <button className="btn btn-outline-dark my-2">
                           Details
                         </button>
                       </Link>

@@ -22,24 +22,29 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    this.gatherData()
+  }
+
+  gatherData = () => {
     API.TMDB.trending('movie')
       .then(movies => {
+        if (!movies.data.results) return this.gatherData()
         API.TMDB.topRated('movie')
           .then(topMovies => {
+            if (!topMovies.data.results) return this.gatherData()
             API.TMDB.nowPlaying()
               .then(nowPlaying => {
+                if (!nowPlaying.data.results) return this.gatherData()
                 API.TMDB.trending('tv')
                   .then(shows => {
+                    if (!shows.data.results) return this.gatherData()
                     API.TMDB.topRated('tv')
                       .then(topShows => {
+                        if (!topShows.data.results) return this.gatherData()
                         API.TMDB.popular('tv')
                           .then(popularShows => {
-                            console.log(movies.data)
-                            console.log(topMovies.data)
-                            console.log(nowPlaying.data)
-                            console.log(shows.data)
-                            console.log(topShows.data)
-                            console.log(popularShows.data)
+                            if (!popularShows.data.results) return this.gatherData()
+
                             this.setState({
                               movies: movies.data.results,
                               topMovies: topMovies.data.results,
