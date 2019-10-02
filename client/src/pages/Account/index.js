@@ -219,7 +219,7 @@ class Account extends Component {
               <div className="row">
                 {movies.map(movie => (
                   <div className="col-6 col-lg-3" key={movie.id}>
-                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                    <div className="card border-secondary rounded bg-light-grey mb-3">
                       <div className="card-body">
                         <h6 className="card-title">{movie.title}</h6>
                         {/* <p className="mb-0">Added:</p>
@@ -238,7 +238,7 @@ class Account extends Component {
               <div className="row">
                 {shows.map(show => (
                   <div className="col-6 col-lg-3" key={show.id}>
-                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                    <div className="card border-secondary rounded bg-light-grey mb-3">
                       <div className="card-body">
                         <h6 className="card-title">{show.title}</h6>
                         {/* <p className="mb-0">Added:</p>
@@ -257,7 +257,7 @@ class Account extends Component {
               <div className="row">
                 {people.map(person => (
                   <div className="col-6 col-lg-3" key={person.id}>
-                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                    <div className="card border-secondary rounded bg-light-grey mb-3">
                       <div className="card-body">
                         <h6 className="card-title">{person.title}</h6>
                         {/* <p className="mb-0">Added:</p>
@@ -276,7 +276,7 @@ class Account extends Component {
               <div className="row">
                 {comments.map(comment => (
                   <div className="col-6 col-lg-3" key={comment.id}>
-                    <div className="card border-secondary rounded bg-blue-lt mb-3">
+                    <div className="card border-secondary rounded bg-light-grey mb-3">
                       <div className="card-body">
                         <h6 className="card-title">{comment.body}</h6>
                         {/* <p className="mb-0">Added:</p>

@@ -23,9 +23,13 @@
   color: white;
   border-radius: 10px;
 }
+
 .bg-light-grey {
-  background-color: rgb(170, 170, 170);
+  /* background-color: rgb(170, 170, 170); */
+  /* background-color: #f2ebe8; */
+  background-color: #a2ccbb;
 }
+
 #cast-container {
   border-radius: 10px;
   min-height: 295px;

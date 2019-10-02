@@ -778,7 +778,7 @@ class Details extends Component {
                             />
                           </div>
                           <div className="form-group mb-3">
-                            <button className='btn btn-success float-right' type='submit'>Post</button>
+                            <button className='btn btn-outline-dark float-right' type='submit'>Post</button>
                           </div>
                         </form>
                       </div>
@@ -794,7 +794,7 @@ class Details extends Component {
                     {comments[0] ? (
                       comments.map(comment => (
                         <div className="col-12 p-2" key={comment.id}>
-                          <div className="card bg-dark text-white text-left">
+                          <div className="card bg-purple text-white text-left">
                             <div className="card-header">
                               <Gravatar className="rounded-circle" email={comment.userName} size={30} /> {comment.userName}
                               {(user && user.id === comment.userId) &&

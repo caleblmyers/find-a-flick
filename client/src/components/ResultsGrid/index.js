@@ -60,7 +60,7 @@ function ResultsGrid(props) {
     <div className="ResultsGrid row no-gutters justify-content-center">
       {props.results.map(result => (
         <div className="col-6 col-md-4 col-lg-6 col-xl-3 p-3" key={result.id}>
-          <div className="card border-dark rounded bg-blue-lt mb-3">
+          <div className="card border-dark rounded bg-light-grey mb-3">
             <div className="row no-gutters">
               <div className="col-12 col-lg-5">
                 <img

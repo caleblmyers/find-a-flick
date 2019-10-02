@@ -5,7 +5,7 @@ import LogoTmdb from '../../img/tmdb.png'
 
 const Footer = () => {
   return (
-    <footer className="Footer">
+    <footer className="Footer nav-bg">
       <div className="container text-white" id="footer-row">
         <div className="row h-100">
           <div className="col-8 col-md-4 h-100 ml-auto">

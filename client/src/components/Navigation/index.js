@@ -20,7 +20,7 @@ class Navigation extends Component {
     const targetClass = `collapse navbar-collapse ${!collapsed && 'show'}`
 
     return (
-      <div className='Navigation sticky-top bg-navy'>
+      <div className='Navigation sticky-top nav-bg'>
         <nav className='navbar navbar-dark navbar-expand-lg'>
           <img className="brand-img" src={Popcorn} alt="Pop Media"/>
           <Link className='navbar-brand' to='/'>Pop Media</Link>

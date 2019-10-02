@@ -58,10 +58,10 @@ class App extends Component {
     return (
       <AuthContext.Provider value={this.state.auth}>
         <Provider store={store}>
-          <div className='App bg-popcorn text-roboto-sm position-relative'>
+          <div className='App bg-beige text-roboto-sm position-relative'>
             <Navigation />
             {/* <SideNav /> */}
-            <div className="bg-popcorn" id="app-body">
+            <div className="bg-beige" id="app-body">
               <Switch className="mb-5">
                 <Route exact path='/' component={Home} />
                 <Route path='/discover' component={Discover} />
