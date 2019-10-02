@@ -1,4 +1,4 @@
-# Pop Media
+# Pop Media Server
 
 #### Developed by Caleb Myers
 
