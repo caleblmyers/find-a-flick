@@ -48,7 +48,7 @@ class CastSlider extends Component {
           &#10095;
         </button>
         {cast.slice(((slide - 1) * 4), (slide * 4)).map(credit => (
-          <div className="col-2 col-md-2 px-0 py-2 mx-1 align-self-center" key={credit.credit_id || credit.id}>
+          <div className="col-4 col-md-2 px-0 py-2 mx-2 align-self-center" key={credit.credit_id || credit.id}>
             <Link
               className="no-link"
               to={`/details/${credit.media_type || "person"}/${credit.id}`}

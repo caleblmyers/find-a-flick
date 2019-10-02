@@ -49,7 +49,7 @@ class Carousel extends Component {
             alt={data[index].title || data[index].name}
             src={data[index].backdrop_path
               ? `https://image.tmdb.org/t/p/original/${data[index].backdrop_path}`
-              : type === "episodes"
+              : (type === "episodes" && data[index].still_path)
                 ? `https://image.tmdb.org/t/p/original/${data[index].still_path}`
                 : Media}
           />

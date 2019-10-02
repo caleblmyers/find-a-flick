@@ -98,6 +98,10 @@ class Details extends Component {
     }
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timer)
+  }
+
   getDetails(type, id) {
     // this.setState({ isLoaded: false })
     console.log(`Getting ${type} ${id}`)
@@ -261,7 +265,7 @@ class Details extends Component {
 
               {/* Header */}
               <div className="row bg-light-grey" id="details-body">
-                <div className="col-12 col-md-8 py-3">
+                <div className="col-12 col-md-8 py-3 position-relative">
                   <div className="p-3" id="details-header">
                     <div className="row no-gutters">
                       <div className="col">
@@ -322,17 +326,32 @@ class Details extends Component {
                       )}
                   </div>
 
-                  <div className="row no-gutters my-4 text-left">
-                    <div className="col-12">
-                      <div className="h5">Overview</div>
-                      <p>{details.overview || details.biography}</p>
+                  <div className="row no-gutters mt-4 mb-3 text-left">
+                    <div className="col-6 col-md-12">
+                      <div className="h4">Overview</div>
+                      {details.overview &&
+                        <p>{details.overview.length > 255 ? `${details.overview.slice(0, 255)}...` : details.overview}</p>}
+                      {details.biography &&
+                        <p>{details.biography.length > 255 ? `${details.biography.slice(0, 255)}...` : details.biography}</p>}
                     </div>
-                    <div className="col-8">
-                      <div className="h5">Featured Crew</div>
+                    <div className="col-5 ml-auto d-md-none">
+                      <img
+                        alt="Poster"
+                        className="img-fluid rounded"
+                        src={
+                          (details.poster_path || details.profile_path)
+                            ? `https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`
+                            : type === "person" ? Person : MediaTall}
+                      />
+                    </div>
+                  </div>
+                  <div className="row no-gutters text-left">
+                    <div className="col-12 col-lg-8">
+                      <div className="h4">Featured Crew</div>
                       {type === "tv" &&
                         <div className="row no-gutters">
                           {details.created_by.map(creator => (
-                            <div className="col" key={creator.id}>
+                            <div className="col col-lg-6" key={creator.id}>
                               <div><strong>{creator.name}</strong></div>
                               <div>Creator</div>
                             </div>
@@ -341,7 +360,7 @@ class Details extends Component {
                       {type === "movie" &&
                         <div className="row no-gutters">
                           {details.credits.crew.slice(0, 3).map(crew => (
-                            <div className="col" key={crew.credit_id}>
+                            <div className="col-4 col-lg-6 my-1" key={crew.credit_id}>
                               <div><strong>{crew.name}</strong></div>
                               <div>{crew.job}</div>
                             </div>
@@ -357,7 +376,7 @@ class Details extends Component {
                           ))}
                         </div>}
                     </div>
-                    <div className="col-4 text-right">
+                    <div className="col-4 mx-auto my-4 text-center d-md-none d-lg-block">
                       {details.vote_average && <div>
                         Rating: {details.vote_average} <small>({details.vote_count})</small>
                       </div>}
@@ -376,14 +395,36 @@ class Details extends Component {
                   </div>
                 </div>
                 <div className="col-4 py-3 d-none d-md-block">
-                  <img
-                    alt="Poster"
-                    className="img-fluid rounded"
-                    src={
-                      (details.poster_path || details.profile_path)
-                        ? `https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`
-                        : type === "person" ? Person : MediaTall}
-                  />
+                  <div className="row no-gutters">
+                    <div className="col-12">
+                      <img
+                        alt="Poster"
+                        className="img-fluid rounded"
+                        src={
+                          (details.poster_path || details.profile_path)
+                            ? `https://image.tmdb.org/t/p/original/${details.poster_path || details.profile_path}`
+                            : type === "person" ? Person : MediaTall}
+                      />
+                    </div>
+                  </div>
+                  <div className="row no-gutters">
+                    <div className="col-12 mx-auto mt-4 text-center d-lg-none">
+                      {details.vote_average && <div>
+                        Rating: {details.vote_average} <small>({details.vote_count})</small>
+                      </div>}
+                      {user && <div>
+                        <button
+                          className="btn btn-outline-dark"
+                          onClick={() => this.addFavorite(
+                            type,
+                            id,
+                            (details.title || details.name),
+                            user.id,
+                            authToken
+                          )}>Favorite</button>
+                      </div>}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -511,30 +552,38 @@ class Details extends Component {
                     </div>
                   </div>}
                   {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    {details.homepage && <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Homepage</strong></div>
                       <div className="text-xs">{details.homepage}</div>
+                    </div>}
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Type</strong></div>
+                      <div className="text-xs">{details.type}</div>
                     </div>
                     <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Status</strong></div>
                       <div className="text-xs">{details.status}</div>
                     </div>
                     <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Type</strong></div>
-                      <div className="text-xs">{details.type}</div>
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>In Production</strong></div>
                       <div className="text-xs">{details.in_production ? "Yes" : "No"}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Number of Seasons</strong></div>
+                      <div className="text-xs">{details.number_of_seasons}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Number of Episodes</strong></div>
+                      <div className="text-xs">{details.number_of_episodes}</div>
                     </div>
                     <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>First Aired</strong></div>
                       <div className="text-xs">{moment(details.first_air_date).format("MMMM Do, YYYY")}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    {/* <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Last Aired</strong></div>
                       <div className="text-xs">{moment(details.last_air_date).format("MMMM Do, YYYY")}</div>
-                    </div>
+                    </div> */}
                     {details.next_episode_to_air && <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Next Episode to Air</strong></div>
                       <div className="text-xs">{details.next_episode_to_air.name}</div>
@@ -546,36 +595,26 @@ class Details extends Component {
                       <div className="text-xs">{moment(details.last_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
                     </div>
                     <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>In Production</strong></div>
-                      <div className="text-xs">{details.in_production ? "Yes" : "No"}</div>
+                      <div className="text-sm"><strong>Networks</strong></div>
+                      {details.networks.map(network => <div className="text-xs" key={network.id}>{network.name}</div>)}
                     </div>
                     <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Available Languages</strong></div>
                       {details.languages.map(language => <div className="text-xs" key={language}>{language}</div>)}
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    {details.languages[0] !== details.original_language && <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Original Language</strong></div>
                       <div className="text-xs">{details.original_language}</div>
-                    </div>
+                    </div>}
                     <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Original Country</strong></div>
-                      <div className="text-xs">{details.original_country}</div>
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Networks</strong></div>
-                      {details.networks.map(network => <div className="text-xs" key={network.id}>{network.name}</div>)}
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Number of Seasons</strong></div>
-                      <div className="text-xs">{details.number_of_seasons}</div>
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Number of Episodes</strong></div>
-                      <div className="text-xs">{details.number_of_episodes}</div>
+                      <div className="text-sm"><strong>Country of Origin</strong></div>
+                      <div className="text-xs">{details.origin_country}</div>
                     </div>
                     <div className="col-3 col-lg-12 pl-2 py-1">
                       <div className="text-sm"><strong>Keywords</strong></div>
-                      {details.keywords.results.map(keyword => <div className="text-xs" key={keyword.id}>{keyword.name}</div>)}
+                      {details.keywords.results.map((keyword, index) => (
+                        <span key={keyword.id} className="text-xs">{keyword.name}{index === details.keywords.results.length - 1 ? "" : ", "}</span>
+                      ))}
                     </div>
                   </div>}
                 </div>
@@ -680,7 +719,7 @@ class Details extends Component {
                   </div>
                 </div>
                 <div className="col-12 col-lg-3 my-2 side-col-lg">
-                  <div className="h4 text-left">Reviews</div>
+                  <div className="h4 text-left"><strong>Reviews</strong></div>
                   <div className="row no-gutters bg-light-grey border-round py-2">
                     {(details.reviews.results && details.reviews.results[0]) ? (
                       details.reviews.results.map(review => (

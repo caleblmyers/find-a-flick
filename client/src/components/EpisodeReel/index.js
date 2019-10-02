@@ -88,9 +88,9 @@ class EpisodeReel extends Component {
         >
           &#10095;
         </button>
-        <div className="card mb-3">
+        <div className="card bg-light-grey border-0 mb-3">
           <div className="row no-gutters">
-            <div className="col-md-4 my-auto p-3">
+            <div className="col-10 col-md-4 my-auto mx-auto p-3">
               <img
                 alt={season.name}
                 className="card-img-top img-fluid"
@@ -100,13 +100,13 @@ class EpisodeReel extends Component {
                     : MediaTall}
               />
             </div>
-            <div className="col-md-8 text-center">
+            <div className="col-12 col-md-8 text-center">
               <div className="card-body">
                 <h5 className="mb-0 card-title"><strong>{season.name || season.title}</strong></h5>
                 <p className="mb-0 card-text"><small className="text-muted">{moment(season.air_date).format("MMMM Do, YYYY")}</small></p>
                 <p className="text-sm">{season.overview.slice(0, 255)}...</p>
                 <div className="row">
-                  <div className="col-10 mx-auto">
+                  <div className="col-12 col-md-10 mx-auto">
                     <Carousel data={season.episodes} type="episodes" handler={console.log} />
                   </div>
                 </div>

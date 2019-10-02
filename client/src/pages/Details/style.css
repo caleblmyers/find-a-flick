@@ -126,4 +126,10 @@
   .Details {
     margin: 0 10px;
   }
+  #data-container {
+    min-height: 750px;
+  }
+  #cast-container {
+    min-height: 500px;
+  }
 }
