@@ -339,7 +339,7 @@ class Details extends Component {
                     </div>
                   </div>
                   <div className="row no-gutters text-left">
-                    <div className="col-12 col-lg-8 mb-3">
+                    <div className="col-6 col-md-12 col-lg-8 mb-3">
                       {type === "tv" &&
                         <div>
                           <div className="h4">Created By</div>
@@ -388,7 +388,7 @@ class Details extends Component {
                     <div className="col col-lg-4 mx-auto text-center d-md-none d-lg-block">
                       {details.vote_average >= 0 &&
                         <div>
-                          <div className="h4">Rating</div>
+                          <div className="h4">Rating <span className="text-sm">({details.vote_count} votes)</span></div>
                           <svg
                             width={sqSize}
                             height={sqSize}
@@ -465,7 +465,7 @@ class Details extends Component {
                     <div className="col-12 mx-auto mt-4 text-center d-lg-none">
                       {details.vote_average >= 0 &&
                         <div>
-                          <div className="h4">Rating</div>
+                        <div className="h4">Rating <span className="text-sm">({details.vote_count} votes)</span></div>
                           <svg
                             width={sqSize}
                             height={sqSize}
@@ -784,7 +784,7 @@ class Details extends Component {
                       </div>
                     ) : (
                         <div className="col-12 p-3">
-                          <div className="h5 pl-2">Log in to comment!</div>
+                          <div className="h5 text-center">Log in to comment!</div>
                         </div>
                       )}
                   </div>
