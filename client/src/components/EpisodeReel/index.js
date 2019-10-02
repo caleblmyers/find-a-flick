@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 
-import MediaTall from '../../img/media_placeholder_tall.png'
+import './style.css'
 import API from '../../lib/API'
 import Carousel from '../Carousel'
 import moment from 'moment'
+import MediaTall from '../../img/media_placeholder_tall.png'
 
 class EpisodeReel extends Component {
   state = {
@@ -129,7 +130,7 @@ class EpisodeReel extends Component {
                 <p className="mb-0 card-text"><small className="text-muted">{moment(content.air_date).format("MMMM Do, YYYY")}</small></p>
                 {content.overview && <p className="text-sm">{content.overview.length > 255 ? `${content.overview.slice(0, 255)}...` : content.overview}</p>}
                 {(content.episodes || content.parts) && <div className="row">
-                  <div className="col-12 col-md-10 mx-auto">
+                  <div className="col-12 col-md-10 mx-auto" id="carousel-container">
                     <Carousel data={content.episodes || content.parts} type={type === "tv" ? "episodes" : type} handler={console.log} />
                   </div>
                 </div>}
