@@ -6,7 +6,8 @@
   background: none;
 }
 #app-body {
-  min-height: calc(100vh - 70px);
+  /* min-height: calc(100vh - 70px); */
+  padding-bottom: 100px;
 }
 
 .overflow-wrap {

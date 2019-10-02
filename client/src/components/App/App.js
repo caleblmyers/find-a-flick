@@ -17,6 +17,7 @@ import Account from '../../pages/Account'
 import Login from '../../pages/Login'
 import Register from '../../pages/Register'
 import NotFound from '../../pages/NotFound'
+import Footer from '../Footer'
 
 class App extends Component {
   constructor(props) {
@@ -57,11 +58,11 @@ class App extends Component {
     return (
       <AuthContext.Provider value={this.state.auth}>
         <Provider store={store}>
-          <div className='App bg-popcorn text-roboto-sm'>
+          <div className='App bg-popcorn text-roboto-sm position-relative'>
             <Navigation />
             {/* <SideNav /> */}
             <div className="bg-popcorn" id="app-body">
-              <Switch>
+              <Switch className="mb-5">
                 <Route exact path='/' component={Home} />
                 <Route path='/discover' component={Discover} />
                 <Route path='/results' component={SearchResults} />
@@ -71,6 +72,7 @@ class App extends Component {
                 <PrivateRoute path='/account' component={Account} />
                 <Route component={NotFound} />
               </Switch>
+              <Footer />
             </div>
           </div>
         </Provider>

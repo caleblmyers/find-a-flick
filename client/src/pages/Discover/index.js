@@ -49,7 +49,7 @@ class Discover extends Component {
           data: {
             releaseYear: "2010",
             sort: "vote_average.desc",
-            voteCountGt: "500"
+            voteCountGt: "300"
           }
         },
         {
@@ -57,7 +57,7 @@ class Discover extends Component {
           data: {
             genres: "18",
             releaseYear: "2019",
-            voteCountGt: "500"
+            voteCountGt: "300"
           }
         },
         {
@@ -91,11 +91,11 @@ class Discover extends Component {
           }
         },
         {
-          name: "What are the best dramas?",
+          name: "What are the best documentaries?",
           data: {
-            genres: "18",
+            genres: "99",
             sort: "vote_average.desc",
-            voteCountGt: "10"
+            voteCountGt: "100"
           }
         },
         {
@@ -118,19 +118,38 @@ class Discover extends Component {
           }
         },
         {
-          name: "What shows are new?",
+          name: "What are the highest rated shows rated R?",
           data: {
-            releaseDateGt: "2019-08-25",
-            releaseDateLt: "2019-09-27"
+            certificationCountry: "US",
+            certification: "R",
+            sort: "vote_average.desc",
+            voteCountGt: "500"
           }
         },
         {
-          name: "What shows are new?",
+          name: "What are the best shows from 2010?",
           data: {
-            releaseDateGt: "2019-08-25",
-            releaseDateLt: "2019-09-27"
+            releaseYear: "2010",
+            sort: "vote_average.desc",
+            voteCountGt: "100"
           }
         },
+        {
+          name: "What are the best dramas that were released this year?",
+          data: {
+            genres: "18",
+            releaseYear: "2019",
+            voteCountGt: "500"
+          }
+        },
+        {
+          name: "What are the best kids shows?",
+          data: {
+            genres: "10762",
+            sort: "vote_average.desc",
+            voteCountGt: "10"
+          }
+        }
       ]
     },
     activeTab: 'movie',

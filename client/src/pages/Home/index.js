@@ -71,7 +71,9 @@ class HomePage extends Component {
         </div>
 
         {!this.state.isLoaded ? (
-          <Loader />
+          <div className="position-relative">
+            <Loader />
+          </div>
         ) : (
             <div className="Featured">
               <div className="h2 text-center">Movies</div>
