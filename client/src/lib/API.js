@@ -84,6 +84,9 @@ export default {
     search: function (data) {
       return axios.post('/api/tmdb/search', { data })
     },
+    season: function (type, id, season) {
+      return axios.get(`/api/tmdb/details/${type}/${id}/${season}`)
+    },
     topRated: function (type) {
       return axios.get(`/api/tmdb/${type}/top_rated`)
     },

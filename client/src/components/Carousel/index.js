@@ -49,14 +49,18 @@ class Carousel extends Component {
             alt={data[index].title || data[index].name}
             src={data[index].backdrop_path
               ? `https://image.tmdb.org/t/p/original/${data[index].backdrop_path}`
-              : Media}
+              : type === "episodes"
+                ? `https://image.tmdb.org/t/p/original/${data[index].still_path}`
+                : Media}
           />
-          <Link
-            to={`/details/${mediaType}/${data[index].id}`}
-            onClick={() => this.props.handler(mediaType, data[index].id)}
-          >
-            <div id="caption"><strong>{data[index].title || data[index].name}</strong></div>
-          </Link>
+          {type === "episodes"
+            ? <div id="caption"><strong>{data[index].title || data[index].name}</strong></div>
+            : <Link
+              to={`/details/${mediaType}/${data[index].id}`}
+              onClick={() => this.props.handler(mediaType, data[index].id)}
+            >
+              <div id="caption"><strong>{data[index].title || data[index].name}</strong></div>
+            </Link>}
           <button onClick={event => this.changeSlide(event)} className="btn" id="prev">&#10094;</button>
           <button onClick={event => this.changeSlide(event)} className="btn" id="next">&#10095;</button>
         </div>

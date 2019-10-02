@@ -52,7 +52,6 @@ class CastSlider extends Component {
             <Link
               className="no-link"
               to={`/details/${credit.media_type || "person"}/${credit.id}`}
-              onClick={() => this.props.handler(credit.media_type || "person", credit.id)}
             >
               <div className="card">
                 <img

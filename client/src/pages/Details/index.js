@@ -13,8 +13,14 @@ import CastSlider from '../../components/CastSlider'
 import Carousel from '../../components/Carousel'
 import Person from '../../img/person_placeholder.png'
 import MediaTall from '../../img/media_placeholder_tall.png'
+import EpisodeReel from '../../components/EpisodeReel'
 
 class Details extends Component {
+  constructor(props) {
+    super(props)
+
+    this.timer = null
+  }
   static contextType = AuthContext
 
   state = {
@@ -50,42 +56,54 @@ class Details extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.location !== this.props.location) {
-      // console.log('diff type')
-      // console.log(this.props.match.params.type)
-      // console.log(nextProps.match.params.type)
+      clearTimeout(this.timer)
+      console.log('diff type')
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       this.setState({ isLoaded: false })
       if (this.props.history.action === "POP") {
-        this.getDetails(nextProps.match.params.type, nextProps.match.params.id)
+        console.log("POP")
+        this.timer = setTimeout(() => {
+          this.getDetails(nextProps.match.params.type, nextProps.match.params.id)
+        }, 3000);
+      } else {
+        console.log(this.props.history.action)
+        this.timer = setTimeout(() => {
+          this.getDetails(nextProps.match.params.type, nextProps.match.params.id)
+        }, 3000);
       }
       return false
     }
-    else if (this.props.match.params.type === "movie" && !this.state.details.revenue) {
-      // console.log('movie wait')
-      // console.log(this.props.match.params.type)
-      // console.log(nextProps.match.params.type)
-      return true
-    }
+    // else if (this.props.match.params.type === "movie" && !this.state.details.revenue) {
+    //   console.log('movie wait')
+    //   console.log(this.props.match.params.type)
+    //   console.log(nextProps.match.params.type)
+    //   return true
+    // }
     else if (this.props.match.params.type === "movie" && this.state.details.revenue) {
-      // console.log('movie update')
-      // console.log(this.props.match.params.type)
-      // console.log(nextProps.match.params.type)
+      console.log('movie update')
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       return true
     }
     else {
-      // console.log('updating')
-      // console.log(this.props.details)
-      // console.log(this.props.match.params.type)
-      // console.log(nextProps.match.params.type)
+      console.log('updating')
+      console.log(this.state.isLoaded)
+      console.log(nextState.isLoaded)
+      console.log(this.state.details)
+      console.log(nextState.details)
+      console.log(this.props.match.params.type)
+      console.log(nextProps.match.params.type)
       return true
     }
   }
 
   getDetails(type, id) {
-    this.setState({ isLoaded: false })
+    // this.setState({ isLoaded: false })
+    console.log(`Getting ${type} ${id}`)
     API.TMDB.details(type, id)
       .then(pageDetails => {
         const details = pageDetails.data
-        console.log(pageDetails.data)
         if (pageDetails.data.name === "Error") return this.getDetails(type, id)
         API.Comments.pageComments(type, id)
           .then(pageComments => {
@@ -231,6 +249,7 @@ class Details extends Component {
           </div>
         ) : (
             <div className="container pt-3">
+              {/* Messages */}
               {message &&
                 <div className='row'>
                   <div className='col'>
@@ -240,6 +259,7 @@ class Details extends Component {
                   </div>
                 </div>}
 
+              {/* Header */}
               <div className="row bg-light-grey" id="details-body">
                 <div className="col-12 col-md-8 py-3">
                   <div className="p-3" id="details-header">
@@ -367,37 +387,43 @@ class Details extends Component {
                 </div>
               </div>
 
+              {/* Details */}
               <div className="row">
+                {/* Slider and Carousel */}
                 <div className="col-12 col-lg-9 pt-3 text-left">
+                  {type === "tv" && <div className="row mb-3">
+                    <div className="col-12">
+                      <div className="h4"><strong>Episode Guide</strong></div>
+                      <EpisodeReel
+                        data={details.seasons.sort((a, b) => a.season_number - b.season_number)}
+                        type={type} id={id}
+                      />
+                    </div>
+                  </div>}
                   {type !== "person" ? (
                     <div>
                       <div className="h4"><strong>Cast</strong></div>
-                      <div>
-                        <CastSlider
-                          cast={details.credits.cast.sort((a, b) => a.order - b.order)}
-                          handler={this.changeMedia}
-                          type={type}
-                        />
-                      </div>
+                      <CastSlider
+                        cast={details.credits.cast.sort((a, b) => a.order - b.order)}
+                        type={type}
+                      />
                     </div>
                   ) : (
                       <div>
                         <div className="h4"><strong>Credits</strong></div>
-                        <div>
-                          {details.known_for_department === "Acting" ? (
+                        {details.known_for_department === "Acting" ? (
+                          <CastSlider
+                            cast={details.combined_credits.cast.sort((a, b) => b.vote_count - a.vote_count)}
+                            handler={this.changeMedia}
+                            type={type}
+                          />
+                        ) : (
                             <CastSlider
-                              cast={details.combined_credits.cast.sort((a, b) => b.vote_count - a.vote_count)}
+                              cast={details.combined_credits.crew.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
                               handler={this.changeMedia}
                               type={type}
                             />
-                          ) : (
-                              <CastSlider
-                                cast={details.combined_credits.crew.slice(0, 30).sort((a, b) => b.vote_count - a.vote_count)}
-                                handler={this.changeMedia}
-                                type={type}
-                              />
-                            )}
-                        </div>
+                          )}
                       </div>
                     )}
                   {type !== "person" ? (
@@ -436,6 +462,8 @@ class Details extends Component {
                       </div>
                     )}
                 </div>
+
+                {/* Crew and Facts */}
                 <div className="col-12 col-lg-3 pt-3 text-left side-col-lg">
                   <div className="h4"><strong>Crew</strong></div>
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
@@ -458,7 +486,13 @@ class Details extends Component {
                         <div className="text-xs">{person.job}</div>
                       </div>
                     ))}
+                    {details.credits.crew.length === 0 && <div>
+                      <div className="col-12 px-3 py-2">
+                        <div className="h6">Crew unavailable.</div>
+                      </div>
+                    </div>}
                   </div>}
+
                   <div className="h4 mt-2"><strong>Facts</strong></div>
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
                     <div className="col-3 col-lg-12 pl-2 py-1">
@@ -476,12 +510,78 @@ class Details extends Component {
                       ))}
                     </div>
                   </div>}
-                  {type === "tv" && <div className="col-12">
-                    Tv Facts
+                  {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Homepage</strong></div>
+                      <div className="text-xs">{details.homepage}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Status</strong></div>
+                      <div className="text-xs">{details.status}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Type</strong></div>
+                      <div className="text-xs">{details.type}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>In Production</strong></div>
+                      <div className="text-xs">{details.in_production ? "Yes" : "No"}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>First Aired</strong></div>
+                      <div className="text-xs">{moment(details.first_air_date).format("MMMM Do, YYYY")}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Last Aired</strong></div>
+                      <div className="text-xs">{moment(details.last_air_date).format("MMMM Do, YYYY")}</div>
+                    </div>
+                    {details.next_episode_to_air && <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Next Episode to Air</strong></div>
+                      <div className="text-xs">{details.next_episode_to_air.name}</div>
+                      <div className="text-xs">{moment(details.next_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
                     </div>}
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Last Episode to Air</strong></div>
+                      <div className="text-xs">{details.last_episode_to_air.name}</div>
+                      <div className="text-xs">{moment(details.last_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>In Production</strong></div>
+                      <div className="text-xs">{details.in_production ? "Yes" : "No"}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Available Languages</strong></div>
+                      {details.languages.map(language => <div className="text-xs" key={language}>{language}</div>)}
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Original Language</strong></div>
+                      <div className="text-xs">{details.original_language}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Original Country</strong></div>
+                      <div className="text-xs">{details.original_country}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Networks</strong></div>
+                      {details.networks.map(network => <div className="text-xs" key={network.id}>{network.name}</div>)}
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Number of Seasons</strong></div>
+                      <div className="text-xs">{details.number_of_seasons}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Number of Episodes</strong></div>
+                      <div className="text-xs">{details.number_of_episodes}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 pl-2 py-1">
+                      <div className="text-sm"><strong>Keywords</strong></div>
+                      {details.keywords.results.map(keyword => <div className="text-xs" key={keyword.id}>{keyword.name}</div>)}
+                    </div>
+                  </div>}
                 </div>
               </div>
 
+              {/* Comments */}
               <div className="row">
 
                 <div className="col-12 col-lg-9 my-2 text-left px-0">
