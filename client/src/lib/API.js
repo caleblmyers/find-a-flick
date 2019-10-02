@@ -59,6 +59,9 @@ export default {
   },
 
   TMDB: {
+    collection: function(id) {
+      return axios.get(`/api/tmdb/collection/${id}`)
+    },
     comingSoon: function () {
       return axios.get('/api/tmdb/coming_soon')
     },

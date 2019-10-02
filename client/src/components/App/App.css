@@ -9,6 +9,9 @@
   min-height: calc(100vh - 70px);
 }
 
+.overflow-wrap {
+  overflow-wrap: break-word;
+}
 .text-roboto {
   font-family: 'Roboto', sans-serif;
 }

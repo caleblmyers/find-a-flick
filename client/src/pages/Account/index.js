@@ -82,6 +82,14 @@ class Account extends Component {
     const { user, authToken } = this.context
     const { isEditing } = this.state
 
+    if (this.state[isEditing] === "") {
+      return this.setState({
+        message: "Entries cannot be blank.",
+        messageType: "danger",
+        isEditing: false
+      })
+    }
+
     API.Users.update(isEditing, this.state[isEditing], user.id, authToken)
       .then(update => {
         console.log(update)
@@ -186,7 +194,7 @@ class Account extends Component {
                           >Change Username</button>
                         </div>
                       </div>
-                      <div className="row my-3">
+                      {/* <div className="row my-3">
                         <div className="col-12">
                           <button
                             className="btn btn-info"
@@ -194,7 +202,7 @@ class Account extends Component {
                             name="password"
                           >Change Password</button>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="row my-3">
                         <div className="col-12">
                           <button

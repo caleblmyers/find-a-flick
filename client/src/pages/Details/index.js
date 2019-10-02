@@ -115,6 +115,8 @@ class Details extends Component {
             this.setState({
               details,
               comments,
+              message: "",
+              messageType: "",
               isLoaded: true
             })
           })
@@ -227,22 +229,18 @@ class Details extends Component {
   }
 
   render() {
-    // const { details } = this.props
     const { user, authToken } = this.context
     const { type, id } = this.props.match.params
     const { details, message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
 
+    const sqSize = 80;
+    const strokeWidth = 4
+    const radius = (sqSize - strokeWidth) / 2;
+    const viewBox = `0 0 ${sqSize} ${sqSize}`;
+    const dashArray = radius * Math.PI * 2;
+
     return (
       <div className="Details pb-5 position-relative">
-        {/* {(isLoaded && details.backdrop_path) && <div className="row no-gutters" id="backdrop-row">
-          <div className="col-sm-12 d-md-none">
-            <img
-              alt="Poster"
-              className="img-fluid rounded"
-              src={`https://image.tmdb.org/t/p/original/${details.backdrop_path || details.profile_path}`}
-            />
-          </div>
-        </div>} */}
         {!isLoaded ? (
           <div className="align-center" id="loader">
             <div className="bounce-loader mt-4">
@@ -314,7 +312,7 @@ class Details extends Component {
                               </div>}
                           </div>
 
-                          {details.genres && <div className="col-6">
+                          {details.genres[0] && <div className="col-6">
                             <div>Genres: </div>
                             <div>
                               {details.genres.map((genre, index) => (
@@ -346,52 +344,109 @@ class Details extends Component {
                     </div>
                   </div>
                   <div className="row no-gutters text-left">
-                    <div className="col-12 col-lg-8">
-                      <div className="h4">Featured Crew</div>
+                    <div className="col-12 col-lg-8 mb-3">
                       {type === "tv" &&
-                        <div className="row no-gutters">
-                          {details.created_by.map(creator => (
-                            <div className="col col-lg-6" key={creator.id}>
-                              <div><strong>{creator.name}</strong></div>
-                              <div>Creator</div>
-                            </div>
-                          ))}
+                        <div>
+                          <div className="h4">Created By</div>
+                          <div className="row no-gutters">
+                            {details.created_by.map(creator => (
+                              <div className="col col-lg-6" key={creator.id}>
+                                <div><strong>{creator.name}</strong></div>
+                                <div>Creator</div>
+                              </div>
+                            ))}
+                          </div>
                         </div>}
                       {type === "movie" &&
-                        <div className="row no-gutters">
-                          {details.credits.crew.slice(0, 3).map(crew => (
-                            <div className="col-4 col-lg-6 my-1" key={crew.credit_id}>
-                              <div><strong>{crew.name}</strong></div>
-                              <div>{crew.job}</div>
+                        <div>
+                          <div className="h4">Featured Crew</div>
+                          {details.credits.crew[0]
+                            ? <div className="row no-gutters">
+                              {details.credits.crew.slice(0, 3).map(crew => (
+                                <div className="col-4 col-lg-6 my-1" key={crew.credit_id}>
+                                  <div><strong>{crew.name}</strong></div>
+                                  <div>{crew.job}</div>
+                                </div>
+                              ))}
                             </div>
-                          ))}
+                            : <div className="col-4 col-lg-6 my-1">
+                              <div><strong>Unavailable</strong></div>
+                            </div>}
                         </div>}
                       {type === "person" &&
-                        <div className="row no-gutters">
-                          {details.combined_credits && details.combined_credits.crew.slice(0, 3).map(credit => (
-                            <div className="col" key={credit.credit_id || credit.id}>
-                              <div><strong>{credit.title || credit.name}</strong></div>
-                              <div>{credit.job}</div>
-                            </div>
-                          ))}
+                        <div>
+                          <div className="h4">Featured Roles</div>
+                          <div className="row no-gutters">
+                            {details.combined_credits && details.combined_credits.crew.slice(0, 3).map(credit => (
+                              <div className="col" key={credit.credit_id || credit.id}>
+                                <div><strong>{credit.title || credit.name}</strong></div>
+                                <div>{credit.job}</div>
+                              </div>
+                            ))}
+                          </div>
                         </div>}
                     </div>
-                    <div className="col-4 mx-auto my-4 text-center d-md-none d-lg-block">
-                      {details.vote_average && <div>
-                        Rating: {details.vote_average} <small>({details.vote_count})</small>
-                      </div>}
-                      {user && <div>
+                    <div className="col col-lg-4 mx-auto text-center d-md-none d-lg-block">
+                      {details.vote_average &&
+                        <div>
+                          <div className="h4">Rating</div>
+                          <svg
+                            width={sqSize}
+                            height={sqSize}
+                            viewBox={viewBox}>
+                            <circle
+                              className="circle-background"
+                              cx={sqSize / 2}
+                              cy={sqSize / 2}
+                              r={radius}
+                              strokeWidth={`${strokeWidth}px`} />
+                            <circle
+                              className="circle-progress"
+                              cx={sqSize / 2}
+                              cy={sqSize / 2}
+                              r={radius}
+                              strokeWidth={`${strokeWidth}px`}
+                              // Start progress marker at 12 O'Clock
+                              transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
+                              style={{
+                                strokeDasharray: dashArray,
+                                strokeDashoffset: dashArray - dashArray * details.vote_average / 10
+                              }} />
+                            <text
+                              className="circle-text"
+                              x="50%"
+                              y="50%"
+                              dy=".3em"
+                              textAnchor="middle">
+                              {`${details.vote_average * 10}%`}
+                            </text>
+                          </svg>
+                        </div>}
+                      {user && <div className="d-none d-lg-block">
                         <button
-                          className="btn btn-outline-dark"
+                          className="btn btn-outline-dark mt-3"
                           onClick={() => this.addFavorite(
                             type,
                             id,
                             (details.title || details.name),
                             user.id,
                             authToken
-                          )}>Favorite</button>
+                          )}>Add Favorite</button>
                       </div>}
                     </div>
+                    {user && <div className="col-6 my-auto text-center d-md-none">
+                      <div>
+                        <button
+                          className="btn btn-outline-dark mt-3"
+                          onClick={() => this.addFavorite(
+                            type,
+                            id,
+                            (details.title || details.name),
+                            user.id,
+                            authToken
+                          )}>Add Favorite</button>
+                      </div>
+                    </div>}
                   </div>
                 </div>
                 <div className="col-4 py-3 d-none d-md-block">
@@ -409,12 +464,44 @@ class Details extends Component {
                   </div>
                   <div className="row no-gutters">
                     <div className="col-12 mx-auto mt-4 text-center d-lg-none">
-                      {details.vote_average && <div>
-                        Rating: {details.vote_average} <small>({details.vote_count})</small>
-                      </div>}
+                      {details.vote_average &&
+                        <div>
+                          <div className="h4">Rating</div>
+                          <svg
+                            width={sqSize}
+                            height={sqSize}
+                            viewBox={viewBox}>
+                            <circle
+                              className="circle-background"
+                              cx={sqSize / 2}
+                              cy={sqSize / 2}
+                              r={radius}
+                              strokeWidth={`${strokeWidth}px`} />
+                            <circle
+                              className="circle-progress"
+                              cx={sqSize / 2}
+                              cy={sqSize / 2}
+                              r={radius}
+                              strokeWidth={`${strokeWidth}px`}
+                              // Start progress marker at 12 O'Clock
+                              transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
+                              style={{
+                                strokeDasharray: dashArray,
+                                strokeDashoffset: dashArray - dashArray * details.vote_average / 10
+                              }} />
+                            <text
+                              className="circle-text"
+                              x="50%"
+                              y="50%"
+                              dy=".3em"
+                              textAnchor="middle">
+                              {`${details.vote_average * 10}%`}
+                            </text>
+                          </svg>
+                        </div>}
                       {user && <div>
                         <button
-                          className="btn btn-outline-dark"
+                          className="btn btn-outline-dark mt-3"
                           onClick={() => this.addFavorite(
                             type,
                             id,
@@ -432,6 +519,15 @@ class Details extends Component {
               <div className="row">
                 {/* Slider and Carousel */}
                 <div className="col-12 col-lg-9 pt-3 text-left">
+                  {details.belongs_to_collection && <div className="row mb-3">
+                    <div className="col-12">
+                      <div className="h4"><strong>Collection</strong></div>
+                      <EpisodeReel
+                        data={details.belongs_to_collection}
+                        type={type} id={details.belongs_to_collection.id}
+                      />
+                    </div>
+                  </div>}
                   {type === "tv" && <div className="row mb-3">
                     <div className="col-12">
                       <div className="h4"><strong>Episode Guide</strong></div>
@@ -470,13 +566,13 @@ class Details extends Component {
                   {type !== "person" ? (
                     <div className="row mt-3">
                       <div className="col-12 col-md-6 my-2">
-                        <div className="h4"><strong>Recommended</strong></div>
+                        <div className="h4"><strong>Others Liked</strong></div>
                         <div className="row bg-light-grey border-round" id="section-recs">
                           <div className="col-12 p-2">
                             {details.recommendations.results.length >= 1 ? (
                               <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
                             ) : (
-                                <div className="h6">No recommendations!</div>
+                                <div className="h6 pl-2"><strong>No recommendations!</strong></div>
                               )}
                           </div>
                         </div>
@@ -488,7 +584,7 @@ class Details extends Component {
                             {details.similar.results.length >= 1 ? (
                               <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
                             ) : (
-                                <div className="h6">Nothing listed as similar!</div>
+                                <div className="h6 pl-2"><strong>Nothing listed as similar!</strong></div>
                               )}
                           </div>
                         </div>
@@ -514,9 +610,9 @@ class Details extends Component {
                         <div className="text-xs">{person.job}</div>
                       </div>
                     ))}
-                    {details.credits.crew.length === 0 && <div>
+                    {details.credits.crew.length <= 3 && <div>
                       <div className="col-12 px-3 py-2">
-                        <div className="h6">Crew unavailable.</div>
+                        <div className="h6"><strong>Crew unavailable.</strong></div>
                       </div>
                     </div>}
                   </div>}
@@ -536,81 +632,107 @@ class Details extends Component {
 
                   <div className="h4 mt-2"><strong>Facts</strong></div>
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Revenue</strong></div>
-                      <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Budget</strong></div>
-                      <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Production Companies</strong></div>
-                      {details.production_companies.map(company => (
-                        <div className="text-xs" key={company.id}>{company.name}</div>
-                      ))}
-                    </div>
-                  </div>}
-                  {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
-                    {details.homepage && <div className="col-3 col-lg-12 pl-2 py-1">
+                    {details.homepage && <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Homepage</strong></div>
-                      <div className="text-xs">{details.homepage}</div>
+                      <div className="overflow-wrap text-xs"><a href={details.homepage} target="_blank" className="no-link">{details.homepage}</a></div>
                     </div>}
-                    <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Type</strong></div>
-                      <div className="text-xs">{details.type}</div>
-                    </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Status</strong></div>
                       <div className="text-xs">{details.status}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    {details.revenue !== 0 && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Revenue</strong></div>
+                      <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                    </div>}
+                    {details.budget !== 0 && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Budget</strong></div>
+                      <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
+                    </div>}
+                    {details.production_companies[0] && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Production Companies</strong></div>
+                      {details.production_companies.map((company, index) => (
+                        <span key={company.id} className="text-xs">{company.name}{index === details.production_companies.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
+                    {details.production_countries[0] && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Production Countries</strong></div>
+                      {details.production_countries.map((country, index) => (
+                        <span key={`${country.iso_639_1}-${index}`} className="text-xs">{country.name}{index === details.production_countries.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
+                    {details.spoken_languages[0] && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Available Languages</strong></div>
+                      {details.spoken_languages.map((lang, index) => (
+                        <span key={`${lang.iso_639_1}-${index}`} className="text-xs">{lang.name}{index === details.spoken_languages.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
+                    {details.original_language && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Original Language</strong></div>
+                      <div className="text-xs">{details.original_language}</div>
+                    </div>}
+                    {details.keywords.keywords[0] && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Keywords</strong></div>
+                      {details.keywords.keywords.map((keyword, index) => (
+                        <span key={keyword.id} className="text-xs">{keyword.name}{index === details.keywords.keywords.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
+                  </div>}
+                  {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
+                    {details.homepage && <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Homepage</strong></div>
+                      <div className="text-xs">{details.homepage}</div>
+                    </div>}
+                    <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Type</strong></div>
+                      <div className="text-xs">{details.type}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Status</strong></div>
+                      <div className="text-xs">{details.status}</div>
+                    </div>
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>In Production</strong></div>
                       <div className="text-xs">{details.in_production ? "Yes" : "No"}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Number of Seasons</strong></div>
                       <div className="text-xs">{details.number_of_seasons}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Number of Episodes</strong></div>
                       <div className="text-xs">{details.number_of_episodes}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>First Aired</strong></div>
                       <div className="text-xs">{moment(details.first_air_date).format("MMMM Do, YYYY")}</div>
                     </div>
-                    {/* <div className="col-3 col-lg-12 pl-2 py-1">
-                      <div className="text-sm"><strong>Last Aired</strong></div>
-                      <div className="text-xs">{moment(details.last_air_date).format("MMMM Do, YYYY")}</div>
-                    </div> */}
-                    {details.next_episode_to_air && <div className="col-3 col-lg-12 pl-2 py-1">
+                    {details.next_episode_to_air && <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Next Episode to Air</strong></div>
                       <div className="text-xs">{details.next_episode_to_air.name}</div>
                       <div className="text-xs">{moment(details.next_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
                     </div>}
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Last Episode to Air</strong></div>
                       <div className="text-xs">{details.last_episode_to_air.name}</div>
                       <div className="text-xs">{moment(details.last_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Networks</strong></div>
                       {details.networks.map(network => <div className="text-xs" key={network.id}>{network.name}</div>)}
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Available Languages</strong></div>
                       {details.languages.map(language => <div className="text-xs" key={language}>{language}</div>)}
                     </div>
-                    {details.languages[0] !== details.original_language && <div className="col-3 col-lg-12 pl-2 py-1">
+                    {details.languages[0] !== details.original_language && <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Original Language</strong></div>
                       <div className="text-xs">{details.original_language}</div>
                     </div>}
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Country of Origin</strong></div>
                       <div className="text-xs">{details.origin_country}</div>
                     </div>
-                    <div className="col-3 col-lg-12 pl-2 py-1">
+                    <div className="col-3 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Keywords</strong></div>
                       {details.keywords.results.map((keyword, index) => (
                         <span key={keyword.id} className="text-xs">{keyword.name}{index === details.keywords.results.length - 1 ? "" : ", "}</span>
@@ -622,7 +744,6 @@ class Details extends Component {
 
               {/* Comments */}
               <div className="row">
-
                 <div className="col-12 col-lg-9 my-2 text-left px-0">
                   <div className="h4"><strong>Add a Comment</strong></div>
                   <div className="row no-gutters bg-light-grey border-round my-3">
@@ -647,7 +768,7 @@ class Details extends Component {
                       </div>
                     ) : (
                         <div className="col-12 p-3">
-                          <h4>Log in to comment!</h4>
+                          <div className="h5 pl-2">Log in to comment!</div>
                         </div>
                       )}
                   </div>
@@ -713,7 +834,7 @@ class Details extends Component {
                       ))
                     ) : (
                         <div className="col-12 p-2">
-                          <div className="h4">No comments yet!</div>
+                          <div className="h5 pl-2">No comments yet!</div>
                         </div>
                       )}
                   </div>
@@ -729,20 +850,21 @@ class Details extends Component {
                               <Gravatar className="rounded-circle" email={review.author} size={30} /> {review.author}
                             </div>
                             <div className="card-body">
-                              <p>{review.content.slice(0, 255)}...</p>
+                              <p>{review.content.length > 255
+                                ? `${review.content.slice(0, 255)}...`
+                                : review.content}</p>
                             </div>
                           </div>
                         </div>
                       ))
                     ) : (
                         <div className="col-12 p-2">
-                          <div className="h4">No reviews yet!</div>
+                          <div className="h5">No reviews yet!</div>
                         </div>
                       )}
                   </div>
                 </div>
               </div>
-
             </div>
           )
         }

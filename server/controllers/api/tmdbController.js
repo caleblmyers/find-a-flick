@@ -28,6 +28,13 @@ tmdbController.get('/details/:type/:id', (req, res) => {
     .catch(err => res.json(err))
 })
 
+tmdbController.get('/collection/:id', (req, res) => {
+  const { id } = req.params
+  axios.get(`${tmdbURL}/collection/${id}?api_key=${tmdbKey}`)
+    .then(collection => res.json(collection.data))
+    .catch(err => res.json(err))
+})
+
 tmdbController.post('/discover', (req, res) => {
   const { type } = req.body
   let {

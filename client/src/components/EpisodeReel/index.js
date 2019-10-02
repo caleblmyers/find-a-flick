@@ -11,11 +11,16 @@ class EpisodeReel extends Component {
     isLoading: true,
     slide: 0,
     maxSlide: this.props.data.length - 1,
-    season: {}
+    season: {},
+    collection: {}
   }
 
   componentDidMount() {
-    const { data } = this.props
+    const { type, data } = this.props
+    if (type === "movie") {
+      return this.getCollection()
+    }
+
     if (data.length > 0) {
       this.getSeason(0)
     }
@@ -36,6 +41,20 @@ class EpisodeReel extends Component {
       .catch(err => console.log(err))
   }
 
+  getCollection = () => {
+    const { id } = this.props
+
+    API.TMDB.collection(id)
+      .then(collection => {
+        console.log(collection.data)
+        this.setState({
+          collection: collection.data,
+          isLoading: false
+        })
+      })
+      .catch(err => console.log(err))
+  }
+
   changeSlide = (slide, e) => {
     this.setState({ isLoading: true })
     if (e.target.id === "next") this.getSeason(slide + 1)
@@ -44,9 +63,11 @@ class EpisodeReel extends Component {
 
   render() {
     const { data, type, id } = this.props
-    const { slide, maxSlide, season, isLoading } = this.state
+    const { slide, maxSlide, season, collection, isLoading } = this.state
     const displayPrev = slide === 0 ? 'd-none' : ''
     const displayNext = (slide >= maxSlide) ? 'd-none' : ''
+
+    const content = type === "movie" ? collection : season
 
     if (data.length === 0) {
       return (
@@ -76,14 +97,14 @@ class EpisodeReel extends Component {
       <div className="EpisodeReel position-relative row justify-content-center bg-light-grey border-round py-2 p-3" id="data-container">
         <button
           id="prev"
-          className={`btn ${displayPrev}`}
+          className={`btn ${type === "movie" ? 'd-none' : displayPrev}`}
           onClick={event => this.changeSlide(slide, event)}
         >
           &#10094;
         </button>
         <button
           id="next"
-          className={`btn ${displayNext}`}
+          className={`btn ${type === "movie" ? 'd-none' : displayNext}`}
           onClick={event => this.changeSlide(slide, event)}
         >
           &#10095;
@@ -92,22 +113,22 @@ class EpisodeReel extends Component {
           <div className="row no-gutters">
             <div className="col-10 col-md-4 my-auto mx-auto p-3">
               <img
-                alt={season.name}
+                alt={content.name}
                 className="card-img-top img-fluid"
                 src={
-                  season.poster_path
-                    ? `https://image.tmdb.org/t/p/original/${season.poster_path}`
+                  content.poster_path
+                    ? `https://image.tmdb.org/t/p/original/${content.poster_path}`
                     : MediaTall}
               />
             </div>
             <div className="col-12 col-md-8 text-center">
               <div className="card-body">
-                <h5 className="mb-0 card-title"><strong>{season.name || season.title}</strong></h5>
-                <p className="mb-0 card-text"><small className="text-muted">{moment(season.air_date).format("MMMM Do, YYYY")}</small></p>
-                <p className="text-sm">{season.overview.slice(0, 255)}...</p>
+                <h5 className="mb-0 card-title"><strong>{content.name || content.title}</strong></h5>
+                <p className="mb-0 card-text"><small className="text-muted">{moment(content.air_date).format("MMMM Do, YYYY")}</small></p>
+                <p className="text-sm">{content.overview.length > 255 ? `${content.overview.slice(0, 255)}...` : content.overview}</p>
                 <div className="row">
                   <div className="col-12 col-md-10 mx-auto">
-                    <Carousel data={season.episodes} type="episodes" handler={console.log} />
+                    <Carousel data={content.episodes || content.parts} type={type === "tv" ? "episodes" : type} handler={console.log} />
                   </div>
                 </div>
               </div>
