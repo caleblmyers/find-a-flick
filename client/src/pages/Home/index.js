@@ -6,6 +6,7 @@ import API from "../../lib/API"
 import SearchBar from '../../components/SearchBar';
 import Carousel from '../../components/Carousel';
 import Table from '../../components/Table';
+import Loader from '../../components/Loader';
 
 class HomePage extends Component {
   static contextType = AuthContext
@@ -33,12 +34,12 @@ class HomePage extends Component {
                       .then(topShows => {
                         API.TMDB.popular('tv')
                           .then(popularShows => {
-                            // console.log(movies.data)
-                            // console.log(topMovies.data)
-                            // console.log(nowPlaying.data)
-                            // console.log(shows.data)
-                            // console.log(topShows.data)
-                            // console.log(popularShows.data)
+                            console.log(movies.data)
+                            console.log(topMovies.data)
+                            console.log(nowPlaying.data)
+                            console.log(shows.data)
+                            console.log(topShows.data)
+                            console.log(popularShows.data)
                             this.setState({
                               movies: movies.data.results,
                               topMovies: topMovies.data.results,
@@ -70,7 +71,7 @@ class HomePage extends Component {
         </div>
 
         {!this.state.isLoaded ? (
-          <div>Loading...</div>
+          <Loader />
         ) : (
             <div className="Featured">
               <div className="h2 text-center">Movies</div>
@@ -118,7 +119,7 @@ class HomePage extends Component {
                   </div> */}
                 </div>
                 <div className="col-12 col-md-4 p-3">
-                  <div className="h6">Today's Most Popular</div>
+                  <div className="h5">Today's Most Popular</div>
                   <Table dataSet={this.state.popularShows.slice(0, 10)} type="tv" />
                 </div>
               </div>

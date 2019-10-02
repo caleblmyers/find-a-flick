@@ -5,6 +5,7 @@ import moment from 'moment'
 
 import API from '../../lib/API'
 import AuthContext from '../../contexts/AuthContext'
+import Loader from '../../components/Loader'
 
 class Account extends Component {
   static contextType = AuthContext
@@ -132,9 +133,7 @@ class Account extends Component {
     return (
       <div>
         {isLoading ? (
-          <div>
-            Loading...
-          </div>
+          <Loader />
         ) : (
             <div className="container pt-5">
               <div className="row mb-2">
@@ -214,9 +213,9 @@ class Account extends Component {
                     </div>
                   </div>
                 </div>
-
               </div>
-              <h4 className="text-left my-2">Movies</h4>
+              <div className="h2 mt-2">Favorites</div>
+              {movies[0] && <h4 className="text-left my-2">Movies</h4>}
               <div className="row">
                 {movies.map(movie => (
                   <div className="col-6 col-lg-3" key={movie.id}>
@@ -235,7 +234,7 @@ class Account extends Component {
                   </div>
                 ))}
               </div>
-              <h4 className="text-left my-2">Shows</h4>
+              {shows[0] && <h4 className="text-left my-2">Shows</h4>}
               <div className="row">
                 {shows.map(show => (
                   <div className="col-6 col-lg-3" key={show.id}>
@@ -254,7 +253,7 @@ class Account extends Component {
                   </div>
                 ))}
               </div>
-              <h4 className="text-left my-2">People</h4>
+              {people[0] && <h4 className="text-left my-2">People</h4>}
               <div className="row">
                 {people.map(person => (
                   <div className="col-6 col-lg-3" key={person.id}>
@@ -273,7 +272,7 @@ class Account extends Component {
                   </div>
                 ))}
               </div>
-              <h4 className="text-left my-2">Comments</h4>
+              {comments[0] && <h4 className="text-left my-2">Comments</h4>}
               <div className="row">
                 {comments.map(comment => (
                   <div className="col-6 col-lg-3" key={comment.id}>

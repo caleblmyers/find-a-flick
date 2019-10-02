@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import AuthContext from '../../contexts/AuthContext'
 import API from '../../lib/API'
 import ResultsGrid from '../../components/ResultsGrid'
+import Loader from '../../components/Loader'
 
 class Discover extends Component {
   static contextType = AuthContext
@@ -166,7 +167,8 @@ class Discover extends Component {
     results: undefined,
     favPeople: [],
     peopleLoaded: false,
-    ratings: {}
+    ratings: {},
+    isLoading: false
   }
 
   componentDidMount() {
@@ -216,6 +218,7 @@ class Discover extends Component {
   }
 
   handleSubmit = e => {
+    this.setState({ isLoading: true })
     e.preventDefault()
     const { queries, params, advanced, activeTab } = this.state
     let queryParams = {
@@ -261,7 +264,8 @@ class Discover extends Component {
         console.log(res.data)
         this.setState({
           results: res.data.results,
-          params: queryParams
+          params: queryParams,
+          isLoading: false
         })
       })
       .catch(err => console.log(err))
@@ -269,7 +273,7 @@ class Discover extends Component {
 
   render() {
     const { user } = this.context
-    const { query, queries, params, favPeople, ratings, activeTab } = this.state
+    const { query, queries, params, favPeople, ratings, activeTab, advanced, results, isLoading } = this.state
 
     return (
       <div className="Discover">
@@ -300,7 +304,7 @@ class Discover extends Component {
               <div className="tab-content" id="nav-tabContent">
                 <div className="tab-pane show active" id="nav-movie" role="tabpanel" aria-labelledby="nav-movie-tab">
                   <div className="form-group">
-                    {!this.state.advanced ? (
+                    {!advanced ? (
                       <div className="form-group">
                         <label>Choose an option...</label>
                         <div className="input-group">
@@ -685,7 +689,7 @@ class Discover extends Component {
                 </div>
                 <div className="tab-pane" id="nav-tv" role="tabpanel" aria-labelledby="nav-tv-tab">
                   <div className="form-group">
-                    {!this.state.advanced ? (
+                    {!advanced ? (
                       <div className="form-group">
                         <label>Choose an option...</label>
                         <div className="input-group">
@@ -897,16 +901,17 @@ class Discover extends Component {
             </form>
           </div>
         </div>
-        {this.state.results && <div className="row no-gutters bg-popcorn">
-          <div className="col">
+        <div className="row no-gutters position-relative bg-popcorn">
+          {isLoading && <Loader  />}
+          {results && <div className="col">
             <h3>Results</h3>
-            {this.state.results[0] ? (
-              <ResultsGrid results={this.state.results} type={activeTab} />
+            {results[0] ? (
+              <ResultsGrid results={results} type={activeTab} />
             ) : (
                 <h1>No Matches!</h1>
               )}
-          </div>
-        </div>}
+          </div>}
+        </div>
       </div>
     )
   }

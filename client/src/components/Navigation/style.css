@@ -1,8 +1,18 @@
 .Navigation {
   color: white;
-  min-height: 70px;
+  /* min-height: 70px; */
 }
 
 .bg-navy {
   background-color: rgb(41, 31, 133);
+}
+
+.brand-img {
+  max-height: 45px;
+}
+
+@media only screen and (min-width:992px) {
+  .brand-img {
+    margin-right: 0.75rem;
+  }
 }

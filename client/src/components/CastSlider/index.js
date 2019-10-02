@@ -25,7 +25,7 @@ class CastSlider extends Component {
       return (
         <div className="row bg-light-grey py-2 border-round" id="">
           <div className="col-12 px-3 py-2 align-self-center">
-            <div className="h6">Cast Unavailable</div>
+            <div className="h6 pl-2"><strong>Cast unavailable</strong></div>
           </div>
         </div>
       )

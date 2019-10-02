@@ -14,6 +14,7 @@ import Carousel from '../../components/Carousel'
 import Person from '../../img/person_placeholder.png'
 import MediaTall from '../../img/media_placeholder_tall.png'
 import EpisodeReel from '../../components/EpisodeReel'
+import Loader from '../../components/Loader'
 
 class Details extends Component {
   constructor(props) {
@@ -65,12 +66,12 @@ class Details extends Component {
         console.log("POP")
         this.timer = setTimeout(() => {
           this.getDetails(nextProps.match.params.type, nextProps.match.params.id)
-        }, 3000);
+        }, 3000)
       } else {
         console.log(this.props.history.action)
         this.timer = setTimeout(() => {
           this.getDetails(nextProps.match.params.type, nextProps.match.params.id)
-        }, 3000);
+        }, 3000)
       }
       return false
     }
@@ -233,22 +234,16 @@ class Details extends Component {
     const { type, id } = this.props.match.params
     const { details, message, messageType, comment, comments, isLoaded, isEditing, edit } = this.state
 
-    const sqSize = 80;
+    const sqSize = 80
     const strokeWidth = 4
-    const radius = (sqSize - strokeWidth) / 2;
-    const viewBox = `0 0 ${sqSize} ${sqSize}`;
-    const dashArray = radius * Math.PI * 2;
+    const radius = (sqSize - strokeWidth) / 2
+    const viewBox = `0 0 ${sqSize} ${sqSize}`
+    const dashArray = radius * Math.PI * 2
 
     return (
       <div className="Details pb-5 position-relative">
         {!isLoaded ? (
-          <div className="align-center" id="loader">
-            <div className="bounce-loader mt-4">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
+          <Loader />
         ) : (
             <div className="container pt-3">
               {/* Messages */}
@@ -348,14 +343,18 @@ class Details extends Component {
                       {type === "tv" &&
                         <div>
                           <div className="h4">Created By</div>
-                          <div className="row no-gutters">
-                            {details.created_by.map(creator => (
-                              <div className="col col-lg-6" key={creator.id}>
-                                <div><strong>{creator.name}</strong></div>
-                                <div>Creator</div>
-                              </div>
-                            ))}
-                          </div>
+                          {details.created_by[0]
+                            ? <div className="row no-gutters">
+                              {details.created_by.slice(0, 3).map(person => (
+                                <div className="col-4 col-lg-6 my-1" key={person.credit_id}>
+                                  <div><strong>{person.name}</strong></div>
+                                  <div>{person.job}</div>
+                                </div>
+                              ))}
+                            </div>
+                            : <div className="col-4 col-lg-6 my-1">
+                              <div><strong>Unavailable</strong></div>
+                            </div>}
                         </div>}
                       {type === "movie" &&
                         <div>
@@ -387,7 +386,7 @@ class Details extends Component {
                         </div>}
                     </div>
                     <div className="col col-lg-4 mx-auto text-center d-md-none d-lg-block">
-                      {details.vote_average &&
+                      {details.vote_average >= 0 &&
                         <div>
                           <div className="h4">Rating</div>
                           <svg
@@ -464,7 +463,7 @@ class Details extends Component {
                   </div>
                   <div className="row no-gutters">
                     <div className="col-12 mx-auto mt-4 text-center d-lg-none">
-                      {details.vote_average &&
+                      {details.vote_average >= 0 &&
                         <div>
                           <div className="h4">Rating</div>
                           <svg
@@ -532,7 +531,9 @@ class Details extends Component {
                     <div className="col-12">
                       <div className="h4"><strong>Episode Guide</strong></div>
                       <EpisodeReel
-                        data={details.seasons.sort((a, b) => a.season_number - b.season_number)}
+                        data={details.seasons.length >= 2
+                          ? details.seasons.sort((a, b) => a.season_number - b.season_number)
+                          : details.seasons}
                         type={type} id={id}
                       />
                     </div>
@@ -563,46 +564,37 @@ class Details extends Component {
                           )}
                       </div>
                     )}
-                  {type !== "person" ? (
-                    <div className="row mt-3">
-                      <div className="col-12 col-md-6 my-2">
-                        <div className="h4"><strong>Others Liked</strong></div>
-                        <div className="row bg-light-grey border-round" id="section-recs">
-                          <div className="col-12 p-2">
-                            {details.recommendations.results.length >= 1 ? (
-                              <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
-                            ) : (
-                                <div className="h6 pl-2"><strong>No recommendations!</strong></div>
-                              )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-6 my-2">
-                        <div className="h4"><strong>Similar</strong></div>
-                        <div className="row bg-light-grey border-round" id="section-similar">
-                          <div className="col-12 p-2">
-                            {details.similar.results.length >= 1 ? (
-                              <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
-                            ) : (
-                                <div className="h6 pl-2"><strong>Nothing listed as similar!</strong></div>
-                              )}
-                          </div>
+                  {type !== "person" && <div className="row mt-3">
+                    <div className="col-12 col-md-6 my-2">
+                      <div className="h4"><strong>Others Liked</strong></div>
+                      <div className="row bg-light-grey border-round" id="section-recs">
+                        <div className="col-12 p-2">
+                          {details.recommendations.results.length >= 1 ? (
+                            <Carousel data={details.recommendations.results} type={type} handler={this.changeMedia} />
+                          ) : (
+                              <div className="h6 pl-2"><strong>No recommendations!</strong></div>
+                            )}
                         </div>
                       </div>
                     </div>
-                  ) : (
-                      <div className="row bg-light-grey border-round">
-                        <div className="mr-auto col-12 col-md-6 p-3">
-                        </div>
-                        <div className="mr-auto col-12 col-md-6 p-3">
+                    <div className="col-12 col-md-6 my-2">
+                      <div className="h4"><strong>Similar</strong></div>
+                      <div className="row bg-light-grey border-round" id="section-similar">
+                        <div className="col-12 p-2">
+                          {details.similar.results.length >= 1 ? (
+                            <Carousel data={details.similar.results} type={type} handler={this.changeMedia} />
+                          ) : (
+                              <div className="h6 pl-2"><strong>Nothing listed as similar!</strong></div>
+                            )}
                         </div>
                       </div>
-                    )}
+                    </div>
+                  </div>}
                 </div>
 
                 {/* Crew and Facts */}
                 <div className="col-12 col-lg-3 pt-3 text-left side-col-lg">
-                  <div className="h4"><strong>Crew</strong></div>
+                  {type !== "person" && <div className="h4"><strong>Crew</strong></div>}
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
                     {details.credits.crew.slice(3, 10).map(person => (
                       <div className="col-3 col-lg-12 pl-2 py-1 mr-0" key={person.credit_id}>
@@ -625,52 +617,52 @@ class Details extends Component {
                     ))}
                     {details.credits.crew.length === 0 && <div>
                       <div className="col-12 px-3 py-2">
-                        <div className="h6">Crew unavailable.</div>
+                        <div className="h6"><strong>Crew unavailable.</strong></div>
                       </div>
                     </div>}
                   </div>}
 
                   <div className="h4 mt-2"><strong>Facts</strong></div>
                   {type === "movie" && <div className="row no-gutters bg-light-grey border-round py-2">
-                    {details.homepage && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.homepage && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Homepage</strong></div>
-                      <div className="overflow-wrap text-xs"><a href={details.homepage} target="_blank" className="no-link">{details.homepage}</a></div>
+                      <div className="overflow-wrap text-xs"><a href={details.homepage} className="no-link">{details.homepage}</a></div>
                     </div>}
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Status</strong></div>
                       <div className="text-xs">{details.status}</div>
                     </div>
-                    {details.revenue !== 0 && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.revenue !== 0 && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Revenue</strong></div>
                       <div className="text-xs">${details.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
                     </div>}
-                    {details.budget !== 0 && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.budget !== 0 && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Budget</strong></div>
                       <div className="text-xs">${details.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
                     </div>}
-                    {details.production_companies[0] && <div className="col-3 col-lg-12 px-2 py-1">
-                      <div className="text-sm"><strong>Production Companies</strong></div>
-                      {details.production_companies.map((company, index) => (
-                        <span key={company.id} className="text-xs">{company.name}{index === details.production_companies.length - 1 ? "" : ", "}</span>
-                      ))}
-                    </div>}
-                    {details.production_countries[0] && <div className="col-3 col-lg-12 px-2 py-1">
-                      <div className="text-sm"><strong>Production Countries</strong></div>
-                      {details.production_countries.map((country, index) => (
-                        <span key={`${country.iso_639_1}-${index}`} className="text-xs">{country.name}{index === details.production_countries.length - 1 ? "" : ", "}</span>
-                      ))}
-                    </div>}
-                    {details.spoken_languages[0] && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.spoken_languages[0] && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Available Languages</strong></div>
                       {details.spoken_languages.map((lang, index) => (
                         <span key={`${lang.iso_639_1}-${index}`} className="text-xs">{lang.name}{index === details.spoken_languages.length - 1 ? "" : ", "}</span>
                       ))}
                     </div>}
-                    {details.original_language && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.original_language && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Original Language</strong></div>
                       <div className="text-xs">{details.original_language}</div>
                     </div>}
-                    {details.keywords.keywords[0] && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.production_countries[0] && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Production Countries</strong></div>
+                      {details.production_countries.map((country, index) => (
+                        <span key={`${country.iso_639_1}-${index}`} className="text-xs">{country.name}{index === details.production_countries.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
+                    {details.production_companies[0] && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Production Companies</strong></div>
+                      {details.production_companies.map((company, index) => (
+                        <span key={company.id} className="text-xs">{company.name}{index === details.production_companies.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
+                    {details.keywords.keywords[0] && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Keywords</strong></div>
                       {details.keywords.keywords.map((keyword, index) => (
                         <span key={keyword.id} className="text-xs">{keyword.name}{index === details.keywords.keywords.length - 1 ? "" : ", "}</span>
@@ -678,66 +670,90 @@ class Details extends Component {
                     </div>}
                   </div>}
                   {type === "tv" && <div className="row no-gutters bg-light-grey border-round py-2">
-                    {details.homepage && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.homepage && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Homepage</strong></div>
-                      <div className="text-xs">{details.homepage}</div>
+                      <div className="overflow-wrap text-xs"><a href={details.homepage} className="no-link">{details.homepage}</a></div>
                     </div>}
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Type</strong></div>
                       <div className="text-xs">{details.type}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Status</strong></div>
                       <div className="text-xs">{details.status}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>In Production</strong></div>
                       <div className="text-xs">{details.in_production ? "Yes" : "No"}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Number of Seasons</strong></div>
                       <div className="text-xs">{details.number_of_seasons}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Number of Episodes</strong></div>
                       <div className="text-xs">{details.number_of_episodes}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>First Aired</strong></div>
                       <div className="text-xs">{moment(details.first_air_date).format("MMMM Do, YYYY")}</div>
                     </div>
-                    {details.next_episode_to_air && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.next_episode_to_air && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Next Episode to Air</strong></div>
                       <div className="text-xs">{details.next_episode_to_air.name}</div>
                       <div className="text-xs">{moment(details.next_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
                     </div>}
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Last Episode to Air</strong></div>
                       <div className="text-xs">{details.last_episode_to_air.name}</div>
                       <div className="text-xs">{moment(details.last_episode_to_air.air_date).format("MMMM Do, YYYY")}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Networks</strong></div>
                       {details.networks.map(network => <div className="text-xs" key={network.id}>{network.name}</div>)}
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Available Languages</strong></div>
                       {details.languages.map(language => <div className="text-xs" key={language}>{language}</div>)}
                     </div>
-                    {details.languages[0] !== details.original_language && <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.languages[0] !== details.original_language && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Original Language</strong></div>
                       <div className="text-xs">{details.original_language}</div>
                     </div>}
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Country of Origin</strong></div>
                       <div className="text-xs">{details.origin_country}</div>
                     </div>
-                    <div className="col-3 col-lg-12 px-2 py-1">
+                    {details.keywords.results[0] && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
                       <div className="text-sm"><strong>Keywords</strong></div>
                       {details.keywords.results.map((keyword, index) => (
                         <span key={keyword.id} className="text-xs">{keyword.name}{index === details.keywords.results.length - 1 ? "" : ", "}</span>
                       ))}
+                    </div>}
+                  </div>}
+                  {type === "person" && <div className="row no-gutters bg-light-grey border-round py-2">
+                    {details.homepage && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Homepage</strong></div>
+                      <div className="overflow-wrap text-xs"><a href={details.homepage} className="no-link">{details.homepage}</a></div>
+                    </div>}
+                    <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Birthday</strong></div>
+                      {details.birthday ? (
+                        <div className="text-xs">{moment(details.birthday).format("MMMM Do, YYYY")}</div>
+                      ) : (
+                        <div className="text-xs">Unavailable</div>
+                      )}
                     </div>
+                    {details.deathday && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Died</strong></div>
+                      <div className="text-xs">{moment(details.deathday).format("MMMM Do, YYYY")}</div>
+                    </div>}
+                    {details.also_known_as[0] && <div className="col-6 col-md-4 col-lg-12 px-2 py-1">
+                      <div className="text-sm"><strong>Also known as</strong></div>
+                      {details.also_known_as.map((name, index) => (
+                        <span key={name} className="text-xs">{name}{index === details.also_known_as.length - 1 ? "" : ", "}</span>
+                      ))}
+                    </div>}
                   </div>}
                 </div>
               </div>
@@ -834,7 +850,7 @@ class Details extends Component {
                       ))
                     ) : (
                         <div className="col-12 p-2">
-                          <div className="h5 pl-2">No comments yet!</div>
+                          <div className="h5 text-center">No comments yet!</div>
                         </div>
                       )}
                   </div>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 import MediaTall from '../../img/media_placeholder_tall.png'
 import API from '../../lib/API'
@@ -12,7 +11,8 @@ class EpisodeReel extends Component {
     slide: 0,
     maxSlide: this.props.data.length - 1,
     season: {},
-    collection: {}
+    collection: {},
+    error: false
   }
 
   componentDidMount() {
@@ -32,6 +32,7 @@ class EpisodeReel extends Component {
     API.TMDB.season(type, id, slide)
       .then(season => {
         console.log(season.data)
+        if (season.data.name === "Error") return this.setState({ error: true })
         this.setState({
           slide,
           season: season.data,
@@ -47,6 +48,7 @@ class EpisodeReel extends Component {
     API.TMDB.collection(id)
       .then(collection => {
         console.log(collection.data)
+        if (collection.data.name === "Error") return this.setState({ error: true })
         this.setState({
           collection: collection.data,
           isLoading: false
@@ -62,18 +64,18 @@ class EpisodeReel extends Component {
   }
 
   render() {
-    const { data, type, id } = this.props
-    const { slide, maxSlide, season, collection, isLoading } = this.state
+    const { data, type } = this.props
+    const { slide, maxSlide, season, collection, isLoading, error } = this.state
     const displayPrev = slide === 0 ? 'd-none' : ''
     const displayNext = (slide >= maxSlide) ? 'd-none' : ''
 
     const content = type === "movie" ? collection : season
 
-    if (data.length === 0) {
+    if (data.length === 0 || error) {
       return (
         <div className="row bg-light-grey py-2 border-round" id="">
           <div className="col-12 px-3 py-2 align-self-center">
-            <div className="h6">Data Unavailable</div>
+            <div className="h6"><strong>Data Unavailable</strong></div>
           </div>
         </div>
       )
@@ -125,12 +127,12 @@ class EpisodeReel extends Component {
               <div className="card-body">
                 <h5 className="mb-0 card-title"><strong>{content.name || content.title}</strong></h5>
                 <p className="mb-0 card-text"><small className="text-muted">{moment(content.air_date).format("MMMM Do, YYYY")}</small></p>
-                <p className="text-sm">{content.overview.length > 255 ? `${content.overview.slice(0, 255)}...` : content.overview}</p>
-                <div className="row">
+                {content.overview && <p className="text-sm">{content.overview.length > 255 ? `${content.overview.slice(0, 255)}...` : content.overview}</p>}
+                {(content.episodes || content.parts) && <div className="row">
                   <div className="col-12 col-md-10 mx-auto">
                     <Carousel data={content.episodes || content.parts} type={type === "tv" ? "episodes" : type} handler={console.log} />
                   </div>
-                </div>
+                </div>}
               </div>
             </div>
           </div>

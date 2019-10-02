@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom'
 import './style.css'
 import AuthContext from '../../contexts/AuthContext'
 import AuthDropdown from '../../components/AuthDropdown'
+import Popcorn from '../../img/popcorn.ico'
 
 class Navigation extends Component {
   static contextType = AuthContext
 
-  state = {
-    collapsed: true
-  }
+  state = { collapsed: true }
 
   toggleCollapse = () => this.setState({ collapsed: !this.state.collapsed })
 
@@ -23,6 +22,7 @@ class Navigation extends Component {
     return (
       <div className='Navigation sticky-top bg-navy'>
         <nav className='navbar navbar-dark navbar-expand-lg'>
+          <img className="brand-img" src={Popcorn} alt="Pop Media"/>
           <Link className='navbar-brand' to='/'>Pop Media</Link>
           <button className={togglerClass} onClick={this.toggleCollapse} data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
             <span className='navbar-toggler-icon'></span>
@@ -39,9 +39,6 @@ class Navigation extends Component {
               <li className='nav-item'>
                 <Link className='nav-link' to='/results' onClick={this.toggleCollapse}>Search</Link>
               </li>
-              {/* <li className='nav-item'>
-                <Link className='nav-link' to='/genres' onClick={this.toggleCollapse}>Genres</Link>
-              </li> */}
               {user &&
                 <li className='nav-item'>
                   <Link className='nav-link' to='/account' onClick={this.toggleCollapse}>Account</Link>
