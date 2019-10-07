@@ -63,3 +63,10 @@ If the user is logged in to an account, a link to the **Account** page also appe
 
 ## Details
 
+Pop Media is designed, developed, and maintained by Caleb Myers -- https://github.com/caleblmyers
+
+This app is built with a **SERN** stack -- MySQL, Express.js, React.js, and Node.js
+
+The site is hosted on **Heroku** -- https://pop-media.herokuapp.com/
+
+All movie, tv show, and person data is provided by The Movie Database -- https://www.themoviedb.org
