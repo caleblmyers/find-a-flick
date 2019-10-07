@@ -13,6 +13,11 @@ The navigation bar at the top of the screen displays the available pages:
 * `Search`
 * `Account` (only if the user is logged in to an account)
 
+Guest account information:
+
+* User: `Guest`
+* Password: `password`
+
 ## Pages
 
 #### Home
